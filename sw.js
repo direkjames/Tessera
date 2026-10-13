@@ -1,6 +1,6 @@
 // Tessera service worker — makes the app installable and fully usable offline.
 // Bump VERSION whenever you publish changes so installed copies update.
-const VERSION = 'tessera-v3';
+const VERSION = 'tessera-v4';
 const RUNTIME = VERSION + '-rt';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon.svg', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
@@ -35,8 +35,8 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // Fonts and link favicons: cache on first use so they work offline later.
-  if (/(^|\.)fonts\.(googleapis|gstatic)\.com$/.test(url.hostname) || url.hostname === 'www.google.com') {
+  // Fonts, favicons, PDF engine and video thumbnails: cache on first use so they work offline later.
+  if (/(^|\.)fonts\.(googleapis|gstatic)\.com$/.test(url.hostname) || ['www.google.com', 'cdnjs.cloudflare.com', 'i.ytimg.com'].includes(url.hostname)) {
     e.respondWith(
       caches.open(RUNTIME).then(async c => {
         const hit = await c.match(req);
