@@ -2,11 +2,11 @@
 
 A calm, infinite canvas for ideas, references and plans — a free, private alternative to visual board apps.
 
-**Features:** notes (with bold, italic, headings, lists), to-do lists, links, images, nested boards, columns, arrows between cards, undo/redo, copy/paste, colours, backup export/import, offline support, and install-as-app on Windows, Android, Mac and iPad.
+**Features:** notes (with bold, italic, headings, lists), to-do lists, links, images, nested boards, columns, arrows between cards, undo/redo, copy/paste, colours, light and dark mode, global search and command palette (Ctrl K), pinned and recent boards, move cards between boards (or drag onto a board), a 30-day Trash, auto-backup to a folder, a storage meter with image compression, backup export/import, offline support, and install-as-app on Windows, Android, Mac and iPad.
 
 ## Your data stays on your device
 
-There are no accounts and no sync. Boards are saved in the browser on the device you use. Clearing site data, uninstalling the app or using a private window erases them, so **export a backup** from the ⋯ menu (Ctrl S) regularly. Backups can be imported on any device.
+There are no accounts and no sync. Boards are saved in the browser on the device you use. Clearing site data, uninstalling the app or using a private window erases them, so **export a backup** (Ctrl S) regularly, or turn on **auto-backup to a folder** from the storage chip (Chrome and Edge on a computer). Backups can be imported on any device.
 
 ## Put it on GitHub Pages
 
