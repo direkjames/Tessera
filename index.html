@@ -29,7 +29,7 @@
   --hover:rgba(30,26,18,.055);--hover-soft:rgba(30,26,18,.025);--input-bg:#f6f4ef;
   --dots:rgba(30,26,18,.14);--vignette:rgba(120,105,80,.07);
   --link:rgba(30,26,18,.3);--link-hover:rgba(30,26,18,.6);--link-arrow:rgba(30,26,18,.5);
-  --col-bg:#eeebe5;--tile-top:#ffffff;--tile-base:#ebe8e1;--tint-amt:9%;--chk-border:rgba(30,26,18,.25);--sel-text:rgba(109,92,232,.22);
+  --col-bg:#eeebe5;--tile-top:#ffffff;--tile-base:#ebe8e1;--tint-amt:9%;--chk-border:rgba(30,26,18,.25);--sel-text:rgba(109,92,232,.22);--gridline:rgba(30,26,18,.07);
   --ease:cubic-bezier(.22,1,.36,1);
   --font:'Inter',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
   --serif:'Instrument Serif',ui-serif,Georgia,serif;
@@ -49,7 +49,7 @@
   --hover:rgba(255,255,255,.065);--hover-soft:rgba(255,255,255,.03);--input-bg:rgba(0,0,0,.35);
   --dots:rgba(255,255,255,.08);--vignette:rgba(0,0,0,.5);
   --link:rgba(255,255,255,.3);--link-hover:rgba(255,255,255,.6);--link-arrow:rgba(255,255,255,.5);
-  --col-bg:#0f0f12;--tile-top:#1c1c22;--tile-base:#121216;--tint-amt:8%;--chk-border:rgba(255,255,255,.2);--sel-text:rgba(169,155,255,.35);
+  --col-bg:#0f0f12;--tile-top:#1c1c22;--tile-base:#121216;--tint-amt:8%;--chk-border:rgba(255,255,255,.2);--sel-text:rgba(169,155,255,.35);--gridline:rgba(255,255,255,.045);
 }
 [data-color=violet]{--tint:#7c6cf0}[data-color=sky]{--tint:#3b8de0}[data-color=mint]{--tint:#20a678}[data-color=rose]{--tint:#e2557a}[data-color=amber]{--tint:#ea822e}[data-color=slate]{--tint:#7d8796}
 [data-theme=dark] [data-color=violet]{--tint:#a99bff}[data-theme=dark] [data-color=sky]{--tint:#6fb7ff}[data-theme=dark] [data-color=mint]{--tint:#62d6a9}[data-theme=dark] [data-color=rose]{--tint:#ff7b9c}[data-theme=dark] [data-color=amber]{--tint:#ff9f5a}[data-theme=dark] [data-color=slate]{--tint:#9aa4b2}
@@ -74,7 +74,13 @@ body.is-dragging,body.is-dragging *{cursor:grabbing!important}
 @keyframes stageIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
 @keyframes stageOut{from{opacity:0;transform:scale(1.06)}to{opacity:1;transform:none}}
 #world{position:absolute;left:0;top:0;width:0;height:0;transform-origin:0 0;user-select:none;-webkit-user-select:none}
-#links{position:absolute;left:0;top:0;width:1px;height:1px;overflow:visible;pointer-events:none;z-index:0}
+#canvas[data-bg=grid]{background-image:linear-gradient(var(--gridline) 1px,transparent 1px),linear-gradient(90deg,var(--gridline) 1px,transparent 1px)}
+#canvas[data-bg=lines]{background-image:linear-gradient(var(--gridline) 1px,transparent 1px)}
+#canvas[data-bg=plain]{background-image:none}
+#links{position:absolute;left:0;top:0;width:1px;height:1px;overflow:visible;pointer-events:none;z-index:1}
+#labels,#guides{position:absolute;left:0;top:0;width:0;height:0;pointer-events:none}
+#labels{z-index:1}#guides{z-index:100000}
+.link-line.dashed{stroke-dasharray:7 6}.link-line.dotted{stroke-dasharray:.1 5.5;stroke-width:2.4}
 .link-line{fill:none;stroke:var(--link);stroke-width:1.6;stroke-linecap:round;transition:stroke .15s;pointer-events:none}
 .link-line.sel,.link-line.temp{stroke:var(--accent)}
 .link-line.temp{stroke-dasharray:5 6}
@@ -193,6 +199,44 @@ body.is-dragging,body.is-dragging *{cursor:grabbing!important}
 .card.column.drop-target{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft),var(--shadow)}
 .col-ind{position:absolute;left:4px;right:4px;height:3px;border-radius:3px;background:var(--accent);box-shadow:0 0 14px var(--accent-glow);pointer-events:none;z-index:5}
 
+/* frames, locks, guides, labels */
+.card.frame{background:color-mix(in srgb,var(--text) 2.5%,transparent);border:1.5px dashed var(--line-3);border-radius:22px;box-shadow:none;pointer-events:none}
+.card.frame[data-color]{background:color-mix(in srgb,var(--tint) 7%,transparent);border-color:color-mix(in srgb,var(--tint) 50%,transparent)}
+.card.frame::before{display:none}
+.card.frame.selected{border-style:solid;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.card.frame.dragging{box-shadow:none}
+.card.frame.selected.dragging{box-shadow:0 0 0 3px var(--accent-soft)}
+.fr-title{position:absolute;left:-1px;bottom:100%;margin-bottom:8px;display:flex;align-items:center;gap:7px;height:30px;max-width:calc(100% + 2px);padding:0 13px 0 11px;border-radius:10px;background:var(--surface);border:1px solid var(--line-2);box-shadow:var(--shadow);font-size:12.5px;font-weight:600;color:var(--text);pointer-events:auto;cursor:grab;white-space:nowrap;transition:border-color .15s}
+.fr-title svg{color:var(--tint,var(--text-3))}
+.fr-title span{overflow:hidden;text-overflow:ellipsis;outline:none}
+.fr-title span[contenteditable=true]{cursor:text;user-select:text;-webkit-user-select:text}
+.card.frame.selected .fr-title{border-color:var(--accent)}
+.card.frame>.rz{pointer-events:auto;cursor:nwse-resize;width:15px;height:15px;right:-8px;bottom:-8px}
+.card.locked>.rz{display:none}
+.lock-badge{position:absolute;top:-10px;right:-10px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--surface);border:1px solid var(--line-2);color:var(--text-2);box-shadow:var(--shadow);opacity:0;transition:opacity .15s;z-index:3;pointer-events:none}
+.card.locked:hover>.lock-badge,.card.locked.selected>.lock-badge{opacity:1}
+.card.tween{transition:left .42s var(--ease),top .42s var(--ease),box-shadow .22s,border-color .2s}
+.guide{position:absolute;background:var(--accent);border-radius:1px;box-shadow:0 0 6px var(--accent-glow)}
+.link-label{position:absolute;transform:translate(-50%,-50%);padding:3px 11px;border-radius:20px;background:var(--surface);border:1px solid var(--line-2);box-shadow:var(--shadow);font-size:12px;font-weight:500;line-height:1.5;color:var(--text-2);white-space:nowrap;max-width:260px;overflow:hidden;text-overflow:ellipsis;cursor:pointer;outline:none;min-width:28px;text-align:center;pointer-events:auto;transition:border-color .15s,color .15s}
+.link-label.sel{border-color:var(--accent);color:var(--text)}
+.link-label[contenteditable=true]{cursor:text;user-select:text;-webkit-user-select:text;overflow:visible;border-color:var(--accent);color:var(--text)}
+.link-label:empty::before{content:'Label';color:var(--text-3)}
+#minimap{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));width:208px;height:136px;border-radius:16px;z-index:45;overflow:hidden;cursor:pointer;touch-action:none;opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .3s,transform .35s var(--ease)}
+#minimap.show{opacity:1;transform:none;pointer-events:auto}
+#minimap canvas{width:100%;height:100%;display:block}
+/* menu rows */
+.mrow{display:flex;align-items:center;gap:2px;padding:3px 6px 3px 10px}
+.mrow.col{flex-direction:column;align-items:stretch;gap:6px;padding:6px 8px 6px 10px}
+.mrl{flex:1;font-size:12.5px;color:var(--text-2)}
+.mic{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;color:var(--text-2);transition:background .12s,color .12s}
+.mic:hover{background:var(--hover);color:var(--text)}
+.mic.on{color:var(--accent);background:var(--accent-soft)}
+.mic:disabled{opacity:.3;pointer-events:none}
+.seg{display:flex;gap:2px;padding:2px;border-radius:10px;background:var(--hover-soft);border:1px solid var(--line)}
+.seg button{flex:1;height:28px;padding:0 8px;border-radius:8px;font-size:12px;font-weight:500;color:var(--text-2);transition:background .15s,color .15s,box-shadow .15s}
+.seg button:hover{color:var(--text)}
+.seg button.on{background:var(--surface);color:var(--text);box-shadow:var(--shadow)}
+
 /* ---------- Chrome ---------- */
 .glass{background:var(--glass);backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow)}
 .bar{position:fixed;top:calc(12px + env(safe-area-inset-top));height:48px;display:flex;align-items:center;gap:2px;padding:0 6px;border-radius:15px;z-index:60;touch-action:manipulation}
@@ -238,7 +282,7 @@ body.is-dragging,body.is-dragging *{cursor:grabbing!important}
 .ghost svg{color:var(--accent)}
 
 /* menus */
-.menu{position:fixed;z-index:200;min-width:228px;max-width:300px;padding:6px;border-radius:15px;opacity:0;transform:scale(.97) translateY(-4px);transition:opacity .16s var(--ease),transform .2s var(--ease);pointer-events:none;background:var(--menu-bg)}
+.menu{position:fixed;z-index:200;min-width:236px;max-width:320px;padding:6px;border-radius:15px;opacity:0;transform:scale(.97) translateY(-4px);transition:opacity .16s var(--ease),transform .2s var(--ease);pointer-events:none;background:var(--menu-bg)}
 .menu.show{opacity:1;transform:none;pointer-events:auto}
 .mi{display:flex;align-items:center;gap:10px;width:100%;height:34px;padding:0 10px;border-radius:9px;font-size:13px;color:var(--text);text-align:left;transition:background .12s}
 .mi>span:first-of-type{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -418,6 +462,7 @@ mark{background:var(--accent-soft);color:var(--text);border-radius:3px;padding:0
 </div>
 
 <nav id="dock" class="glass" aria-label="Add cards"></nav>
+<div id="minimap" class="glass" title="Click or drag to move around"><canvas></canvas></div>
 
 <div id="empty"><div class="em-ic" data-ico="board" data-s="28"></div><h3>A blank board</h3><p>Drag a card from the dock, double-click anywhere to write, or drop images straight onto the canvas.</p></div>
 <div id="marquee"></div>
@@ -483,13 +528,32 @@ const ICONS = {
   move:'<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M10 13h6M14 11l2 2-2 2"/>',
   folder:'<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
   database:'<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>',
-  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  frame:'<path d="M7 3v18M17 3v18M3 7h18M3 17h18"/>',
+  lock:'<rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+  unlock:'<rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 7.6-1.8"/>',
+  alignL:'<path d="M4 3v18"/><rect x="8" y="6" width="12" height="4" rx="1.5"/><rect x="8" y="14" width="7" height="4" rx="1.5"/>',
+  alignC:'<path d="M12 3v18"/><rect x="5" y="6" width="14" height="4" rx="1.5"/><rect x="8" y="14" width="8" height="4" rx="1.5"/>',
+  alignR:'<path d="M20 3v18"/><rect x="4" y="6" width="12" height="4" rx="1.5"/><rect x="9" y="14" width="7" height="4" rx="1.5"/>',
+  alignT:'<path d="M3 4h18"/><rect x="6" y="8" width="4" height="12" rx="1.5"/><rect x="14" y="8" width="4" height="7" rx="1.5"/>',
+  alignM:'<path d="M3 12h18"/><rect x="6" y="5" width="4" height="14" rx="1.5"/><rect x="14" y="8" width="4" height="8" rx="1.5"/>',
+  alignB:'<path d="M3 20h18"/><rect x="6" y="4" width="4" height="12" rx="1.5"/><rect x="14" y="9" width="4" height="7" rx="1.5"/>',
+  distH:'<path d="M4 3v18M20 3v18"/><rect x="9" y="7" width="6" height="10" rx="1.5"/>',
+  distV:'<path d="M3 4h18M3 20h18"/><rect x="7" y="9" width="10" height="6" rx="1.5"/>',
+  tidy:'<rect x="3" y="3" width="7" height="7" rx="1.8"/><rect x="14" y="3" width="7" height="7" rx="1.8"/><rect x="3" y="14" width="7" height="7" rx="1.8"/><rect x="14" y="14" width="7" height="7" rx="1.8"/>',
+  curve:'<path d="M4 19C4 9 20 15 20 5"/>', straight:'<path d="M4 20 20 4"/>', line:'<path d="M4 12h16"/>',
+  dashed:'<path d="M3 12h4M10 12h4M17 12h4"/>', dotted:'<path d="M4 12h.01M9.3 12h.01M14.7 12h.01M20 12h.01" stroke-width="2.6"/>',
+  headEnd:'<path d="M4 12h15M14 7l5 5-5 5"/>', headBoth:'<path d="M5 12h14M9 7l-5 5 5 5M15 7l5 5-5 5"/>', headNone:'<path d="M4 12h16"/><circle cx="4" cy="12" r="1"/><circle cx="20" cy="12" r="1"/>',
+  label:'<rect x="3" y="7" width="18" height="10" rx="5"/><path d="M8 12h8"/>',
+  sliders:'<path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>',
+  map:'<rect x="3" y="5" width="18" height="14" rx="3"/><rect x="11" y="9" width="7" height="6" rx="1.5"/>'
 };
 const ico = (n, s = 18) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n] || ''}</svg>`;
 const COLORS = ['violet','sky','mint','rose','amber','slate'];
-const TOOLS = [['note','Note','N'],['todo','To-do','T'],['link','Link','L'],['image','Image','I'],['board','Board','B'],['column','Column','C']];
-const W = {note:280, todo:260, link:300, image:300, board:132, column:280};
-const MIN_W = {note:160, todo:200, link:220, image:110, column:200};
+const TOOLS = [['note','Note','N'],['todo','To-do','T'],['link','Link','L'],['image','Image','I'],['board','Board','B'],['column','Column','C'],['frame','Frame','F']];
+const W = {note:280, todo:260, link:300, image:300, board:132, column:280, frame:520};
+const MIN_W = {note:160, todo:200, link:220, image:110, column:200, frame:160};
+const GRID = 24;
 
 function hostOf(u){ try { return new URL(u).hostname.replace(/^www\./,''); } catch { return u; } }
 function normUrl(u){ u = (u||'').trim(); if (u && !/^[a-z][\w+.-]*:\/\//i.test(u)) u = 'https://' + u; return u; }
@@ -505,6 +569,7 @@ function applyTheme(t){
   try { localStorage.setItem('tessera-theme', t); } catch {}
   const m = $('meta[name="theme-color"]'); if (m) m.content = t === 'dark' ? '#08080a' : '#f5f3ee';
   const b = $('#themeBtn'); if (b){ b.innerHTML = ico(t === 'dark' ? 'sun' : 'moon'); b.title = t === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'; }
+  if (S) minimapSoon();
 }
 function toggleTheme(e){
   const next = isDark() ? 'light' : 'dark', r0 = $('#themeBtn').getBoundingClientRect();
@@ -587,6 +652,7 @@ function seed(){
     {id:uid(), text:'Drag a card into the Ideas column', done:false},
     {id:uid(), text:'Drop a card onto the Moodboard to move it inside', done:false},
     {id:uid(), text:'Press Ctrl K to search everything', done:false},
+    {id:uid(), text:'Select a few cards, right-click and tidy them up', done:false},
     {id:uid(), text:'Turn on auto-backup from the storage chip', done:false}]});
   const col = put({id:uid(), type:'column', x:240, y:-200, w:270, z:3, color:null, title:'Ideas', children:[]});
   const k1 = put({id:uid(), type:'note', x:0, y:0, w:270, z:4, color:'mint', parent:col.id, html:'<div>Cards can live inside columns. Drag them in and out to group things.</div>'});
@@ -616,7 +682,7 @@ function updateUndoUI(){ $('#undoBtn').disabled = !hist.past.length; $('#redoBtn
 
 /* ================= DOM refs ================= */
 const canvas = $('#canvas'), stage = $('#stage'), world = $('#world'), ctx = $('#ctx'), fmt = $('#fmt');
-let linksG = null;
+let linksG = null, labelsEl = null, guidesEl = null;
 
 /* ================= View ================= */
 function applyView(){
@@ -627,6 +693,7 @@ function applyView(){
   canvas.style.backgroundPosition = `${v.x}px ${v.y}px`;
   $('#zl').textContent = Math.round(v.s * 100) + '%';
   if (fmtFor) positionFormatBar();
+  minimapSoon();
 }
 function screenToWorld(x, y){ const v = cur().view; return {x:(x - v.x) / v.s, y:(y - v.y) / v.s}; }
 function zoomAt(px, py, ns){
@@ -693,16 +760,36 @@ function edgePoint(r, p, pad = 5){
   const t = Math.min(dx ? (r.w / 2 + pad) / Math.abs(dx) : Infinity, dy ? (r.h / 2 + pad) / Math.abs(dy) : Infinity);
   return {x:cx + dx * t, y:cy + dy * t};
 }
-function drawLinks(){
-  if (!linksG) return; const b = cur(); let h = '';
+let labelEditing = null;
+function linkGeom(l){
+  const A = getWorldRect(l.from), B = getWorldRect(l.to); if (!A || !B) return null;
+  const ca = {x:A.x + A.w/2, y:A.y + A.h/2}, cb = {x:B.x + B.w/2, y:B.y + B.h/2};
+  const gs = l.heads === 'both' ? 7 : 4, ge = l.heads === 'none' ? 4 : 7, f = n => n.toFixed(1);
+  if (!l.curve){ const p1 = edgePoint(A, cb, gs), p2 = edgePoint(B, ca, ge); return {d:`M${f(p1.x)} ${f(p1.y)}L${f(p2.x)} ${f(p2.y)}`, mid:{x:(p1.x + p2.x) / 2, y:(p1.y + p2.y) / 2}}; }
+  const dx = cb.x - ca.x, dy = cb.y - ca.y; let p1, p2, c1, c2;
+  if (Math.abs(dx) >= Math.abs(dy)){
+    const g = Math.sign(dx) || 1;
+    p1 = {x:g > 0 ? A.x + A.w + gs : A.x - gs, y:ca.y}; p2 = {x:g > 0 ? B.x - ge : B.x + B.w + ge, y:cb.y};
+    const k = Math.max(40, Math.abs(p2.x - p1.x) * .5); c1 = {x:p1.x + g * k, y:p1.y}; c2 = {x:p2.x - g * k, y:p2.y};
+  } else {
+    const g = Math.sign(dy) || 1;
+    p1 = {x:ca.x, y:g > 0 ? A.y + A.h + gs : A.y - gs}; p2 = {x:cb.x, y:g > 0 ? B.y - ge : B.y + B.h + ge};
+    const k = Math.max(40, Math.abs(p2.y - p1.y) * .5); c1 = {x:p1.x, y:p1.y + g * k}; c2 = {x:p2.x, y:p2.y - g * k};
+  }
+  return {d:`M${f(p1.x)} ${f(p1.y)}C${f(c1.x)} ${f(c1.y)} ${f(c2.x)} ${f(c2.y)} ${f(p2.x)} ${f(p2.y)}`,
+    mid:{x:(p1.x + 3 * c1.x + 3 * c2.x + p2.x) / 8, y:(p1.y + 3 * c1.y + 3 * c2.y + p2.y) / 8}};
+}
+function drawLinks(force){
+  if (!linksG) return; const b = cur(); let h = '', lh = '';
   for (const l of b.links){
-    const A = getWorldRect(l.from), B = getWorldRect(l.to); if (!A || !B) continue;
-    const ca = {x:A.x + A.w/2, y:A.y + A.h/2}, cb = {x:B.x + B.w/2, y:B.y + B.h/2};
-    const p1 = edgePoint(A, cb, 4), p2 = edgePoint(B, ca, 7), on = selLink === l.id;
-    const d = `M${p1.x.toFixed(1)} ${p1.y.toFixed(1)}L${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`;
-    h += `<path class="link-hit" data-id="${l.id}" d="${d}"/><path class="link-line${on?' sel':''}" d="${d}" marker-end="url(#${on?'arr-sel':'arr'})"/>`;
+    const g = linkGeom(l); if (!g) continue;
+    const on = selLink === l.id, m = on ? 'arr-sel' : 'arr', heads = l.heads || 'end', dash = l.dash && l.dash !== 'solid' ? ' ' + l.dash : '';
+    h += `<path class="link-hit" data-id="${l.id}" d="${g.d}"/><path class="link-line${on ? ' sel' : ''}${dash}" d="${g.d}"${heads !== 'none' ? ` marker-end="url(#${m})"` : ''}${heads === 'both' ? ` marker-start="url(#${m})"` : ''}/>`;
+    if (l.label || labelEditing === l.id) lh += `<div class="link-label${on ? ' sel' : ''}" data-link="${l.id}" style="left:${g.mid.x.toFixed(1)}px;top:${g.mid.y.toFixed(1)}px">${esc(l.label || '')}</div>`;
   }
   linksG.innerHTML = h;
+  if (labelsEl && (!labelEditing || force)) labelsEl.innerHTML = lh;
+  minimapSoon();
 }
 let linksRAF = 0;
 function drawLinksSoon(){ if (!linksRAF) linksRAF = requestAnimationFrame(() => { linksRAF = 0; drawLinks(); }); }
@@ -726,7 +813,12 @@ function cardEl(c, inCol = false){
   el.className = `card ${c.type}`; el.dataset.id = c.id;
   if (c.color && c.type !== 'image') el.dataset.color = c.color;
   if (sel.has(c.id)) el.classList.add('selected');
-  if (!inCol){ el.style.left = c.x + 'px'; el.style.top = c.y + 'px'; el.style.zIndex = c.z || 1; if (c.type !== 'board') el.style.width = (c.w || W[c.type]) + 'px'; }
+  if (c.locked) el.classList.add('locked');
+  if (!inCol){
+    el.style.left = c.x + 'px'; el.style.top = c.y + 'px'; el.style.zIndex = c.type === 'frame' ? 0 : (c.z || 1) + 1;
+    if (c.type !== 'board') el.style.width = (c.w || W[c.type]) + 'px';
+    if (c.type === 'frame') el.style.height = (c.h || 320) + 'px';
+  }
   let h = '';
   if (c.type === 'note') h = `<div class="note-body" spellcheck="false">${sanitize(c.html || '')}</div>`;
   else if (c.type === 'todo') h = todoHTML(c);
@@ -740,8 +832,10 @@ function cardEl(c, inCol = false){
     h = `<div class="tile">${ico('board',30)}</div><div class="b-meta"><div class="bt">${esc(tb ? tb.title : 'Untitled board')}</div><div class="bc">${n ? `${n} card${n > 1 ? 's' : ''}` : 'Empty'}</div></div>`;
   }
   else if (c.type === 'column') h = `<div class="col-head"><span class="col-title">${esc(c.title || 'Column')}</span><span class="col-count">${c.children.length}</span></div><div class="col-body"></div>`;
-  h += `<div class="ch" title="Drag to connect"></div>`;
+  else if (c.type === 'frame') h = `<div class="fr-title">${ico(c.locked ? 'lock' : 'frame', 13)}<span>${esc(c.title || 'Frame')}</span></div>`;
+  if (c.type !== 'frame') h += `<div class="ch" title="Drag to connect"></div>`;
   if (!inCol && c.type !== 'board') h += `<div class="rz" title="Drag to resize"></div>`;
+  if (c.locked && c.type !== 'frame') h += `<div class="lock-badge">${ico('lock', 11)}</div>`;
   el.innerHTML = h;
 
   if (c.type === 'image'){
@@ -769,9 +863,14 @@ function cardEl(c, inCol = false){
 function render(pop = []){
   const b = cur();
   world.innerHTML = ''; world.appendChild(makeSvg());
+  labelsEl = document.createElement('div'); labelsEl.id = 'labels'; world.appendChild(labelsEl);
+  guidesEl = document.createElement('div'); guidesEl.id = 'guides'; world.appendChild(guidesEl);
+  canvas.dataset.bg = b.bg || 'dots';
   for (const c of Object.values(b.cards)) if (c.parent && !b.cards[c.parent]) c.parent = null;
-  const free = Object.values(b.cards).filter(c => !c.parent).sort((a, c) => (a.z || 0) - (c.z || 0));
-  for (const c of free) world.appendChild(cardEl(c));
+  const area = c => (c.w || 0) * (c.h || 0), all = Object.values(b.cards).filter(c => !c.parent);
+  const frames = all.filter(c => c.type === 'frame').sort((a, c) => area(c) - area(a));
+  const free = all.filter(c => c.type !== 'frame').sort((a, c) => (a.z || 0) - (c.z || 0));
+  for (const c of [...frames, ...free]) world.appendChild(cardEl(c));
   world.querySelectorAll('.ti-text').forEach(autosize);
   pop.forEach(id => elOf(id)?.classList.add('pop'));
   applyView(); drawLinks(); renderCrumbs(); updateEmpty(); updateUndoUI();
@@ -936,6 +1035,7 @@ function renameCard(id){
   if (c.type === 'board'){ const tb = S.boards[c.target]; if (tb) inlineEdit(el.querySelector('.bt'), tb.title, v => tb.title = v); }
   else if (c.type === 'column') inlineEdit(el.querySelector('.col-title'), c.title || 'Column', v => c.title = v);
   else if (c.type === 'link') inlineEdit(el.querySelector('.lk-title'), c.title || hostOf(c.url), v => c.title = v);
+  else if (c.type === 'frame') inlineEdit(el.querySelector('.fr-title span'), c.title || 'Frame', v => c.title = v);
 }
 
 /* ================= Card operations ================= */
@@ -943,6 +1043,7 @@ function defaults(type){
   if (type === 'note') return {html:''};
   if (type === 'todo') return {title:'', items:[{id:uid(), text:'', done:false}]};
   if (type === 'column') return {title:'Column', children:[]};
+  if (type === 'frame') return {title:'Frame', h:340};
   return {};
 }
 function addCard(type, p, extra = {}, opts = {}){
@@ -950,6 +1051,7 @@ function addCard(type, p, extra = {}, opts = {}){
   const w = W[type];
   const c = {id:uid(), type, x:Math.round(p.x - w / 2), y:Math.round(p.y - 24), w, z:maxZ(b) + 1, color:null, ...defaults(type), ...extra};
   if (type === 'board') c.target = newBoard('Untitled board', b.id).id;
+  if (type === 'frame'){ c.y = Math.round(p.y - c.h / 2); c.z = 0; }
   b.cards[c.id] = c; sel.clear(); sel.add(c.id); selLink = null;
   render([c.id]); saveSoon();
   if (opts.edit === false) return c;
@@ -957,7 +1059,7 @@ function addCard(type, p, extra = {}, opts = {}){
     const el = elOf(c.id); if (!el) return;
     if (type === 'note'){ fresh.add(c.id); enterEdit(c.id); }
     else if (type === 'todo') el.querySelector('.todo-title')?.focus({preventScroll:true});
-    else if (type === 'board' || type === 'column') renameCard(c.id);
+    else if (type === 'board' || type === 'column' || type === 'frame') renameCard(c.id);
   });
   return c;
 }
@@ -1019,7 +1121,9 @@ function collectBoards(bid, into){
   for (const c of Object.values(bd.cards)) if (c.type === 'board') collectBoards(c.target, into);
 }
 function deleteCards(ids){
-  const b = cur(); ids = ids.filter(id => b.cards[id]); if (!ids.length) return;
+  const b = cur(); ids = ids.filter(id => b.cards[id]);
+  const lockedN = ids.filter(id => b.cards[id].locked).length; ids = ids.filter(id => !b.cards[id].locked);
+  if (!ids.length){ if (lockedN) toast('Locked cards can’t be deleted — unlock them first'); return; }
   commit();
   const e = {id:uid(), at:Date.now(), from:b.id, cards:{}, roots:[], boards:{}, links:[]};
   const kill = (id, root) => {
@@ -1117,7 +1221,7 @@ function cloneCard(c, src, dst, dx, dy, parent, map){
   return n;
 }
 function duplicate(ids){
-  const b = cur(); ids = ids.filter(id => b.cards[id]); if (!ids.length) return;
+  const b = cur(); ids = expandFrames(ids.filter(id => b.cards[id])); if (!ids.length) return;
   commit(); const map = {};
   const made = ids.map(id => {
     const c = b.cards[id];
@@ -1192,6 +1296,7 @@ function isDoubleTap(id, ev){
 function handleBgTap(ev){ if (isDoubleTap('bg', ev)) addCard('note', screenToWorld(ev.clientX, ev.clientY)); }
 
 function onDown(e){
+  lastPtrType = e.pointerType;
   if (e.pointerType === 'touch'){ touches.set(e.pointerId, {x:e.clientX, y:e.clientY}); if (touches.size >= 2){ startPinch(); return; } }
   if (e.button === 2) return;
   hideMenus();
@@ -1201,9 +1306,16 @@ function onDown(e){
   if (gesture){ gesture.cancel?.(); gesture = null; }
   if (e.button === 1 || (spaceDown && e.button === 0)){ e.preventDefault(); startPan(e); return; }
   if (cardElm && t.closest('.ch')){ startConnect(e, cardElm.dataset.id); return; }
-  if (cardElm && t.closest('.rz')){ startResize(e, cardElm.dataset.id); return; }
+  const locked = cardElm && findCard(cardElm.dataset.id)?.locked;
+  if (cardElm && t.closest('.rz') && !locked){ startResize(e, cardElm.dataset.id); return; }
+  if (locked){ lockedPress(e, cardElm); return; }
   if (cardElm){ startCardPress(e, cardElm); return; }
-  const lh = t.closest('.link-hit'); if (lh){ e.preventDefault(); selectLink(lh.dataset.id); return; }
+  const lb = t.closest('.link-label, .link-hit');
+  if (lb){
+    e.preventDefault(); const id = lb.dataset.link || lb.dataset.id; selectLink(id);
+    track(e, () => {}, ev => { if (isDoubleTap('ln' + id, ev)) editLinkLabel(id); });
+    return;
+  }
   if (e.pointerType === 'mouse'){ e.preventDefault(); startMarquee(e); } else startPan(e);
 }
 canvas.addEventListener('pointerdown', onDown);
@@ -1211,17 +1323,17 @@ canvas.addEventListener('pointermove', e => { lastPtr = {x:e.clientX, y:e.client
 window.addEventListener('pointerup', e => touches.delete(e.pointerId));
 window.addEventListener('pointercancel', e => touches.delete(e.pointerId));
 
-function startPan(e){
+function startPan(e, opts = {}){
   const v = cur().view, sx = e.clientX, sy = e.clientY, x0 = v.x, y0 = v.y; let moved = false, lp = 0;
   canvas.classList.add('panning');
-  if (e.pointerType === 'touch') lp = setTimeout(() => { if (!moved){ cancel(); openBgMenu(sx, sy); } }, 520);
+  if (e.pointerType === 'touch') lp = setTimeout(() => { if (!moved){ cancel(); buzz(12); opts.onLong ? opts.onLong(sx, sy) : openBgMenu(sx, sy); } }, 520);
   const stop = track(e, ev => {
     const dx = ev.clientX - sx, dy = ev.clientY - sy;
     if (!moved && Math.hypot(dx, dy) > 5){ moved = true; clearTimeout(lp); }
     if (moved){ v.x = x0 + dx; v.y = y0 + dy; applyView(); }
   }, ev => {
     clearTimeout(lp); canvas.classList.remove('panning'); gesture = null;
-    if (moved) saveSoon(false); else if (e.pointerType === 'touch'){ clearSelection(); handleBgTap(ev); }
+    if (moved) saveSoon(false); else if (opts.onTap) opts.onTap(ev); else if (e.pointerType === 'touch'){ clearSelection(); handleBgTap(ev); }
   });
   const cancel = () => { stop(); clearTimeout(lp); canvas.classList.remove('panning'); gesture = null; };
   gesture = {type:'pan', cancel};
@@ -1242,18 +1354,18 @@ function startPinch(){
   window.addEventListener('pointermove', mv); window.addEventListener('pointerup', up); window.addEventListener('pointercancel', up);
   gesture = {type:'pinch', cancel:cleanup};
 }
-function startMarquee(e){
+function startMarquee(e, opts = {}){
   const sx = e.clientX, sy = e.clientY, add = e.shiftKey, base = new Set(add ? sel : []), box = $('#marquee');
-  const rects = [...world.querySelectorAll(':scope > .card')].map(el => ({id:el.dataset.id, r:el.getBoundingClientRect()}));
+  const rects = [...world.querySelectorAll(':scope > .card')].map(el => ({id:el.dataset.id, r:el.getBoundingClientRect(), full:el.classList.contains('frame') || el.classList.contains('locked')}));
   let moved = false;
   const stop = track(e, ev => {
     if (!moved){ if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < 4) return; moved = true; box.style.display = 'block'; }
     const x1 = Math.min(sx, ev.clientX), y1 = Math.min(sy, ev.clientY), x2 = Math.max(sx, ev.clientX), y2 = Math.max(sy, ev.clientY);
     Object.assign(box.style, {left:x1 + 'px', top:y1 + 'px', width:(x2 - x1) + 'px', height:(y2 - y1) + 'px'});
     sel.clear(); base.forEach(i => sel.add(i));
-    for (const {id, r} of rects) if (r.right > x1 && r.left < x2 && r.bottom > y1 && r.top < y2) sel.add(id);
+    for (const {id, r, full} of rects) if (full ? (r.left >= x1 && r.right <= x2 && r.top >= y1 && r.bottom <= y2) : (r.right > x1 && r.left < x2 && r.bottom > y1 && r.top < y2)) sel.add(id);
     selLink = null; updateSelectionUI();
-  }, ev => { box.style.display = 'none'; gesture = null; if (!moved){ if (!add) clearSelection(); handleBgTap(ev); } });
+  }, ev => { box.style.display = 'none'; gesture = null; if (!moved){ if (opts.onTap) opts.onTap(ev); else { if (!add) clearSelection(); handleBgTap(ev); } } });
   gesture = {type:'marquee', cancel:() => { stop(); box.style.display = 'none'; gesture = null; }};
 }
 function startCardPress(e, el){
@@ -1272,14 +1384,9 @@ function startCardPress(e, el){
     if (e.shiftKey){ if (was){ sel.delete(id); updateSelectionUI(); } return; }
     const dbl = isDoubleTap(id, ev);
     if (was && sel.size > 1 && !dbl){ sel.clear(); sel.add(id); updateSelectionUI(); return; }
-    const again = dbl || was;
-    if (c.type === 'note'){ if (again) enterEdit(id, ev); }
-    else if (c.type === 'board'){ if (dbl || (was && ev.pointerType !== 'mouse')) openBoard(c.target); }
-    else if (c.type === 'image'){ if (dbl) lightbox(c); }
-    else if (c.type === 'column'){ if (again && downT.closest('.col-title')) renameCard(id); }
-    else if (c.type === 'link'){ if (again && downT.closest('.lk-title')) renameCard(id); }
+    cardTap(c, was, dbl, ev, downT);
   });
-  if (e.pointerType === 'touch') lp = setTimeout(() => { if (!drag){ stop(); gesture = null; openCardMenu(id, sx, sy); } }, 520);
+  if (e.pointerType === 'touch') lp = setTimeout(() => { if (!drag){ stop(); gesture = null; buzz(12); openCardMenu(id, sx, sy); } }, 520);
   gesture = {type:'card', cancel:() => { stop(); clearTimeout(lp); gesture = null; }};
 }
 function beginDrag(id, sx, sy){
@@ -1291,32 +1398,100 @@ function beginDrag(id, sx, sy){
     c.x = Math.round(r.x); c.y = Math.round(r.y); c.w = Math.round(r.w);
     sel.clear(); sel.add(id); render();
   }
+  const base = [...sel].map(i => b.cards[i]).filter(x => x && !x.parent && !x.locked);
+  const set = new Map(base.map(x => [x.id, x]));
+  for (const x of base) if (x.type === 'frame') frameContents(x).forEach(k => set.set(k.id, k));
   let z = maxZ(b);
-  const items = [...sel].map(i => b.cards[i]).filter(x => x && !x.parent).map(x => {
-    x.z = ++z; const el = elOf(x.id); el.style.zIndex = x.z; el.classList.add('dragging'); return {c:x, el, x0:x.x, y0:x.y};
+  const items = [...set.values()].map(x => {
+    const el = elOf(x.id); if (x.type !== 'frame'){ x.z = ++z; el.style.zIndex = x.z + 1; }
+    el.classList.add('dragging'); return {c:x, el, x0:x.x, y0:x.y};
   });
   const ids = new Set(items.map(i => i.c.id));
-  const s = cur().view.s, single = items.length === 1 && items[0].c.type !== 'column';
-  let target = null;
+  const s = cur().view.s, single = items.length === 1 && !['column','frame'].includes(items[0].c.type);
+  let g0 = null;
+  for (const it of items){ const r = getWorldRect(it.c.id); if (!r) continue; g0 = g0 ? {x:Math.min(g0.x, r.x), y:Math.min(g0.y, r.y), x2:Math.max(g0.x2, r.x + r.w), y2:Math.max(g0.y2, r.y + r.h)} : {x:r.x, y:r.y, x2:r.x + r.w, y2:r.y + r.h}; }
+  if (g0){ g0.w = g0.x2 - g0.x; g0.h = g0.y2 - g0.y; }
+  const others = [];
+  for (const el of world.querySelectorAll(':scope > .card')){ if (ids.has(el.dataset.id)) continue; const r = getWorldRect(el.dataset.id); if (r) others.push(r); }
+  let target = null, lastKey = '';
   document.body.classList.add('is-dragging');
   return {
     move(e){
-      const dx = (e.clientX - sx) / s, dy = (e.clientY - sy) / s;
+      let dx = (e.clientX - sx) / s, dy = (e.clientY - sy) / s; const gs = [], mode = S.meta.snap || 'guides';
+      if (g0 && !e.altKey && mode !== 'off'){
+        const gx = g0.x + dx, gy = g0.y + dy;
+        if (mode === 'grid'){ dx += Math.round(gx / GRID) * GRID - gx; dy += Math.round(gy / GRID) * GRID - gy; }
+        else {
+          const T = 7 / s, xs = [gx, gx + g0.w / 2, gx + g0.w], ys = [gy, gy + g0.h / 2, gy + g0.h]; let bx = null, by = null;
+          for (const o of others){
+            for (const a of xs) for (const v of [o.x, o.x + o.w / 2, o.x + o.w]){ const d = v - a; if (Math.abs(d) < T && (!bx || Math.abs(d) < Math.abs(bx.d))) bx = {d, v}; }
+            for (const a of ys) for (const v of [o.y, o.y + o.h / 2, o.y + o.h]){ const d = v - a; if (Math.abs(d) < T && (!by || Math.abs(d) < Math.abs(by.d))) by = {d, v}; }
+          }
+          if (bx) dx += bx.d; if (by) dy += by.d;
+          const fx = g0.x + dx, fy = g0.y + dy, near = (arr, v) => arr.some(q => Math.abs(q - v) < .6);
+          if (bx){ let y1 = fy, y2 = fy + g0.h; for (const o of others) if (near([o.x, o.x + o.w / 2, o.x + o.w], bx.v)){ y1 = Math.min(y1, o.y); y2 = Math.max(y2, o.y + o.h); } gs.push({v:true, x:bx.v, y1, y2}); }
+          if (by){ let x1 = fx, x2 = fx + g0.w; for (const o of others) if (near([o.y, o.y + o.h / 2, o.y + o.h], by.v)){ x1 = Math.min(x1, o.x); x2 = Math.max(x2, o.x + o.w); } gs.push({v:false, y:by.v, x1, x2}); }
+          const key = (bx ? bx.v : '') + '|' + (by ? by.v : ''); if (key !== lastKey && (bx || by)) buzz(6); lastKey = key;
+        }
+      }
       for (const it of items){ it.c.x = Math.round(it.x0 + dx); it.c.y = Math.round(it.y0 + dy); it.el.style.left = it.c.x + 'px'; it.el.style.top = it.c.y + 'px'; }
-      drawLinksSoon(); target = updateDropTarget(e, ids, single);
+      drawGuides(gs); drawLinksSoon();
+      const nt = updateDropTarget(e, ids, single);
+      if (nt && (nt.board || nt.colId) !== (target?.board || target?.colId)) buzz(8);
+      target = nt;
     },
     end(){
-      document.body.classList.remove('is-dragging');
+      document.body.classList.remove('is-dragging'); drawGuides([]);
       items.forEach(it => it.el.classList.remove('dragging')); clearDropTarget();
       if (target?.board && b.cards[target.board]){
-        moveCards([...ids], b.cards[target.board].target, {noCommit:true});
+        buzz(14); moveCards([...ids], b.cards[target.board].target, {noCommit:true});
       } else if (target?.colId && b.cards[target.colId]){
-        const col = b.cards[target.colId], cc = items[0].c;
+        buzz(14); const col = b.cards[target.colId], cc = items[0].c;
         col.children.splice(target.index, 0, cc.id); cc.parent = col.id; render();
       } else drawLinks();
       saveSoon();
     }
   };
+}
+function frameContents(f){
+  const fr = getWorldRect(f.id), out = []; if (!fr) return out;
+  for (const c of Object.values(cur().cards)){
+    if (c.parent || c.id === f.id) continue; const r = getWorldRect(c.id); if (!r) continue;
+    if (c.type === 'frame'){ if (r.x >= fr.x && r.y >= fr.y && r.x + r.w <= fr.x + fr.w && r.y + r.h <= fr.y + fr.h) out.push(c); }
+    else { const cx = r.x + r.w / 2, cy = r.y + r.h / 2; if (cx > fr.x && cx < fr.x + fr.w && cy > fr.y && cy < fr.y + fr.h) out.push(c); }
+  }
+  return out;
+}
+function expandFrames(ids){
+  const b = cur(), set = new Set(ids);
+  for (const id of ids){ const c = b.cards[id]; if (c?.type === 'frame' && !c.parent) frameContents(c).forEach(x => set.add(x.id)); }
+  return [...set];
+}
+function drawGuides(gs){
+  if (!guidesEl) return; const t = 1.25 / cur().view.s;
+  guidesEl.innerHTML = gs.map(g => g.v
+    ? `<i class="guide" style="left:${g.x - t / 2}px;top:${g.y1 - 10}px;width:${t}px;height:${g.y2 - g.y1 + 20}px"></i>`
+    : `<i class="guide" style="top:${g.y - t / 2}px;left:${g.x1 - 10}px;height:${t}px;width:${g.x2 - g.x1 + 20}px"></i>`).join('');
+}
+function cardTap(c, was, dbl, ev, downT){
+  const id = c.id, again = dbl || was;
+  if (c.type === 'note'){ if (again) enterEdit(id, ev); }
+  else if (c.type === 'board'){ if (dbl || (was && ev.pointerType !== 'mouse')) openBoard(c.target); }
+  else if (c.type === 'image'){ if (dbl) lightbox(c); }
+  else if (c.type === 'column'){ if (again && downT.closest('.col-title')) renameCard(id); }
+  else if (c.type === 'link'){ if (again && downT.closest('.lk-title')) renameCard(id); }
+  else if (c.type === 'frame'){ if (again) renameCard(id); }
+}
+function lockedPress(e, el){
+  const id = el.dataset.id, c = findCard(id), was = sel.has(id), downT = e.target;
+  const onTap = ev => {
+    if (e.shiftKey){ sel.has(id) ? sel.delete(id) : sel.add(id); updateSelectionUI(); return; }
+    const dbl = isDoubleTap(id, ev);
+    if (!was || sel.size > 1){ sel.clear(); sel.add(id); selLink = null; updateSelectionUI(); }
+    cardTap(c, was && sel.size === 1, dbl, ev, downT);
+  };
+  if (e.pointerType === 'mouse'){ e.preventDefault(); startMarquee(e, {onTap}); }
+  else startPan(e, {onTap, onLong:(x, y) => openCardMenu(id, x, y)});
 }
 function clearDropTarget(){
   world.querySelectorAll('.col-ind').forEach(n => n.remove());
@@ -1345,9 +1520,14 @@ function updateDropTarget(e, ids, single){
 }
 function startResize(e, id){
   e.preventDefault(); commit();
-  const c = findCard(id), el = elOf(id), sx = e.clientX, w0 = c.w || W[c.type], s = cur().view.s, min = MIN_W[c.type] || 140;
-  const stop = track(e, ev => { c.w = Math.round(clamp(w0 + (ev.clientX - sx) / s, min, 1600)); el.style.width = c.w + 'px'; el.querySelectorAll('.ti-text').forEach(autosize); drawLinksSoon(); },
-    () => { gesture = null; saveSoon(); });
+  const c = findCard(id), el = elOf(id), sx = e.clientX, sy = e.clientY, w0 = c.w || W[c.type], h0 = c.h || 320, s = cur().view.s, min = MIN_W[c.type] || 140, fr = c.type === 'frame';
+  const stop = track(e, ev => {
+    let w = w0 + (ev.clientX - sx) / s, h = h0 + (ev.clientY - sy) / s;
+    if ((S.meta.snap || 'guides') === 'grid' && !ev.altKey){ w = Math.round((c.x + w) / GRID) * GRID - c.x; h = Math.round((c.y + h) / GRID) * GRID - c.y; }
+    c.w = Math.round(clamp(w, min, fr ? 8000 : 1600)); el.style.width = c.w + 'px';
+    if (fr){ c.h = Math.round(clamp(h, 120, 8000)); el.style.height = c.h + 'px'; }
+    el.querySelectorAll('.ti-text').forEach(autosize); drawLinksSoon();
+  }, () => { gesture = null; saveSoon(); });
   gesture = {type:'resize', cancel:() => { stop(); gesture = null; }};
 }
 function startConnect(e, fromId){
@@ -1364,7 +1544,7 @@ function startConnect(e, fromId){
     tmp.remove(); gesture = null;
     if (hover){
       const to = hover; setHover(null); const b = cur();
-      if (!b.links.some(l => (l.from === fromId && l.to === to) || (l.from === to && l.to === fromId))){ commit(); b.links.push({id:uid(), from:fromId, to}); saveSoon(); }
+      if (!b.links.some(l => (l.from === fromId && l.to === to) || (l.from === to && l.to === fromId))){ commit(); b.links.push({...(S.meta.linkDefault || {}), id:uid(), from:fromId, to}); buzz(12); saveSoon(); }
     }
     drawLinks();
   });
@@ -1437,6 +1617,8 @@ function openMenu(items, x, y, alignRight = false){
     if (it.sep) return '<div class="msep"></div>';
     if (it.heading) return `<div class="mlabel">${esc(it.heading)}</div>`;
     if (it.note) return `<div class="mnote">${esc(it.note)}</div>`;
+    if (it.iconRow) return `<div class="mrow">${it.label ? `<span class="mrl">${esc(it.label)}</span>` : ''}${it.iconRow.map((b, j) => `<button class="mic${b.on ? ' on' : ''}" data-i="${i}" data-j="${j}" title="${esc(b.title)}"${b.disabled ? ' disabled' : ''}>${ico(b.icon, 17)}</button>`).join('')}</div>`;
+    if (it.segment) return `<div class="mrow col"><span class="mrl">${esc(it.segment.label)}</span><div class="seg">${it.segment.opts.map(([v, l]) => `<button class="${it.segment.value === v ? 'on' : ''}" data-i="${i}" data-v="${v}">${esc(l)}</button>`).join('')}</div></div>`;
     if (it.swatches) return `<div class="mlabel">Colour</div><div class="swatches">${['', ...COLORS].map(k => `<button class="sw${k ? '' : ' none'}${(it.value || '') === k ? ' on' : ''}" ${k ? `data-color="${k}"` : ''} data-i="${i}" data-sw="${k}" title="${k ? cap(k) : 'Default'}"></button>`).join('')}</div>`;
     return `<button class="mi${it.danger ? ' danger' : ''}" data-i="${i}" role="menuitem">${ico(it.icon, 16)}<span>${esc(it.label)}</span>${it.kbd ? `<span class="k">${it.kbd}</span>` : ''}</button>`;
   }).join('');
@@ -1448,14 +1630,27 @@ function openMenu(items, x, y, alignRight = false){
 }
 function hideMenus(){ ctx.classList.remove('show'); }
 ctx.addEventListener('click', e => {
-  const b = e.target.closest('[data-i]'); if (!b) return; const it = ctx._items[+b.dataset.i]; hideMenus();
+  const b = e.target.closest('[data-i]'); if (!b) return; const it = ctx._items[+b.dataset.i];
+  if (it.segment){ it.segment.value = b.dataset.v; b.parentElement.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); it.segment.pick(b.dataset.v); return; }
+  if (it.iconRow){
+    const sub = it.iconRow[+b.dataset.j];
+    if (it.radio){ b.parentElement.querySelectorAll('.mic').forEach(x => x.classList.toggle('on', x === b)); sub.fn(); return; }
+    hideMenus(); sub.fn(); return;
+  }
+  hideMenus();
   if (it.swatches) it.onPick(b.dataset.sw || null); else it.fn?.();
 });
 document.addEventListener('pointerdown', e => { if (!e.target.closest('#ctx') && !e.target.closest('#moreBtn,#brand')) hideMenus(); }, true);
 function openCardMenu(id, x, y){
   if (!sel.has(id)){ sel.clear(); sel.add(id); selLink = null; updateSelectionUI(); }
-  const c = findCard(id); if (!c) return; const ids = [...sel], items = [];
+  const c = findCard(id); if (!c) return; const ids = [...sel], items = [], free = freeSel();
   if (c.type !== 'image') items.push({swatches:true, value:c.color, onPick:col => setColor(ids, col)}, {sep:true});
+  if (free.length >= 2){
+    items.push({label:'Align', iconRow:[['alignL','Align left','l'],['alignC','Align centers','c'],['alignR','Align right','r'],['alignT','Align top','t'],['alignM','Align middles','m'],['alignB','Align bottom','b']].map(([icon, title, k]) => ({icon, title, fn:() => align(k)}))});
+    items.push({label:'Arrange', iconRow:[{icon:'distH', title:'Distribute horizontally', disabled:free.length < 3, fn:() => distribute('x')}, {icon:'distV', title:'Distribute vertically', disabled:free.length < 3, fn:() => distribute('y')}, {icon:'tidy', title:'Tidy up into a grid', fn:tidy}]});
+    items.push({label:'Frame selection', icon:'frame', kbd:'Ctrl G', fn:frameSelection}, {sep:true});
+  }
+  if (c.type === 'frame') items.push({label:'Select contents', icon:'select', fn:() => { sel.clear(); frameContents(c).forEach(k => sel.add(k.id)); updateSelectionUI(); }});
   if (c.type === 'board'){
     items.push({label:'Open board', icon:'open', kbd:'Enter', fn:() => openBoard(c.target)});
     const on = isPinned(c.target); items.push({label:on ? 'Unpin board' : 'Pin board', icon:on ? 'starFill' : 'star', fn:() => togglePin(c.target)});
@@ -1463,32 +1658,35 @@ function openCardMenu(id, x, y){
   if (c.type === 'link') items.push({label:'Open link', icon:'external', fn:() => window.open(c.url, '_blank', 'noopener')});
   if (c.type === 'note') items.push({label:'Edit', icon:'pen', kbd:'Enter', fn:() => enterEdit(id)});
   if (c.type === 'image') items.push({label:'View full size', icon:'image', fn:() => lightbox(c)}, {label:'Save image', icon:'download', fn:() => downloadImage(c)});
-  if (['board','column','link'].includes(c.type)) items.push({label:'Rename', icon:'pen', fn:() => renameCard(id)});
+  if (['board','column','link','frame'].includes(c.type)) items.push({label:'Rename', icon:'pen', fn:() => renameCard(id)});
   if (items.length && !items[items.length - 1].sep) items.push({sep:true});
-  items.push({label:'Move to board…', icon:'move', fn:() => openPalette('move', {ids})});
+  const anyUnlocked = ids.some(i => !cur().cards[i]?.locked);
+  items.push({label:anyUnlocked ? 'Lock in place' : 'Unlock', icon:anyUnlocked ? 'lock' : 'unlock', kbd:'Ctrl ⇧ L', fn:() => toggleLock(ids)});
+  items.push({label:'Move to board…', icon:'move', fn:() => openPalette('move', {ids:expandFrames(ids)})});
   items.push({label:'Duplicate', icon:'copy', kbd:'Ctrl D', fn:() => duplicate(ids)});
-  if (!c.parent) items.push({label:'Bring to front', icon:'front', fn:() => reorder(ids, true)}, {label:'Send to back', icon:'back', fn:() => reorder(ids, false)});
+  if (!c.parent && c.type !== 'frame') items.push({label:'Bring to front', icon:'front', fn:() => reorder(ids, true)}, {label:'Send to back', icon:'back', fn:() => reorder(ids, false)});
   items.push({sep:true}, {label:ids.length > 1 ? `Delete ${ids.length} cards` : 'Delete', icon:'trash', kbd:'Del', danger:true, fn:() => deleteCards(ids)});
   openMenu(items, x, y);
 }
 function openBgMenu(x, y){
   const p = screenToWorld(x, y);
   openMenu([...TOOLS.map(([t, l, k]) => ({label:`Add ${l.toLowerCase()}`, icon:t, kbd:k, fn:() => createCard(t, p)})), {sep:true},
-    {label:'Select all', icon:'select', kbd:'Ctrl A', fn:selectAll}, {label:'Fit to screen', icon:'fit', kbd:'Ctrl 0', fn:() => fit()}], x, y);
+    {label:'Select all', icon:'select', kbd:'Ctrl A', fn:selectAll}, {label:'Fit to screen', icon:'fit', kbd:'Ctrl 0', fn:() => fit()},
+    {label:'View options…', icon:'sliders', fn:() => openViewMenu(x, y)}], x, y);
 }
 canvas.addEventListener('contextmenu', e => {
   e.preventDefault(); if (ctx.classList.contains('show') && e.pointerType === 'touch') return;
   if (gesture){ gesture.cancel?.(); gesture = null; }
-  const card = e.target.closest('.card'), lh = e.target.closest('.link-hit');
-  if (card && !e.target.closest('[contenteditable="true"],input,textarea')) openCardMenu(card.dataset.id, e.clientX, e.clientY);
-  else if (lh){ selectLink(lh.dataset.id); openMenu([{label:'Reverse direction', icon:'swap', fn:() => reverseLink(lh.dataset.id)}, {sep:true}, {label:'Delete connection', icon:'trash', danger:true, kbd:'Del', fn:() => removeLink(lh.dataset.id)}], e.clientX, e.clientY); }
+  const card = e.target.closest('.card'), lh = e.target.closest('.link-hit, .link-label');
+  if (lh){ if (!lh.isContentEditable) openLinkMenu(lh.dataset.link || lh.dataset.id, e.clientX, e.clientY); }
+  else if (card && !e.target.closest('[contenteditable="true"],input,textarea')) openCardMenu(card.dataset.id, e.clientX, e.clientY);
   else if (!card) openBgMenu(e.clientX, e.clientY);
 });
 
 /* ---------- clipboard & drop ---------- */
 document.addEventListener('copy', e => {
   if (isEditingAny() || !sel.size) return;
-  const b = cur(), ids = [...sel], pl = {roots:ids, cards:{}};
+  const b = cur(), ids = expandFrames([...sel]), pl = {roots:ids, cards:{}};
   const add = id => { const c = b.cards[id]; if (!c) return; pl.cards[id] = c; if (c.type === 'column') c.children.forEach(add); };
   ids.forEach(add); e.clipboardData.setData('text/plain', 'tessera:' + JSON.stringify(pl)); e.preventDefault();
   toast(`Copied ${ids.length} card${ids.length > 1 ? 's' : ''}`);
@@ -1529,6 +1727,8 @@ document.addEventListener('keydown', e => {
   if (mod && k === 'y'){ e.preventDefault(); redo(); return; }
   if (mod && k === 'd'){ e.preventDefault(); duplicate([...sel]); return; }
   if (mod && k === 'a'){ e.preventDefault(); selectAll(); return; }
+  if (mod && k === 'g'){ e.preventDefault(); frameSelection(); return; }
+  if (mod && e.shiftKey && k === 'l'){ e.preventDefault(); toggleLock([...sel]); return; }
   if (mod || e.altKey) return;
   if (k === '/'){ e.preventDefault(); openPalette(); return; }
   if (k === 'delete' || k === 'backspace'){ if (selLink){ e.preventDefault(); removeLink(selLink); } else if (sel.size){ e.preventDefault(); deleteCards([...sel]); } return; }
@@ -1538,7 +1738,7 @@ document.addEventListener('keydown', e => {
   if (k.startsWith('arrow') && sel.size){
     e.preventDefault(); const now = Date.now(); if (now - lastNudge > 800) commit(); lastNudge = now;
     const d = e.shiftKey ? 10 : 1, dx = k === 'arrowleft' ? -d : k === 'arrowright' ? d : 0, dy = k === 'arrowup' ? -d : k === 'arrowdown' ? d : 0;
-    for (const id of sel){ const c = findCard(id); if (c && !c.parent){ c.x += dx; c.y += dy; const el = elOf(id); el.style.left = c.x + 'px'; el.style.top = c.y + 'px'; } }
+    for (const id of expandFrames([...sel].filter(i => !findCard(i)?.locked))){ const c = findCard(id); if (c && !c.parent){ c.x += dx; c.y += dy; const el = elOf(id); el.style.left = c.x + 'px'; el.style.top = c.y + 'px'; } }
     drawLinks(); saveSoon(); return;
   }
   const tool = TOOLS.find(t => t[2].toLowerCase() === k);
@@ -1546,6 +1746,161 @@ document.addEventListener('keydown', e => {
 });
 document.addEventListener('keyup', e => { if (e.key === ' '){ spaceDown = false; canvas.classList.remove('grab'); } });
 window.addEventListener('blur', () => { spaceDown = false; canvas.classList.remove('grab'); });
+
+/* ================= Arrange, lock, frames ================= */
+function freeSel(){ const b = cur(); return [...sel].map(id => b.cards[id]).filter(c => c && !c.parent && !c.locked); }
+function tweenMove(moves){
+  if (!moves.length) return; commit();
+  const done = new Set(moves.map(m => m.c.id)), extra = [];
+  for (const m of moves) if (m.c.type === 'frame'){
+    const dx = Math.round(m.x) - m.c.x, dy = Math.round(m.y) - m.c.y;
+    if (dx || dy) frameContents(m.c).forEach(k => { if (!done.has(k.id)){ done.add(k.id); extra.push({c:k, x:k.x + dx, y:k.y + dy}); } });
+  }
+  for (const m of [...moves, ...extra]){
+    m.c.x = Math.round(m.x); m.c.y = Math.round(m.y); const el = elOf(m.c.id);
+    if (el){ el.classList.add('tween'); el.style.left = m.c.x + 'px'; el.style.top = m.c.y + 'px'; }
+  }
+  const t0 = performance.now(), loop = () => { drawLinks(); if (performance.now() - t0 < 460) requestAnimationFrame(loop); else world.querySelectorAll('.tween').forEach(el => el.classList.remove('tween')); };
+  requestAnimationFrame(loop); saveSoon(); buzz(8);
+}
+function align(kind){
+  const cs = freeSel(); if (cs.length < 2) return;
+  const rs = cs.map(c => ({c, r:getWorldRect(c.id)})).filter(o => o.r);
+  const L = Math.min(...rs.map(o => o.r.x)), R = Math.max(...rs.map(o => o.r.x + o.r.w)), T = Math.min(...rs.map(o => o.r.y)), B = Math.max(...rs.map(o => o.r.y + o.r.h));
+  tweenMove(rs.map(({c, r}) => {
+    let x = r.x, y = r.y;
+    if (kind === 'l') x = L; else if (kind === 'c') x = (L + R) / 2 - r.w / 2; else if (kind === 'r') x = R - r.w;
+    else if (kind === 't') y = T; else if (kind === 'm') y = (T + B) / 2 - r.h / 2; else if (kind === 'b') y = B - r.h;
+    return {c, x, y};
+  }));
+}
+function distribute(axis){
+  const cs = freeSel(); if (cs.length < 3) return;
+  const X = axis === 'x', rs = cs.map(c => ({c, r:getWorldRect(c.id)})).filter(o => o.r).sort((a, b) => X ? a.r.x - b.r.x : a.r.y - b.r.y);
+  const first = rs[0].r, last = rs[rs.length - 1].r;
+  const span = X ? last.x + last.w - first.x : last.y + last.h - first.y, total = rs.reduce((n, o) => n + (X ? o.r.w : o.r.h), 0);
+  const gap = Math.max(16, (span - total) / (rs.length - 1)); let pos = X ? first.x : first.y;
+  tweenMove(rs.map(o => { const m = {c:o.c, x:o.r.x, y:o.r.y}; if (X){ m.x = pos; pos += o.r.w + gap; } else { m.y = pos; pos += o.r.h + gap; } return m; }));
+}
+function tidy(){
+  const cs = freeSel().filter(c => c.type !== 'frame'); if (cs.length < 2) return;
+  const rs = cs.map(c => ({c, r:getWorldRect(c.id)})).filter(o => o.r);
+  const L = Math.min(...rs.map(o => o.r.x)), T = Math.min(...rs.map(o => o.r.y));
+  rs.sort((a, b) => (Math.round(a.r.y / 80) - Math.round(b.r.y / 80)) || (a.r.x - b.r.x));
+  const n = rs.length, cols = Math.min(n, Math.max(1, Math.round(Math.sqrt(n * 1.4)))), gap = 24;
+  const colW = Math.max(...rs.map(o => o.r.w)), hs = new Array(cols).fill(0);
+  tweenMove(rs.map(o => { const k = hs.indexOf(Math.min(...hs)), m = {c:o.c, x:L + k * (colW + gap), y:T + hs[k]}; hs[k] += o.r.h + gap; return m; }));
+}
+function toggleLock(ids){
+  const b = cur(); ids = ids.filter(id => b.cards[id]); if (!ids.length) return;
+  const lock = ids.some(id => !b.cards[id].locked); commit();
+  ids.forEach(id => { if (lock) b.cards[id].locked = true; else delete b.cards[id].locked; });
+  render(); saveSoon(); buzz(8);
+  toast(lock ? `Locked ${ids.length > 1 ? ids.length + ' cards' : 'in place'} — drag across ${ids.length > 1 ? 'them' : 'it'} to select around` : 'Unlocked');
+}
+function frameSelection(){
+  const b = cur(), cs = [...sel].map(id => b.cards[id]).filter(c => c && !c.parent);
+  if (!cs.length){ addCard('frame', centerWorld()); return; }
+  let x1 = Infinity, y1 = Infinity, x2 = -Infinity, y2 = -Infinity;
+  for (const c of cs){ const r = getWorldRect(c.id); if (!r) continue; x1 = Math.min(x1, r.x); y1 = Math.min(y1, r.y); x2 = Math.max(x2, r.x + r.w); y2 = Math.max(y2, r.y + r.h); }
+  const pad = 32; commit();
+  const f = {id:uid(), type:'frame', x:Math.round(x1 - pad), y:Math.round(y1 - pad), w:Math.round(x2 - x1 + pad * 2), h:Math.round(y2 - y1 + pad * 2), z:0, color:null, title:'Frame'};
+  b.cards[f.id] = f; sel.clear(); sel.add(f.id); render([f.id]); saveSoon();
+  requestAnimationFrame(() => renameCard(f.id));
+}
+function setBg(v){ cur().bg = v; canvas.dataset.bg = v; saveSoon(false); }
+
+/* ---------- arrow styles & labels ---------- */
+function openLinkMenu(id, x, y){
+  const l = cur().links.find(q => q.id === id); if (!l) return; selectLink(id);
+  const set = (k, v) => { commit(); l[k] = v; S.meta.linkDefault = {curve:!!l.curve, dash:l.dash || 'solid', heads:l.heads || 'end'}; drawLinks(); saveSoon(); };
+  openMenu([
+    {label:l.label ? 'Edit label' : 'Add label', icon:'label', fn:() => editLinkLabel(id)},
+    ...(l.label ? [{label:'Remove label', icon:'x', fn:() => set('label', '')}] : []),
+    {sep:true},
+    {label:'Shape', radio:true, iconRow:[{icon:'straight', title:'Straight', on:!l.curve, fn:() => set('curve', false)}, {icon:'curve', title:'Curved', on:!!l.curve, fn:() => set('curve', true)}]},
+    {label:'Line', radio:true, iconRow:[['solid','line','Solid'],['dashed','dashed','Dashed'],['dotted','dotted','Dotted']].map(([v, icon, title]) => ({icon, title, on:(l.dash || 'solid') === v, fn:() => set('dash', v)}))},
+    {label:'Arrows', radio:true, iconRow:[['end','headEnd','Arrow at the end'],['both','headBoth','Arrows at both ends'],['none','headNone','No arrows']].map(([v, icon, title]) => ({icon, title, on:(l.heads || 'end') === v, fn:() => set('heads', v)}))},
+    {note:'New connections use the style you pick here.'},
+    {sep:true}, {label:'Reverse direction', icon:'swap', fn:() => reverseLink(id)},
+    {label:'Delete connection', icon:'trash', danger:true, kbd:'Del', fn:() => removeLink(id)}], x, y);
+}
+function editLinkLabel(id){
+  const l = cur().links.find(q => q.id === id); if (!l) return;
+  hideMenus(); labelEditing = id; drawLinks(true);
+  const el = labelsEl.querySelector(`[data-link="${CSS.escape(id)}"]`); if (!el){ labelEditing = null; return; }
+  const before = snapshot(), v0 = l.label || ''; let cancel = false;
+  el.contentEditable = 'true'; el.focus({preventScroll:true});
+  const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+  el.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter'){ e.preventDefault(); el.blur(); } else if (e.key === 'Escape'){ e.preventDefault(); cancel = true; el.blur(); } });
+  el.addEventListener('paste', e => { e.preventDefault(); document.execCommand('insertText', false, e.clipboardData.getData('text/plain').replace(/\s+/g, ' ')); });
+  el.addEventListener('blur', () => {
+    const v = el.textContent.replace(/\s+/g, ' ').trim().slice(0, 60); labelEditing = null;
+    if (!cancel && v !== v0){ pushPast(before); l.label = v; saveSoon(); }
+    getSelection().removeAllRanges(); drawLinks();
+  }, {once:true});
+}
+
+/* ---------- view options & haptics ---------- */
+const HAPTIC_OK = typeof navigator.vibrate === 'function' && matchMedia('(pointer: coarse)').matches;
+let lastPtrType = 'mouse';
+function buzz(ms){ if (lastPtrType === 'touch' && HAPTIC_OK && S?.meta.haptics !== false){ try { navigator.vibrate(ms); } catch {} } }
+function openViewMenu(x, y, right = false){
+  const items = [{heading:'View options'},
+    {segment:{label:'Background', value:cur().bg || 'dots', opts:[['dots','Dots'],['grid','Grid'],['lines','Lines'],['plain','Plain']], pick:setBg}},
+    {segment:{label:'Snapping', value:S.meta.snap || 'guides', opts:[['guides','Guides'],['grid','Grid'],['off','Off']], pick:v => { S.meta.snap = v; saveSoon(false); }}}];
+  if (innerWidth > 760) items.push({segment:{label:'Minimap', value:S.meta.minimap === false ? 'off' : 'on', opts:[['on','Show'],['off','Hide']], pick:v => { S.meta.minimap = v === 'on'; drawMinimap(); saveSoon(false); }}});
+  if (HAPTIC_OK) items.push({segment:{label:'Haptics', value:S.meta.haptics === false ? 'off' : 'on', opts:[['on','On'],['off','Off']], pick:v => { S.meta.haptics = v === 'on'; saveSoon(false); if (v === 'on'){ lastPtrType = 'touch'; buzz(14); } }}});
+  items.push({note:'Background is saved per board. Hold Alt while dragging to skip snapping.'});
+  openMenu(items, x, y, right);
+}
+
+/* ---------- minimap ---------- */
+const mm = $('#minimap'), mmc = mm.querySelector('canvas');
+let mmRAF = 0, mmGeo = null, mmFrozen = null;
+function minimapSoon(){ if (!mmRAF) mmRAF = requestAnimationFrame(() => { mmRAF = 0; drawMinimap(); }); }
+function drawMinimap(){
+  if (!S) return;
+  const els = [...world.querySelectorAll(':scope > .card')], on = S.meta.minimap !== false && innerWidth > 760 && els.length > 0;
+  mm.classList.toggle('show', on); if (!on) return;
+  const dpr = devicePixelRatio || 1, Wd = mm.clientWidth, Hd = mm.clientHeight;
+  if (mmc.width !== Math.round(Wd * dpr) || mmc.height !== Math.round(Hd * dpr)){ mmc.width = Math.round(Wd * dpr); mmc.height = Math.round(Hd * dpr); }
+  const g = mmc.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, Wd, Hd);
+  const v = cur().view, vr = {x:-v.x / v.s, y:-v.y / v.s, w:innerWidth / v.s, h:innerHeight / v.s};
+  const items = els.map(el => ({r:getWorldRect(el.dataset.id), el})).filter(o => o.r);
+  let geo = mmFrozen;
+  if (!geo){
+    let x1 = vr.x, y1 = vr.y, x2 = vr.x + vr.w, y2 = vr.y + vr.h;
+    for (const {r} of items){ x1 = Math.min(x1, r.x); y1 = Math.min(y1, r.y); x2 = Math.max(x2, r.x + r.w); y2 = Math.max(y2, r.y + r.h); }
+    const pad = 12, sc = Math.min((Wd - pad * 2) / (x2 - x1), (Hd - pad * 2) / (y2 - y1));
+    geo = {sc, ox:pad + ((Wd - pad * 2) - (x2 - x1) * sc) / 2 - x1 * sc, oy:pad + ((Hd - pad * 2) - (y2 - y1) * sc) / 2 - y1 * sc};
+  }
+  mmGeo = geo;
+  const cs = getComputedStyle(document.documentElement), txt = cs.getPropertyValue('--text').trim(), acc = cs.getPropertyValue('--accent').trim();
+  const rr = (x, y, w, h, r) => { g.beginPath(); if (g.roundRect) g.roundRect(x, y, w, h, r); else g.rect(x, y, w, h); };
+  for (const {r, el} of items){
+    const x = geo.ox + r.x * geo.sc, y = geo.oy + r.y * geo.sc, w = Math.max(2, r.w * geo.sc), h = Math.max(2, r.h * geo.sc), on = el.classList.contains('selected');
+    if (el.classList.contains('frame')){ g.globalAlpha = on ? .9 : .4; g.strokeStyle = on ? acc : txt; g.lineWidth = 1; g.setLineDash([3, 2]); rr(x, y, w, h, 3); g.stroke(); g.setLineDash([]); continue; }
+    const tint = el.dataset.color ? getComputedStyle(el).getPropertyValue('--tint').trim() : '', board = el.classList.contains('board');
+    g.globalAlpha = on ? .9 : tint ? .55 : board ? .5 : .2; g.fillStyle = on || board ? acc : tint || txt; rr(x, y, w, h, 2); g.fill();
+  }
+  const x = geo.ox + vr.x * geo.sc, y = geo.oy + vr.y * geo.sc;
+  g.globalAlpha = .1; g.fillStyle = acc; rr(x, y, vr.w * geo.sc, vr.h * geo.sc, 4); g.fill();
+  g.globalAlpha = .95; g.strokeStyle = acc; g.lineWidth = 1.5; g.stroke(); g.globalAlpha = 1;
+}
+mm.addEventListener('pointerdown', e => {
+  e.preventDefault(); mm.setPointerCapture(e.pointerId); mmFrozen = mmGeo; const r = mm.getBoundingClientRect();
+  const go = (ev, anim) => {
+    if (!mmFrozen) return; const v = cur().view;
+    const wx = (ev.clientX - r.left - mmFrozen.ox) / mmFrozen.sc, wy = (ev.clientY - r.top - mmFrozen.oy) / mmFrozen.sc;
+    const t = {s:v.s, x:innerWidth / 2 - wx * v.s, y:innerHeight / 2 - wy * v.s};
+    if (anim) animateView(t); else { cancelAnimationFrame(animRAF); Object.assign(v, t); applyView(); }
+  };
+  go(e, true);
+  const mv = ev => go(ev, false), up = () => { mm.removeEventListener('pointermove', mv); mm.removeEventListener('pointerup', up); mm.removeEventListener('pointercancel', up); mmFrozen = null; saveSoon(false); minimapSoon(); };
+  mm.addEventListener('pointermove', mv); mm.addEventListener('pointerup', up); mm.addEventListener('pointercancel', up);
+});
+mm.addEventListener('wheel', e => e.preventDefault(), {passive:false});
 
 /* ================= Modals, toasts, lightbox ================= */
 const isTop = ov => [...document.querySelectorAll('.overlay')].pop() === ov;
@@ -1601,6 +1956,7 @@ function cardInfo(c){
   if (c.type === 'todo'){ const items = (c.items || []).map(i => i.text).filter(Boolean); return {title:c.title || items[0] || 'To-do list', text:[c.title, ...items].filter(Boolean).join(' · ')}; }
   if (c.type === 'link'){ const t = c.title || hostOf(c.url); return {title:t, text:`${t} ${c.url}`}; }
   if (c.type === 'column') return {title:c.title || 'Column', text:c.title || ''};
+  if (c.type === 'frame') return {title:c.title || 'Frame', text:c.title || ''};
   if (c.type === 'image') return {title:'Image', text:''};
   if (c.type === 'board') return {title:S.boards[c.target]?.title || 'Board', text:''};
   return {title:'Card', text:''};
@@ -1630,7 +1986,19 @@ function paletteActions(){
     a.push({label:'Go to Home', icon:'home', run:() => openBoard(S.rootId)});
     a.push({label:isPinned(curId) ? 'Unpin this board' : 'Pin this board', icon:'star', run:() => togglePin(curId)});
   }
-  if (sel.size) a.push({label:`Move ${sel.size > 1 ? sel.size + ' selected cards' : 'selected card'} to board…`, icon:'move', run:() => openPalette('move', {ids:[...sel]})});
+  if (sel.size){
+    const fs = freeSel();
+    a.push({label:`Move ${sel.size > 1 ? sel.size + ' selected cards' : 'selected card'} to board…`, icon:'move', run:() => openPalette('move', {ids:expandFrames([...sel])})});
+    if (fs.length >= 2){
+      [['l','Align left','alignL'],['c','Align centers','alignC'],['r','Align right','alignR'],['t','Align top','alignT'],['m','Align middles','alignM'],['b','Align bottom','alignB']].forEach(([k, label, icon]) => a.push({label, icon, run:() => align(k)}));
+      if (fs.length >= 3) a.push({label:'Distribute horizontally', icon:'distH', run:() => distribute('x')}, {label:'Distribute vertically', icon:'distV', run:() => distribute('y')});
+      a.push({label:'Tidy up selection', icon:'tidy', run:tidy}, {label:'Frame selection', icon:'frame', kbd:'Ctrl G', run:frameSelection});
+    }
+    a.push({label:'Lock or unlock selection', icon:'lock', kbd:'Ctrl ⇧ L', run:() => toggleLock([...sel])});
+  }
+  [['dots','Dots'],['grid','Grid'],['lines','Lines'],['plain','Plain']].forEach(([v, l]) => a.push({label:`Background: ${l}`, icon:'sliders', run:() => setBg(v)}));
+  [['guides','Alignment guides'],['grid','Grid'],['off','Off']].forEach(([v, l]) => a.push({label:`Snapping: ${l}`, icon:'select', run:() => { S.meta.snap = v; saveSoon(false); toast(`Snapping: ${l}`); }}));
+  a.push({label:S.meta.minimap === false ? 'Show minimap' : 'Hide minimap', icon:'map', run:() => { S.meta.minimap = S.meta.minimap === false; drawMinimap(); saveSoon(false); }});
   a.push({label:`Open trash${S.trash.length ? ` (${S.trash.length})` : ''}`, icon:'trash', run:openTrash});
   a.push({label:'Storage & backup', icon:'database', run:() => storagePanel()});
   a.push({label:'Export backup', icon:'download', kbd:'Ctrl S', run:exportBackup});
@@ -1895,7 +2263,7 @@ function welcome(){
     });
 }
 function shortcuts(){
-  const rows = [['Search & commands','<kbd>Ctrl</kbd> <kbd>K</kbd> · <kbd>/</kbd>'],['New note / to-do / link','<kbd>N</kbd> <kbd>T</kbd> <kbd>L</kbd>'],['New image / board / column','<kbd>I</kbd> <kbd>B</kbd> <kbd>C</kbd>'],['Quick note','Double-click canvas'],['Move into a board','Drag onto its tile'],['Pan','Scroll · <kbd>Space</kbd> + drag'],['Zoom','<kbd>Ctrl</kbd> + scroll · pinch'],['Fit to screen','<kbd>Ctrl</kbd> <kbd>0</kbd>'],['Undo / redo','<kbd>Ctrl</kbd> <kbd>Z</kbd> · <kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>Z</kbd>'],['Duplicate','<kbd>Ctrl</kbd> <kbd>D</kbd>'],['Copy / paste cards','<kbd>Ctrl</kbd> <kbd>C</kbd> · <kbd>Ctrl</kbd> <kbd>V</kbd>'],['Edit note / open board','<kbd>Enter</kbd>'],['Move to Trash','<kbd>Del</kbd>'],['Back to parent board','<kbd>Esc</kbd>'],['Export backup','<kbd>Ctrl</kbd> <kbd>S</kbd>']];
+  const rows = [['Search & commands','<kbd>Ctrl</kbd> <kbd>K</kbd> · <kbd>/</kbd>'],['New note / to-do / link','<kbd>N</kbd> <kbd>T</kbd> <kbd>L</kbd>'],['New image / board / column','<kbd>I</kbd> <kbd>B</kbd> <kbd>C</kbd>'],['New frame','<kbd>F</kbd>'],['Quick note','Double-click canvas'],['Move into a board','Drag onto its tile'],['Frame selection','<kbd>Ctrl</kbd> <kbd>G</kbd>'],['Lock / unlock','<kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>L</kbd>'],['Drag without snapping','Hold <kbd>Alt</kbd>'],['Label an arrow','Double-click it'],['Pan','Scroll · <kbd>Space</kbd> + drag'],['Zoom','<kbd>Ctrl</kbd> + scroll · pinch'],['Fit to screen','<kbd>Ctrl</kbd> <kbd>0</kbd>'],['Undo / redo','<kbd>Ctrl</kbd> <kbd>Z</kbd> · <kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>Z</kbd>'],['Duplicate','<kbd>Ctrl</kbd> <kbd>D</kbd>'],['Copy / paste cards','<kbd>Ctrl</kbd> <kbd>C</kbd> · <kbd>Ctrl</kbd> <kbd>V</kbd>'],['Edit note / open board','<kbd>Enter</kbd>'],['Move to Trash','<kbd>Del</kbd>'],['Back to parent board','<kbd>Esc</kbd>'],['Export backup','<kbd>Ctrl</kbd> <kbd>S</kbd>']];
   modal({title:'Keyboard shortcuts', html:`<div class="kbd-grid">${rows.map(r => `<span>${r[0]}</span><span>${r[1]}</span>`).join('')}</div>`, actions:[{label:'Done', kind:'primary', primary:true}]});
 }
 async function exportBackup(){
@@ -1944,6 +2312,7 @@ function openMoreMenu(){
     {label:'Export backup', icon:'download', kbd:'Ctrl S', fn:exportBackup}, {label:'Import backup…', icon:'upload', fn:importBackup},
     {label:'Storage & backup', icon:'database', fn:() => storagePanel()}, {label:'Trash', icon:'trash', kbd:tn ? String(tn) : '', fn:openTrash}, {sep:true},
     {label:isDark() ? 'Light mode' : 'Dark mode', icon:isDark() ? 'sun' : 'moon', fn:() => toggleTheme()},
+    {label:'View options…', icon:'sliders', fn:() => openViewMenu(r.right, r.bottom + 8, true)},
     {label:'Keyboard shortcuts', icon:'keyboard', fn:shortcuts}];
   if (deferredInstall) items.push({label:'Install app', icon:'install', fn:async () => { deferredInstall.prompt(); try { await deferredInstall.userChoice; } catch {} deferredInstall = null; }});
   items.push({sep:true}, {label:'Erase everything…', icon:'trash', danger:true, fn:eraseAll});
@@ -1968,7 +2337,7 @@ $('#crumbs').addEventListener('click', e => {
   if (c.dataset.b === curId){ const sp = c.querySelector('span'); if (!sp.isContentEditable) inlineEdit(sp, cur().title, v => { cur().title = v; }); }
   else openBoard(c.dataset.b);
 });
-window.addEventListener('resize', () => { if (fmtFor) positionFormatBar(); hideMenus(); });
+window.addEventListener('resize', () => { if (fmtFor) positionFormatBar(); hideMenus(); minimapSoon(); });
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden'){ saveNow(); if (abDirty) runAutoBackup(); } });
 window.addEventListener('pagehide', saveNow);
 
