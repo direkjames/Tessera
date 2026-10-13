@@ -2,11 +2,13 @@
 
 A calm, infinite canvas for ideas, references and plans — a free, private alternative to visual board apps.
 
-**Features:** notes (with bold, italic, headings, lists), to-do lists, links, images, sticky notes, headings, sketches, tables, colour swatches, YouTube and Vimeo videos, files with PDF previews, voice memos, image cropping and captions, colour extraction, web image clipping, a fullscreen gallery, tags with filtering, board icons and covers, templates (built-in and your own), nested boards, columns, arrows between cards, undo/redo, copy/paste, colours, light and dark mode, global search and command palette (Ctrl K), pinned and recent boards, move cards between boards (or drag onto a board), a 30-day Trash, auto-backup to a folder, a storage meter with image compression, frames, snapping and alignment guides, align/distribute/tidy, locking, curved and labeled arrows, a minimap, canvas backgrounds, backup export/import, offline support, and install-as-app on Windows, Android, Mac and iPad.
+**Features:** notes (with bold, italic, headings, lists), to-do lists, links, images, sticky notes, headings, sketches, tables, colour swatches, YouTube and Vimeo videos, files with PDF previews, voice memos, image cropping and captions, colour extraction, web image clipping, a fullscreen gallery, tags with filtering, board icons and covers, templates (built-in and your own), nested boards, columns, arrows between cards, undo/redo, copy/paste, colours, light and dark mode, global search and command palette (Ctrl K), pinned and recent boards, move cards between boards (or drag onto a board), a 30-day Trash, auto-backup to a folder, a storage meter with image compression, frames, snapping and alignment guides, align/distribute/tidy, locking, curved and labeled arrows, a minimap, canvas backgrounds, backup export/import, due dates on to-dos with a Due soon overview, Kanban mode, presentation mode (frames become slides), focus mode, export to PNG, PDF and Markdown, shareable board files, print layouts, offline support, and install-as-app on Windows, Android, Mac and iPad.
 
 ## Your data stays on your device
 
 There are no accounts and no sync. Boards are saved in the browser on the device you use. Clearing site data, uninstalling the app or using a private window erases them, so **export a backup** (Ctrl S) regularly, or turn on **auto-backup to a folder** from the storage chip (Chrome and Edge on a computer). Backups can be imported on any device.
+
+To share one board without sharing everything, use **Export & share → Board file** (Ctrl E). The other person opens Tessera and chooses **Import a board** (or drops the file on the canvas). It's added as a new board and nothing of theirs is replaced.
 
 ## Put it on GitHub Pages
 
