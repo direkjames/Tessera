@@ -352,6 +352,94 @@ table.tb{width:100%;border-collapse:collapse;table-layout:fixed}
 .cp-dot{width:22px;height:22px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.1);transition:transform .15s var(--ease)}
 .cp-dot:hover{transform:scale(1.15)}
 
+/* phase 5 */
+:root{--k-slate:#7d8796}:root[data-theme=dark]{--k-slate:#9aa4b2}
+.card{transition:box-shadow .22s var(--ease),border-color .2s,background .2s,opacity .3s,filter .3s}
+.card.dim{opacity:.14;filter:grayscale(.7)}
+.img-wrap{position:relative}
+.img-wrap.cropped img{position:absolute;max-width:none;object-fit:fill}
+.card.image.has-cap .img-wrap{border-radius:13px 13px 0 0}
+.img-cap{padding:9px 12px 10px;font-size:12.5px;line-height:1.45;color:var(--text-2);outline:none;overflow-wrap:anywhere;min-height:36px}
+.img-cap:empty::before{content:'Add a caption…';color:var(--text-3)}
+.img-linked{position:absolute;left:8px;top:8px;display:flex;align-items:center;gap:5px;padding:3px 8px;border-radius:20px;font-size:10.5px;font-weight:600;color:#fff;background:rgba(10,10,14,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.tag-row{position:absolute;left:2px;top:100%;margin-top:7px;display:flex;flex-wrap:wrap;gap:4px;pointer-events:auto;z-index:2;max-width:calc(100% + 60px)}
+.col-body .tag-row{position:relative;top:auto;left:auto;margin:-2px 12px 10px}
+.tag-pill{display:inline-flex;align-items:center;gap:4px;height:21px;padding:0 8px;border-radius:20px;font-size:11px;font-weight:600;color:color-mix(in srgb,var(--tint) 72%,var(--text));background:color-mix(in srgb,var(--tint) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--tint) 28%,transparent);white-space:nowrap;transition:filter .15s,background .15s,color .15s}
+.tag-pill:hover{filter:brightness(1.05)}
+.tag-pill.on{background:var(--tint);color:#fff;border-color:transparent}
+.tag-pill button{display:grid;place-items:center;opacity:.65}
+.tag-pill button:hover{opacity:1}
+#filterbar{position:fixed;left:50%;top:calc(70px + env(safe-area-inset-top));transform:translate(-50%,-6px);z-index:58;display:flex;align-items:center;gap:6px;padding:5px 6px 5px 13px;border-radius:14px;font-size:12.5px;color:var(--text-2);opacity:0;pointer-events:none;transition:opacity .2s,transform .25s var(--ease);max-width:calc(100vw - 24px);flex-wrap:wrap}
+#filterbar.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.fb-n{color:var(--text-3);font-variant-numeric:tabular-nums;margin-left:2px}
+#empty .em-btn{pointer-events:auto;margin-top:20px}
+#empty:not(.show) .em-btn{pointer-events:none}
+.sw-block{height:auto!important;aspect-ratio:4/3}
+.card.swatch{container-type:inline-size}
+@container (max-width:170px){.sw-codes>span{display:none}}
+.overlay.gal{background:rgba(6,6,8,.93);padding:0;display:flex;flex-direction:column;place-items:stretch}
+.gal-top{display:flex;align-items:center;gap:12px;padding:calc(14px + env(safe-area-inset-top)) 16px 10px;color:#fff;font-size:13px}
+.gal-count{opacity:.6;font-variant-numeric:tabular-nums;min-width:52px}
+.gal-cap{flex:1;text-align:center;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gal-x{color:#fff;background:rgba(255,255,255,.1)}.gal-x:hover{background:rgba(255,255,255,.2);color:#fff}
+.gal-stage{flex:1;position:relative;display:grid;place-items:center;min-height:0;padding:0 70px;touch-action:pan-y}
+.gal-stage{overflow:hidden}
+.overlay.gal:not(.single) .gal-stage img{max-height:calc(100vh - 190px)}
+.overlay.gal.single .gal-stage img{max-height:calc(100vh - 110px)}
+.gal-stage img{max-width:100%;max-height:100%;border-radius:12px;box-shadow:0 40px 90px -20px #000;transition:opacity .25s,transform .4s var(--ease);user-select:none}
+.gal-stage img.out{opacity:0;transform:scale(.97)}
+.gal-nav{position:absolute;top:50%;width:46px;height:46px;margin-top:-23px;border-radius:50%;display:grid;place-items:center;color:#fff;background:rgba(255,255,255,.1);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:background .15s}
+.gal-nav:hover{background:rgba(255,255,255,.22)}.gal-prev{left:14px}.gal-next{right:14px}
+.gal-strip{display:flex;gap:6px;padding:12px 16px calc(18px + env(safe-area-inset-bottom));overflow-x:auto;justify-content:safe center}
+.gal-strip button{flex:none;width:58px;height:44px;border-radius:8px;overflow:hidden;opacity:.4;transition:opacity .15s,box-shadow .15s}
+.gal-strip button:hover{opacity:.75}.gal-strip button.on{opacity:1;box-shadow:0 0 0 2px #fff}
+.gal-strip img{width:100%;height:100%;object-fit:cover}
+.modal.crop-modal{width:min(880px,100%)}
+.crop-stage{display:grid;place-items:center;background:repeating-conic-gradient(var(--hover) 0 25%,transparent 0 50%) 0 0/16px 16px;border-radius:14px;padding:16px;margin:2px 0 14px}
+.crop-inner{position:relative;line-height:0;overflow:hidden;border-radius:4px;touch-action:none;user-select:none;-webkit-user-select:none}
+.crop-img{max-width:100%;max-height:54vh;display:block;pointer-events:none}
+.crop-box{position:absolute;box-shadow:0 0 0 9999px rgba(8,8,10,.55);outline:1.5px solid #fff;cursor:move}
+.crop-box i{position:absolute;background:rgba(255,255,255,.35);pointer-events:none}
+.crop-box .g1,.crop-box .g2{top:0;bottom:0;width:1px}.crop-box .g1{left:33.33%}.crop-box .g2{left:66.66%}
+.crop-box .g3,.crop-box .g4{left:0;right:0;height:1px}.crop-box .g3{top:33.33%}.crop-box .g4{top:66.66%}
+.crop-box b{position:absolute;width:16px;height:16px;background:#fff;border-radius:5px;box-shadow:0 2px 8px rgba(0,0,0,.4);margin:-8px 0 0 -8px}
+.h-nw{left:0;top:0;cursor:nwse-resize}.h-ne{left:100%;top:0;cursor:nesw-resize}.h-sw{left:0;top:100%;cursor:nesw-resize}.h-se{left:100%;top:100%;cursor:nwse-resize}
+.h-n{left:50%;top:0;cursor:ns-resize}.h-s{left:50%;top:100%;cursor:ns-resize}.h-e{left:100%;top:50%;cursor:ew-resize}.h-w{left:0;top:50%;cursor:ew-resize}
+.crop-ratios{max-width:460px;margin:0 auto}
+.bemoji{font-size:42px;line-height:1;filter:drop-shadow(0 4px 10px rgba(0,0,0,.15))}
+.col-body .bemoji{font-size:22px}
+.tile.cover{padding:0;overflow:hidden}.tile.cover img{width:100%;height:100%;object-fit:cover}
+.cr-emoji{font-size:14px;line-height:1}
+.pal-emo{font-size:17px;line-height:1}
+.bc-wrap{display:flex;gap:20px;align-items:flex-start}
+.bc-prev .tile{width:104px;height:104px;margin:2px 0 0}
+.emoji-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;margin:6px 0 14px}
+.emoji-grid button{height:32px;border-radius:9px;font-size:18px;display:grid;place-items:center;color:var(--text-3);transition:background .12s,transform .15s var(--ease)}
+.emoji-grid button:hover{background:var(--hover);transform:scale(1.12)}
+.emoji-grid button.on{background:var(--accent-soft);box-shadow:inset 0 0 0 1.5px var(--accent)}
+.lbl{font-size:10.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--text-3);margin:4px 0 6px}
+.row-btns{display:flex;gap:8px;flex-wrap:wrap}
+.tagbox{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 10px;border-radius:13px;border:1px solid var(--line-2);background:var(--input-bg);min-height:48px;cursor:text;transition:border-color .15s,box-shadow .15s}
+.tagbox:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.tagbox .tb-chips{display:contents}
+.tagbox input{flex:1;min-width:120px;border:0;outline:none;background:none;font-size:14px;height:28px}
+.tagbox .tag-pill{height:25px;font-size:12px}
+.tag-sugg{display:flex;flex-wrap:wrap;gap:6px}
+.modal.tpl-modal{width:min(780px,100%)}
+.tpl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:6px}
+.tpl{position:relative;text-align:left;border-radius:16px;border:1px solid var(--line);background:var(--hover-soft);padding:8px;transition:border-color .15s,transform .25s var(--ease),box-shadow .2s}
+.tpl:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow)}
+.tpl-prev{aspect-ratio:16/10;border-radius:10px;background:var(--bg);border:1px solid var(--line);overflow:hidden}
+.tpl-prev svg{width:100%;height:100%;display:block}
+.tpl-meta{display:flex;gap:9px;align-items:flex-start;padding:10px 4px 4px}
+.tpl-ic{font-size:18px;line-height:1.15}
+.tpl-meta b{display:block;font-size:13px;color:var(--text);font-weight:600}
+.tpl-meta span span{display:block;font-size:11.5px;color:var(--text-3);line-height:1.4;margin-top:1px}
+.tpl-del{position:absolute;top:13px;right:13px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--glass);color:var(--text-2);opacity:0;transition:opacity .15s;box-shadow:var(--shadow)}
+.tpl:hover .tpl-del{opacity:1}
+.tpl-h{margin:20px 0 4px;font-size:10.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--text-3)}
+@media (max-width:760px){.tpl-grid{grid-template-columns:repeat(2,1fr)}.emoji-grid{grid-template-columns:repeat(8,1fr)}.bc-wrap{flex-direction:column}.gal-stage{padding:0 10px}.gal-nav{display:none}}
+
 /* menu rows */
 .mrow{display:flex;align-items:center;gap:2px;padding:3px 6px 3px 10px}
 .mrow.col{flex-direction:column;align-items:stretch;gap:6px;padding:6px 8px 6px 10px}
@@ -601,7 +689,8 @@ mark{background:var(--accent-soft);color:var(--text);border-radius:3px;padding:0
 <div id="morepop" class="glass" aria-label="More card types"></div>
 <div id="drawbar" class="glass" aria-label="Drawing tools"></div>
 
-<div id="empty"><div class="em-ic" data-ico="board" data-s="28"></div><h3>A blank board</h3><p>Drag a card from the dock, double-click anywhere to write, or drop images straight onto the canvas.</p></div>
+<div id="empty"><div class="em-ic" data-ico="board" data-s="28"></div><h3>A blank board</h3><p>Drag a card from the dock, double-click anywhere to write, or drop images straight onto the canvas.</p><button class="btn primary em-btn" id="emTpl">Start from a template</button></div>
+<div id="filterbar" class="glass" aria-live="polite"></div>
 <div id="marquee"></div>
 <div id="ctx" class="menu glass" role="menu"></div>
 <div id="fmt" class="glass">
@@ -696,12 +785,21 @@ const ICONS = {
   pause:'<rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor" stroke="none"/><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor" stroke="none"/>',
   stop:'<rect x="6" y="6" width="12" height="12" rx="2.5" fill="currentColor" stroke="none"/>',
   highlighter:'<path d="m9 11-5 5v4h4l5-5"/><path d="m14 6 4 4-5 5-4-4z"/><path d="m14 6 3-3 4 4-3 3"/>',
-  eraser:'<path d="M7 21h12"/><path d="m5 15 9-9a2 2 0 0 1 3 0l3 3a2 2 0 0 1 0 3l-7 7H9z"/><path d="m9 11 6 6"/>'
+  eraser:'<path d="M7 21h12"/><path d="m5 15 9-9a2 2 0 0 1 3 0l3 3a2 2 0 0 1 0 3l-7 7H9z"/><path d="m9 11 6 6"/>',
+  crop:'<path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M2 6h14a2 2 0 0 1 2 2v14"/>',
+  caption:'<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M7 15h4M13 15h4M7 11h10"/>',
+  droplet:'<path d="M12 3s6 6.4 6 11a6 6 0 0 1-12 0c0-4.6 6-11 6-11z"/>',
+  gallery:'<rect x="7" y="3" width="14" height="14" rx="2.5"/><path d="M3 7v12a2 2 0 0 0 2 2h12"/><path d="m11 13 3-3 4 4"/>',
+  tag:'<path d="M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
+  template:'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 9v12"/>',
+  smile:'<circle cx="12" cy="12" r="9"/><path d="M8.5 14a4 4 0 0 0 7 0M9 9.5h.01M15 9.5h.01"/>',
+  cloud:'<path d="M7 18a5 5 0 1 1 1-9.9A6 6 0 0 1 19 10a4 4 0 0 1 0 8z"/>',
+  chevl:'<path d="m15 18-6-6 6-6"/>'
 };
 const ico = (n, s = 18) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n] || ''}</svg>`;
 const COLORS = ['violet','sky','mint','rose','amber','slate'];
 const TOOLS = [['note','Note','N',1],['todo','To-do','T',1],['link','Link','L',1],['image','Image','I',1],['board','Board','B',1],['column','Column','C',2],['frame','Frame','F',2],
-  ['sticky','Sticky','S',0],['heading','Heading','H',0],['sketch','Sketch','D',0],['table','Table','G',0],['swatch','Colour','K',0],['video','Video','V',0],['file','File','U',0],['audio','Audio','A',0]];
+  ['sticky','Sticky','S',0],['heading','Heading','H',0],['sketch','Sketch','D',0],['table','Table','G',0],['swatch','Colour','K',0],['video','Video','V',0],['file','File','U',0],['audio','Audio','A',0],['template','Template','M',0]];
 const W = {note:280, todo:260, link:300, image:300, board:132, column:280, frame:520, sticky:220, heading:380, sketch:380, table:420, swatch:180, video:380, file:260, audio:320};
 const MIN_W = {note:160, todo:200, link:220, image:110, column:200, frame:160, sticky:140, heading:120, sketch:160, table:260, swatch:120, video:240, file:200, audio:240};
 const TOUCHY = matchMedia('(hover: none)').matches;
@@ -763,8 +861,10 @@ async function loadImg(id){
 async function idbClear(store){ if (db) await idb(store,'readwrite', s => s.clear()); }
 function usedImageIds(){
   const ids = new Set(), scan = cards => { for (const c of Object.values(cards || {})) for (const k of ['imageId','fileId','thumbId','audioId']) if (c[k]) ids.add(c[k]); };
-  for (const b of Object.values(S.boards)) scan(b.cards);
-  for (const e of S.trash || []){ scan(e.cards); for (const b of Object.values(e.boards || {})) scan(b.cards); }
+  const scanB = b => { if (!b) return; scan(b.cards); if (b.coverId) ids.add(b.coverId); };
+  for (const b of Object.values(S.boards)) scanB(b);
+  for (const e of S.trash || []){ scan(e.cards); for (const b of Object.values(e.boards || {})) scanB(b); }
+  for (const t of S.templates || []){ scanB(t.board); for (const b of Object.values(t.subs || {})) scanB(b); }
   return ids;
 }
 async function gcImages(){ if (!db) return; try { const used = usedImageIds(); const keys = await idb('img','readonly', s => s.getAllKeys()); for (const k of keys) if (!used.has(k)) await idb('img','readwrite', s => s.delete(k)); } catch {} }
@@ -793,7 +893,7 @@ function boardPath(b, incl = false){
 }
 
 function seed(){
-  S = {app:'tessera', version:2, rootId:null, boards:{}, trash:[], meta:{welcomed:false, lastExport:0, pinned:[], recent:[]}};
+  S = {app:'tessera', version:2, rootId:null, boards:{}, trash:[], templates:[], meta:{welcomed:false, lastExport:0, pinned:[], recent:[]}};
   const root = newBoard('Home', null); S.rootId = root.id;
   const mood = newBoard('Moodboard', root.id);
   const put = c => (root.cards[c.id] = c);
@@ -980,7 +1080,7 @@ function cardEl(c, inCol = false){
     const host = hostOf(c.url);
     h = `<div class="lk"><div class="fav"><span>${esc((host[0] || '?').toUpperCase())}</span><img alt="" referrerpolicy="no-referrer" src="https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=64" onerror="this.remove()"></div><div class="lk-meta"><div class="lk-title">${esc(c.title || host)}</div><div class="lk-host">${esc(host)}</div></div><a class="lk-open nd" href="${esc(c.url)}" target="_blank" rel="noopener noreferrer" title="Open link">${ico('external',15)}</a></div>`;
   }
-  else if (c.type === 'image') h = `<div class="img-wrap" style="aspect-ratio:${c.iw || 4} / ${c.ih || 3}"><img alt="" draggable="false"></div>`;
+  else if (c.type === 'image') h = imageHTML(c);
   else if (c.type === 'board'){
     const tb = S.boards[c.target], n = tb ? Object.keys(tb.cards).length : 0;
     h = `<div class="tile">${ico('board',30)}</div><div class="b-meta"><div class="bt">${esc(tb ? tb.title : 'Untitled board')}</div><div class="bc">${n ? `${n} card${n > 1 ? 's' : ''}` : 'Empty'}</div></div>`;
@@ -998,11 +1098,13 @@ function cardEl(c, inCol = false){
   if (c.type !== 'frame') h += `<div class="ch" title="Drag to connect"></div>`;
   if (!inCol && c.type !== 'board') h += `<div class="rz" title="Drag to resize"></div>`;
   if (c.locked && c.type !== 'frame') h += `<div class="lock-badge">${ico('lock', 11)}</div>`;
+  if (c.tags?.length) h += tagRowHTML(c.tags);
   el.innerHTML = h;
 
   if (c.type === 'image'){
-    const img = el.querySelector('img');
-    loadImg(c.imageId).then(u => { if (!u) return; img.onload = () => img.classList.add('ok'); img.src = u; });
+    const img = el.querySelector('.img-wrap img');
+    if (c.caption || captionEditing === c.id) el.classList.add('has-cap');
+    imgUrl(c).then(u => { if (!u) return; img.onload = () => img.classList.add('ok'); img.src = u; });
   }
   if (c.type === 'file' && c.thumbId){
     const img = el.querySelector('.fl-thumb img');
@@ -1011,8 +1113,10 @@ function cardEl(c, inCol = false){
   if (c.type === 'sketch' && !(c.strokes || []).length) el.classList.add('empty');
   if (c.type === 'audio' && player.id === c.id && player.audio && !player.audio.paused){ el.classList.add('playing'); el.querySelector('.au-play').innerHTML = ico('pause', 18); }
   if (c.type === 'board'){
-    const tb = S.boards[c.target];
-    const ims = tb ? Object.values(tb.cards).filter(x => x.type === 'image').slice(0, 4) : [];
+    const tb = S.boards[c.target], tl = el.querySelector('.tile');
+    const ims = tb && !tb.coverId && !tb.icon ? Object.values(tb.cards).filter(x => x.type === 'image' && x.imageId).slice(0, 4) : [];
+    if (tb?.coverId){ tl.classList.add('cover'); tl.innerHTML = '<img alt="" draggable="false">'; loadImg(tb.coverId).then(u => { if (u) tl.firstChild.src = u; }); }
+    else if (tb?.icon) tl.innerHTML = `<span class="bemoji">${esc(tb.icon)}</span>`;
     if (ims.length){
       const tile = el.querySelector('.tile'); tile.classList.add('mosaic'); tile.dataset.n = ims.length;
       tile.innerHTML = ims.map(() => '<img alt="" draggable="false">').join('');
@@ -1046,11 +1150,12 @@ function render(pop = []){
     const de = elOf(drawingId);
     if (de && cur().cards[drawingId]){ de.classList.add('drawing'); positionDrawbar(); } else { drawingId = null; drawbar.classList.remove('show'); }
   }
+  applyFilter();
 }
 function rerenderCard(id, focusItem, caret){
   const old = elOf(id), c = findCard(id); if (!old || !c) return;
   const n = cardEl(c, !!c.parent); old.replaceWith(n);
-  n.querySelectorAll('.ti-text').forEach(autosize); drawLinks();
+  n.querySelectorAll('.ti-text').forEach(autosize); drawLinks(); applyFilter();
   if (focusItem){ const t = n.querySelector(`[data-item="${focusItem}"] .ti-text`); if (t){ t.focus({preventScroll:true}); t.setSelectionRange(caret, caret); } }
 }
 function updateEmpty(){ $('#empty').classList.toggle('show', !Object.keys(cur().cards).length); }
@@ -1068,7 +1173,7 @@ function renderCrumbs(){
     const sep = i ? `<span class="crumb-sep">${ico('chev',13)}</span>` : '';
     if (!x) return sep + '<span class="crumb-ell">…</span>';
     const isCur = x.id === curId, isRoot = x.id === S.rootId;
-    return `${sep}<div class="crumb${isCur?' cur':''}" role="button" tabindex="0" data-b="${x.id}" title="${isCur?'Click to rename':'Open '+esc(x.title)}">${isRoot ? ico('home',14) : ''}<span>${esc(x.title)}</span></div>`;
+    return `${sep}<div class="crumb${isCur?' cur':''}" role="button" tabindex="0" data-b="${x.id}" title="${isCur?'Click to rename':'Open '+esc(x.title)}">${isRoot ? ico('home',14) : x.icon ? `<span class="cr-emoji">${esc(x.icon)}</span>` : ''}<span>${esc(x.title)}</span></div>`;
   }).join('');
   const pb = $('#pinBtn'), on = isPinned(curId);
   pb.hidden = curId === S.rootId; pb.classList.toggle('on', on);
@@ -1211,7 +1316,7 @@ function renameCard(id){
   else if (c.type === 'video') inlineEdit(el.querySelector('.vd-title'), c.title || (c.provider === 'vimeo' ? 'Vimeo video' : 'YouTube video'), v => c.title = v);
   else if (c.type === 'file') inlineEdit(el.querySelector('.fl-name'), c.name || 'File', v => c.name = v);
   else if (c.type === 'audio') inlineEdit(el.querySelector('.au-title'), c.title || 'Voice memo', v => c.title = v);
-  else if (c.type === 'swatch') inlineEdit(el.querySelector('.sw-name'), c.name || 'Untitled colour', v => c.name = v);
+  else if (c.type === 'swatch'){ const nm = el.querySelector('.sw-name'); if (nm) inlineEdit(nm, c.name, v => c.name = v); else editSwatch(id); }
 }
 
 /* ================= Card operations ================= */
@@ -1254,6 +1359,7 @@ async function createCard(type, p){
   }
   if (type === 'video'){ const v = await askVideo(); if (v) addCard('video', p, {...v, title:''}, {edit:false}); return; }
   if (type === 'swatch'){ const r = await askColor(); if (r) addCard('swatch', p, r, {edit:false}); return; }
+  if (type === 'template') return openTemplates('new', p);
   if (type === 'file') return pickFiles(p);
   if (type === 'audio') return recordAudio(p);
   addCard(type, p);
@@ -1393,20 +1499,21 @@ function moveCards(ids, toId, {noCommit = false} = {}){
   toast(`Moved ${roots.length > 1 ? roots.length + ' cards' : '1 card'} to ${t.title}`, {label:'Open', fn:() => openBoard(t.id)});
 }
 
-function cloneBoard(bid, parentId){
-  const s = S.boards[bid], nb = newBoard(s ? s.title : 'Untitled board', parentId); if (!s) return nb.id;
-  nb.view = {...s.view}; const map = {};
-  for (const c of Object.values(s.cards)) if (!c.parent || !s.cards[c.parent]) cloneCard(c, s.cards, nb, 0, 0, null, map);
+function cloneBoard(bid, parentId, src = S.boards){
+  const s = src[bid], nb = newBoard(s ? s.title : 'Untitled board', parentId); if (!s) return nb.id;
+  nb.view = s.view ? {...s.view} : {x:0, y:0, s:1, set:false}; const map = {};
+  if (s.icon) nb.icon = s.icon; if (s.bg) nb.bg = s.bg; if (s.coverId) nb.coverId = s.coverId;
+  for (const c of Object.values(s.cards)) if (!c.parent || !s.cards[c.parent]) cloneCard(c, s.cards, nb, 0, 0, null, map, src);
   nb.links = s.links.filter(l => map[l.from] && map[l.to]).map(l => ({id:uid(), from:map[l.from], to:map[l.to]}));
   return nb.id;
 }
-function cloneCard(c, src, dst, dx, dy, parent, map){
+function cloneCard(c, src, dst, dx, dy, parent, map, boards = S.boards){
   const n = JSON.parse(JSON.stringify(c)); n.id = uid(); map[c.id] = n.id;
   n.x = Math.round((c.x || 0) + dx); n.y = Math.round((c.y || 0) + dy); n.parent = parent || null; n.w = c.w || W[c.type];
   if (n.type === 'todo') n.items = (n.items || []).map(i => ({...i, id:uid()}));
-  if (n.type === 'board') n.target = cloneBoard(c.target, dst.id);
+  if (n.type === 'board') n.target = cloneBoard(c.target, dst.id, boards);
   dst.cards[n.id] = n;
-  if (n.type === 'column'){ n.children = []; for (const k of (c.children || [])){ const kc = src[k]; if (kc) n.children.push(cloneCard(kc, src, dst, 0, 0, n.id, map).id); } }
+  if (n.type === 'column'){ n.children = []; for (const k of (c.children || [])){ const kc = src[k]; if (kc) n.children.push(cloneCard(kc, src, dst, 0, 0, n.id, map, boards).id); } }
   return n;
 }
 function duplicate(ids){
@@ -1671,7 +1778,7 @@ function cardTap(c, was, dbl, ev, downT){
   const id = c.id, again = dbl || was;
   if (c.type === 'note'){ if (again) enterEdit(id, ev); }
   else if (c.type === 'board'){ if (dbl || (was && ev.pointerType !== 'mouse')) openBoard(c.target); }
-  else if (c.type === 'image'){ if (dbl) lightbox(c); }
+  else if (c.type === 'image'){ if (again && downT.closest('.img-cap')) editCaption(id); else if (dbl) openGallery(id); }
   else if (c.type === 'column'){ if (again && downT.closest('.col-title')) renameCard(id); }
   else if (c.type === 'link'){ if (again && downT.closest('.lk-title')) renameCard(id); }
   else if (c.type === 'frame'){ if (again) renameCard(id); }
@@ -1871,10 +1978,16 @@ function openCardMenu(id, x, y, cell){
   if (c.type === 'board'){
     items.push({label:'Open board', icon:'open', kbd:'Enter', fn:() => openBoard(c.target)});
     const on = isPinned(c.target); items.push({label:on ? 'Unpin board' : 'Pin board', icon:on ? 'starFill' : 'star', fn:() => togglePin(c.target)});
+    items.push({label:'Customize…', icon:'smile', fn:() => customizeBoard(c.target)});
   }
   if (c.type === 'link') items.push({label:'Open link', icon:'external', fn:() => window.open(c.url, '_blank', 'noopener')});
   if (c.type === 'note') items.push({label:'Edit', icon:'pen', kbd:'Enter', fn:() => enterEdit(id)});
-  if (c.type === 'image') items.push({label:'View full size', icon:'image', fn:() => lightbox(c)}, {label:'Save image', icon:'download', fn:() => downloadImage(c)});
+  if (c.type === 'image'){
+    items.push({label:'View in gallery', icon:'gallery', fn:() => openGallery(id)}, {label:'Crop…', icon:'crop', fn:() => cropImage(id)},
+      {label:c.caption ? 'Edit caption' : 'Add caption', icon:'caption', fn:() => editCaption(id)}, {label:'Extract colours', icon:'droplet', fn:() => extractPalette(id)});
+    if (!c.imageId && c.src) items.push({label:'Save offline', icon:'download', fn:() => saveLinkedOffline(id)});
+    items.push({label:'Save image', icon:'download', fn:() => downloadImage(c)});
+  }
   if (c.type === 'heading') items.push({segment:{label:'Size', value:c.size || 'm', opts:[['s','Small'],['m','Medium'],['l','Large']], pick:v => { commit(); c.size = v; rerenderCard(id); saveSoon(); }}});
   if (c.type === 'sticky' || c.type === 'heading') items.push({label:'Edit', icon:'pen', kbd:'Enter', fn:() => enterEdit(id)});
   if (c.type === 'sketch') items.push({label:'Draw', icon:'sketch', kbd:'Enter', fn:() => startDrawMode(id)});
@@ -1884,6 +1997,7 @@ function openCardMenu(id, x, y, cell){
   if (c.type === 'audio'){ const on = player.id === id && player.audio && !player.audio.paused; items.push({label:on ? 'Pause' : 'Play', icon:on ? 'pause' : 'play', fn:() => toggleAudio(c)}, {label:'Download audio', icon:'download', fn:() => downloadAudio(c)}); }
   if (['board','column','link','frame','video','file','audio','swatch'].includes(c.type)) items.push({label:'Rename', icon:'pen', fn:() => renameCard(id)});
   if (items.length && !items[items.length - 1].sep) items.push({sep:true});
+  items.push({label:'Tags…', icon:'tag', fn:() => editTags(ids)});
   const anyUnlocked = ids.some(i => !cur().cards[i]?.locked);
   items.push({label:anyUnlocked ? 'Lock in place' : 'Unlock', icon:anyUnlocked ? 'lock' : 'unlock', kbd:'Ctrl ⇧ L', fn:() => toggleLock(ids)});
   items.push({label:'Move to board…', icon:'move', fn:() => openPalette('move', {ids:expandFrames(ids)})});
@@ -1897,6 +2011,9 @@ function openBgMenu(x, y){
   openMenu([...TOOLS.filter(t => t[3]).map(([t, l, k]) => ({label:`Add ${l.toLowerCase()}`, icon:t, kbd:k, fn:() => createCard(t, p)})),
     {label:'More', iconRow:TOOLS.filter(t => !t[3]).map(([t, l, k]) => ({icon:t, title:`${l} (${k})`, fn:() => createCard(t, p)}))}, {sep:true},
     {label:'Select all', icon:'select', kbd:'Ctrl A', fn:selectAll}, {label:'Fit to screen', icon:'fit', kbd:'Ctrl 0', fn:() => fit()},
+    {label:'Image from URL…', icon:'link', fn:() => askImageUrl(p)},
+    ...(Object.values(cur().cards).some(c => c.type === 'image') ? [{label:'Image gallery', icon:'gallery', fn:() => openGallery()}] : []),
+    ...(boardTags().length ? [{label:'Filter by tag…', icon:'tag', fn:() => openTagFilterMenu(x, y)}] : []),
     {label:'View options…', icon:'sliders', fn:() => openViewMenu(x, y)}], x, y);
 }
 canvas.addEventListener('contextmenu', e => {
@@ -1924,7 +2041,7 @@ document.addEventListener('paste', e => {
   const text = dt.getData('text/plain'); if (!text) return; e.preventDefault();
   if (text.startsWith('tessera:')){ try { pasteCards(JSON.parse(text.slice(8)), p); } catch {} return; }
   const t = text.trim(), u = normUrl(t);
-  if (!/\s/.test(t) && isUrl(u) && /[./]/.test(t)){ const v = parseVideo(u); if (v) addCard('video', p, {...v, title:''}, {edit:false}); else addCard('link', p, {url:u, title:''}, {edit:false}); }
+  if (!/\s/.test(t) && isUrl(u) && /[./]/.test(t)){ const v = parseVideo(u); if (isImageUrl(u)) clipImageUrl(u, p); else if (v) addCard('video', p, {...v, title:''}, {edit:false}); else addCard('link', p, {url:u, title:''}, {edit:false}); }
   else addCard('note', p, {html:esc(t).replace(/\n/g, '<br>')}, {edit:false});
 });
 canvas.addEventListener('dragover', e => { e.preventDefault(); canvas.classList.add('file-over'); });
@@ -1933,8 +2050,10 @@ canvas.addEventListener('drop', e => {
   e.preventDefault(); canvas.classList.remove('file-over');
   const p = screenToWorld(e.clientX, e.clientY), files = [...e.dataTransfer.files];
   if (files.length) return routeFiles(files, p);
+  const html = e.dataTransfer.getData('text/html'), im = html && /<img[^>]+src=["']([^"']+)["']/i.exec(html);
+  if (im && isUrl(im[1].replace(/&amp;/g, '&'))) return clipImageUrl(im[1].replace(/&amp;/g, '&'), p);
   const u = (e.dataTransfer.getData('text/uri-list') || e.dataTransfer.getData('text/plain') || '').trim().split('\n')[0].trim();
-  if (isUrl(u)){ const v = parseVideo(u); if (v) addCard('video', p, {...v, title:''}, {edit:false}); else addCard('link', p, {url:u, title:''}, {edit:false}); } else if (u) addCard('note', p, {html:esc(u)}, {edit:false});
+  if (isUrl(u)){ const v = parseVideo(u); if (isImageUrl(u)) clipImageUrl(u, p); else if (v) addCard('video', p, {...v, title:''}, {edit:false}); else addCard('link', p, {url:u, title:''}, {edit:false}); } else if (u) addCard('note', p, {html:esc(u)}, {edit:false});
 });
 
 /* ---------- keyboard ---------- */
@@ -2216,7 +2335,7 @@ const NICE = ['#7c6cf0','#3b8de0','#20a678','#e2557a','#ea822e','#f2c94c','#1f29
 function normHex(v){ v = (v || '').trim().replace(/^#/, ''); if (/^[0-9a-f]{3}$/i.test(v)) v = v.split('').map(x => x + x).join(''); return /^[0-9a-f]{6}$/i.test(v) ? '#' + v.toLowerCase() : null; }
 function swatchHTML(c){
   const hex = normHex(c.hex) || '#7c6cf0', n = parseInt(hex.slice(1), 16);
-  return `<div class="sw-block" style="background:${hex}"></div><div class="sw-meta"><div class="sw-name">${esc(c.name || 'Untitled colour')}</div><div class="sw-codes"><button class="sw-hex nd" title="Copy hex code">${hex.toUpperCase()}</button><span>RGB ${n >> 16 & 255} ${n >> 8 & 255} ${n & 255}</span></div></div>`;
+  return `<div class="sw-block" style="background:${hex}"></div><div class="sw-meta">${c.name ? `<div class="sw-name">${esc(c.name)}</div>` : ''}<div class="sw-codes"><button class="sw-hex nd" title="Copy hex code">${hex.toUpperCase()}</button><span>RGB ${n >> 16 & 255} ${n >> 8 & 255} ${n & 255}</span></div></div>`;
 }
 function askColor(hex, name = ''){
   hex = normHex(hex) || NICE[Math.floor(Math.random() * NICE.length)];
@@ -2535,6 +2654,421 @@ world.addEventListener('click', e => {
   else if (t.closest('.au-wave')){ const w = t.closest('.au-wave').getBoundingClientRect(); toggleAudio(c, clamp((e.clientX - w.left) / w.width, 0, 1)); }
 });
 
+/* ================= Phase 5 ================= */
+/* ---------- images: crop, caption, clip, palette ---------- */
+const IMG_EXT = /\.(png|jpe?g|gif|webp|avif|svg)$/i;
+let captionEditing = null;
+function isImageUrl(u){ try { const x = new URL(u); return /^https?:$/.test(x.protocol) && IMG_EXT.test(x.pathname); } catch { return false; } }
+function imgUrl(c){ return c.imageId ? loadImg(c.imageId) : Promise.resolve(/^https?:\/\//i.test(c.src || '') ? c.src : null); }
+function validCrop(cr){ return cr && cr.w > 0 && cr.h > 0 && cr.w <= 1 && cr.h <= 1 && !(cr.x <= .0005 && cr.y <= .0005 && cr.w >= .9995 && cr.h >= .9995) ? cr : null; }
+function imageHTML(c){
+  const cr = validCrop(c.crop), iw = c.iw || 4, ih = c.ih || 3;
+  const ar = cr ? `${(iw * cr.w).toFixed(2)} / ${(ih * cr.h).toFixed(2)}` : `${iw} / ${ih}`;
+  const st = cr ? ` style="width:${(100 / cr.w).toFixed(3)}%;height:${(100 / cr.h).toFixed(3)}%;left:${(-cr.x / cr.w * 100).toFixed(3)}%;top:${(-cr.y / cr.h * 100).toFixed(3)}%"` : '';
+  return `<div class="img-wrap${cr ? ' cropped' : ''}" style="aspect-ratio:${ar}"><img alt="" draggable="false" referrerpolicy="no-referrer"${st}>${!c.imageId && c.src ? `<span class="img-linked">${ico('cloud', 11)}Linked</span>` : ''}</div>${c.caption || captionEditing === c.id ? `<div class="img-cap">${esc(c.caption || '')}</div>` : ''}`;
+}
+function editCaption(id){
+  const c = findCard(id); if (!c || c.type !== 'image') return;
+  captionEditing = id; rerenderCard(id);
+  const cap = elOf(id)?.querySelector('.img-cap'); if (!cap){ captionEditing = null; return; }
+  const before = snapshot(), v0 = c.caption || ''; let cancel = false;
+  cap.contentEditable = 'true'; cap.focus({preventScroll:true}); caretEnd(cap);
+  cap.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); cap.blur(); } else if (e.key === 'Escape'){ e.preventDefault(); cancel = true; cap.blur(); } });
+  cap.addEventListener('paste', e => { e.preventDefault(); document.execCommand('insertText', false, e.clipboardData.getData('text/plain').replace(/\s+/g, ' ')); });
+  cap.addEventListener('blur', () => {
+    const v = cap.textContent.replace(/\s+/g, ' ').trim().slice(0, 200); captionEditing = null;
+    if (!cancel && v !== v0){ pushPast(before); if (v) c.caption = v; else delete c.caption; saveSoon(); }
+    rerenderCard(id);
+  }, {once:true});
+}
+function probeImage(url){ return new Promise(res => { const im = new Image(); im.referrerPolicy = 'no-referrer'; im.onload = () => res({w:im.naturalWidth || 400, h:im.naturalHeight || 300}); im.onerror = () => res(null); im.src = url; }); }
+async function fetchImageFile(url){
+  const r = await fetch(url, {mode:'cors', credentials:'omit', referrerPolicy:'no-referrer'}); if (!r.ok) throw new Error('http');
+  const b = await r.blob(); if (!b.type.startsWith('image/')) throw new Error('type'); return new File([b], 'clip', {type:b.type});
+}
+async function clipImageUrl(url, p){
+  toast('Clipping image…', null, 1600);
+  try { const f = await fetchImageFile(url); await addImageFiles([f], p); toast('Image saved to this board'); return; } catch {}
+  const d = await probeImage(url);
+  if (!d){ addCard('link', p, {url, title:''}, {edit:false}); toast('Couldn’t load that image — added it as a link instead'); return; }
+  const w = Math.round(clamp(d.w / 2, 160, 320));
+  addCard('image', {x:p.x, y:p.y - w * d.h / d.w / 2 + 24}, {src:url, iw:d.w, ih:d.h, w}, {edit:false});
+  toast('That site blocks copying, so it’s a linked image — it needs internet to show', null, 6500);
+}
+async function saveLinkedOffline(id){
+  const c = findCard(id); if (!c?.src) return;
+  try {
+    const f = await fetchImageFile(c.src), res = await processImage(f), iid = uid(); await imgPut(iid, res.url); imgCache.set(iid, res.url);
+    commit(); c.imageId = iid; c.iw = res.w; c.ih = res.h; delete c.src; rerenderCard(id); saveSoon(); toast('Saved offline');
+  } catch { toast('This site doesn’t allow saving its images. Download it and drop it in instead.', null, 6000); }
+}
+function askImageUrl(p){
+  modal({title:'Image from a link',
+    html:`<p>Paste the address of an image. Tessera saves a copy to this board when the website allows it.</p><label class="field"><input id="m-img" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://…/photo.jpg"></label>`,
+    onOpen: ov => setTimeout(() => ov.querySelector('#m-img').focus(), 60),
+    actions:[{label:'Cancel', value:null}, {label:'Add image', kind:'primary', primary:true, fn: ov => {
+      const inp = ov.querySelector('#m-img'), u = normUrl(inp.value);
+      if (!isUrl(u)){ const f = inp.parentElement; f.classList.remove('shake'); void f.offsetWidth; f.classList.add('shake'); inp.focus(); return false; }
+      return u;
+    }}]}).then(u => { if (u) clipImageUrl(u, p || centerWorld()); });
+}
+async function cropImage(id){
+  const c = findCard(id); if (!c) return; const url = await imgUrl(c); if (!url){ toast('This image isn’t available'); return; }
+  const iw = c.iw || 4, ih = c.ih || 3; let cr = {...(validCrop(c.crop) || {x:0, y:0, w:1, h:1})}, ratio = null;
+  const res = await modal({title:'Crop image', cls:'crop-modal',
+    html:`<div class="crop-stage"><div class="crop-inner"><img class="crop-img" alt="" draggable="false" referrerpolicy="no-referrer"><div class="crop-box"><i class="g1"></i><i class="g2"></i><i class="g3"></i><i class="g4"></i>${['nw','ne','sw','se','n','s','e','w'].map(h => `<b class="h-${h}" data-h="${h}"></b>`).join('')}</div></div></div><div class="seg crop-ratios">${[['free','Free'],['orig','Original'],['1','1:1'],['0.8','4:5'],['1.7778','16:9'],['1.5','3:2']].map(([v, l]) => `<button data-r="${v}"${v === 'free' ? ' class="on"' : ''}>${l}</button>`).join('')}</div>`,
+    actions:[{label:'Reset', kind:'left', fn:ov => { cr = {x:0, y:0, w:1, h:1}; ratio = null; ov.querySelectorAll('.crop-ratios button').forEach(b => b.classList.toggle('on', b.dataset.r === 'free')); ov._upd(); return false; }},
+      {label:'Cancel', value:null}, {label:'Apply', kind:'primary', primary:true, fn:() => ({...cr})}],
+    onOpen: ov => {
+      const inner = ov.querySelector('.crop-inner'), box = ov.querySelector('.crop-box'); ov.querySelector('.crop-img').src = url;
+      const upd = () => { box.style.left = cr.x * 100 + '%'; box.style.top = cr.y * 100 + '%'; box.style.width = cr.w * 100 + '%'; box.style.height = cr.h * 100 + '%'; };
+      ov._upd = upd; upd();
+      inner.addEventListener('pointerdown', e => {
+        const hd = e.target.dataset.h || (e.target.closest('.crop-box') ? 'move' : null); if (!hd) return;
+        e.preventDefault(); inner.setPointerCapture(e.pointerId);
+        const R = inner.getBoundingClientRect(), s0 = {...cr}, x0 = e.clientX, y0 = e.clientY, MIN = .04;
+        const mv = ev => {
+          const dx = (ev.clientX - x0) / R.width, dy = (ev.clientY - y0) / R.height; let x = s0.x, y = s0.y, w = s0.w, h = s0.h;
+          if (hd === 'move'){ x = clamp(s0.x + dx, 0, 1 - s0.w); y = clamp(s0.y + dy, 0, 1 - s0.h); }
+          else {
+            let L = s0.x, T = s0.y, Rr = s0.x + s0.w, B = s0.y + s0.h;
+            if (hd.includes('w')) L = clamp(L + dx, 0, Rr - MIN); if (hd.includes('e')) Rr = clamp(Rr + dx, L + MIN, 1);
+            if (hd.includes('n')) T = clamp(T + dy, 0, B - MIN); if (hd.includes('s')) B = clamp(B + dy, T + MIN, 1);
+            x = L; y = T; w = Rr - L; h = B - T;
+            if (ratio){
+              const fr = ratio * ih / iw;
+              if (hd === 'n' || hd === 's'){ w = h * fr; x = s0.x + s0.w / 2 - w / 2; } else h = w / fr;
+              if (hd === 'e' || hd === 'w') y = s0.y + s0.h / 2 - h / 2;
+              if (hd.includes('n')) y = B - h; if (hd.includes('w') && hd.length === 2) x = Rr - w;
+              if (x < -.0001 || y < -.0001 || x + w > 1.0001 || y + h > 1.0001 || w < MIN || h < MIN) return;
+            }
+          }
+          cr = {x, y, w, h}; upd();
+        };
+        const up = () => { inner.removeEventListener('pointermove', mv); inner.removeEventListener('pointerup', up); inner.removeEventListener('pointercancel', up); };
+        inner.addEventListener('pointermove', mv); inner.addEventListener('pointerup', up); inner.addEventListener('pointercancel', up);
+      });
+      ov.querySelector('.crop-ratios').addEventListener('click', e => {
+        const b = e.target.closest('[data-r]'); if (!b) return; e.preventDefault();
+        ov.querySelectorAll('.crop-ratios button').forEach(x => x.classList.toggle('on', x === b));
+        const v = b.dataset.r; ratio = v === 'free' ? null : v === 'orig' ? iw / ih : +v;
+        if (ratio){
+          const fr = ratio * ih / iw, w = fr >= 1 ? 1 : fr, h = fr >= 1 ? 1 / fr : 1, cx = cr.x + cr.w / 2, cy = cr.y + cr.h / 2;
+          cr = {x:clamp(cx - w / 2, 0, 1 - w), y:clamp(cy - h / 2, 0, 1 - h), w, h}; upd();
+        }
+      });
+    }});
+  if (!res) return;
+  commit();
+  if (validCrop(res)) c.crop = {x:+res.x.toFixed(4), y:+res.y.toFixed(4), w:+res.w.toFixed(4), h:+res.h.toFixed(4)}; else delete c.crop;
+  rerenderCard(id); saveSoon();
+}
+async function extractPalette(id){
+  const c = findCard(id); if (!c) return; const url = await imgUrl(c); if (!url) return;
+  let data;
+  try {
+    const im = new Image(); im.crossOrigin = 'anonymous'; im.src = url; await im.decode();
+    const cr = validCrop(c.crop) || {x:0, y:0, w:1, h:1}, N = 80, cv = document.createElement('canvas'); cv.width = N; cv.height = N;
+    const g = cv.getContext('2d', {willReadFrequently:true});
+    g.drawImage(im, cr.x * im.naturalWidth, cr.y * im.naturalHeight, cr.w * im.naturalWidth, cr.h * im.naturalHeight, 0, 0, N, N);
+    data = g.getImageData(0, 0, N, N).data;
+  } catch { toast('Can’t read colours from a linked image — use “Save offline” first'); return; }
+  const bk = new Map();
+  for (let i = 0; i < data.length; i += 4){
+    if (data[i + 3] < 128) continue; const r = data[i], gg = data[i + 1], b = data[i + 2], k = (r >> 3) << 10 | (gg >> 3) << 5 | (b >> 3);
+    let o = bk.get(k); if (!o){ o = {n:0, r:0, g:0, b:0}; bk.set(k, o); } o.n++; o.r += r; o.g += gg; o.b += b;
+  }
+  const cands = [...bk.values()].map(o => { const r = o.r / o.n, g = o.g / o.n, b = o.b / o.n, mx = Math.max(r, g, b), mn = Math.min(r, g, b); return {r, g, b, score:o.n * (.55 + (mx ? (mx - mn) / mx : 0))}; }).sort((a, b) => b.score - a.score);
+  const picks = [];
+  for (const k of cands){ if (picks.every(p => Math.hypot(p.r - k.r, p.g - k.g, p.b - k.b) > 54)) picks.push(k); if (picks.length >= 6) break; }
+  if (!picks.length) return;
+  picks.sort((a, b) => (.2126 * a.r + .7152 * a.g + .0722 * a.b) - (.2126 * b.r + .7152 * b.g + .0722 * b.b));
+  const hex = o => '#' + [o.r, o.g, o.b].map(v => Math.round(v).toString(16).padStart(2, '0')).join('');
+  const r = getWorldRect(id) || {x:c.x, y:c.y, w:c.w, h:200}, b = cur(), sw = 116, gap = 12; commit(); let z = maxZ(b); const made = [];
+  picks.forEach((pk, i) => { const s = {id:uid(), type:'swatch', x:Math.round(r.x + i * (sw + gap)), y:Math.round(r.y + r.h + (c.tags?.length ? 44 : 26)), w:sw, z:++z, color:null, hex:hex(pk), name:''}; b.cards[s.id] = s; made.push(s.id); });
+  sel.clear(); made.forEach(i => sel.add(i)); render(made); saveSoon(); buzz(10);
+  toast(`Extracted ${made.length} colours`, {label:'Undo', fn:undo});
+}
+
+/* ---------- gallery ---------- */
+function boardImages(){
+  return Object.values(cur().cards).filter(c => c.type === 'image').map(c => ({c, r:getWorldRect(c.id)})).filter(o => o.r)
+    .sort((a, b) => (Math.round(a.r.y / 140) - Math.round(b.r.y / 140)) || (a.r.x - b.r.x)).map(o => o.c);
+}
+function openGallery(startId){
+  const list = boardImages(); if (!list.length){ toast('There are no images on this board'); return; }
+  let i = Math.max(0, list.findIndex(c => c.id === startId)), tok = 0, swiped = false; blurEditing(); hideMenus();
+  const multi = list.length > 1, ov = document.createElement('div'); ov.className = 'overlay gal' + (multi ? '' : ' single');
+  ov.innerHTML = `<div class="gal-top"><span class="gal-count"></span><span class="gal-cap"></span><button class="ib gal-x" aria-label="Close">${ico('x', 18)}</button></div><div class="gal-stage"><img alt="" draggable="false" referrerpolicy="no-referrer">${multi ? `<button class="gal-nav gal-prev" aria-label="Previous">${ico('chevl', 22)}</button><button class="gal-nav gal-next" aria-label="Next">${ico('chev', 22)}</button>` : ''}</div>${multi ? `<div class="gal-strip">${list.map((_, k) => `<button data-k="${k}" aria-label="Image ${k + 1}"><img alt="" draggable="false" referrerpolicy="no-referrer"></button>`).join('')}</div>` : ''}`;
+  document.body.appendChild(ov); requestAnimationFrame(() => ov.classList.add('show'));
+  const img = ov.querySelector('.gal-stage img'), strip = ov.querySelector('.gal-strip'), stage = ov.querySelector('.gal-stage');
+  strip?.querySelectorAll('img').forEach((t, k) => imgUrl(list[k]).then(u => { if (u) t.src = u; }));
+  const show = async k => {
+    i = (k + list.length) % list.length; const my = ++tok, c = list[i];
+    ov.querySelector('.gal-count').textContent = `${i + 1} / ${list.length}`; ov.querySelector('.gal-cap').textContent = c.caption || '';
+    strip?.querySelectorAll('button').forEach((b, k2) => b.classList.toggle('on', k2 === i));
+    strip?.querySelector('.on')?.scrollIntoView({inline:'center', block:'nearest', behavior:'smooth'});
+    img.classList.add('out'); const u = await imgUrl(c); if (my !== tok || !u) return;
+    const pre = new Image(); pre.referrerPolicy = 'no-referrer'; pre.src = u; try { await pre.decode(); } catch {}
+    if (my !== tok) return; img.src = u; requestAnimationFrame(() => img.classList.remove('out'));
+  };
+  const close = () => { ov.classList.remove('show'); setTimeout(() => ov.remove(), 220); document.removeEventListener('keydown', kd, true); };
+  const kd = e => {
+    if (!isTop(ov)) return;
+    if (e.key === 'Escape'){ e.preventDefault(); e.stopPropagation(); close(); }
+    else if (e.key === 'ArrowRight' && multi){ e.preventDefault(); show(i + 1); }
+    else if (e.key === 'ArrowLeft' && multi){ e.preventDefault(); show(i - 1); }
+  };
+  document.addEventListener('keydown', kd, true);
+  ov.querySelector('.gal-x').onclick = close;
+  ov.querySelector('.gal-prev')?.addEventListener('click', e => { e.stopPropagation(); show(i - 1); });
+  ov.querySelector('.gal-next')?.addEventListener('click', e => { e.stopPropagation(); show(i + 1); });
+  strip?.addEventListener('click', e => { const b = e.target.closest('[data-k]'); if (b) show(+b.dataset.k); });
+  let sx = null;
+  stage.addEventListener('pointerdown', e => { sx = e.clientX; swiped = false; });
+  stage.addEventListener('pointerup', e => { if (sx != null && multi && Math.abs(e.clientX - sx) > 50){ swiped = true; show(i + (e.clientX < sx ? 1 : -1)); } sx = null; });
+  stage.addEventListener('click', e => { if (e.target === stage && !swiped) close(); });
+  show(i);
+}
+
+/* ---------- tags ---------- */
+const tagFilter = new Set();
+function tagColor(t){ let h = 0; for (const ch of t) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return ['violet','sky','mint','rose','amber'][h % 5]; }
+function normTag(t){ return String(t || '').toLowerCase().replace(/^#+/, '').trim().replace(/\s+/g, '-').replace(/[^\p{L}\p{N}_-]/gu, '').slice(0, 24); }
+function tagPill(t, nd = true){ return `<button class="tag-pill${nd ? ' nd' : ''}${tagFilter.has(t) ? ' on' : ''}" data-tag="${esc(t)}" style="--tint:var(--k-${tagColor(t)})">#${esc(t)}</button>`; }
+function tagRowHTML(tags){ return `<div class="tag-row">${tags.map(t => tagPill(t)).join('')}</div>`; }
+function allTags(){
+  const m = new Map(); for (const b of Object.values(S.boards)) for (const c of Object.values(b.cards)) for (const t of c.tags || []) m.set(t, (m.get(t) || 0) + 1);
+  return [...m.entries()].sort((a, b) => b[1] - a[1]).map(x => x[0]);
+}
+function boardTags(){ const s = new Set(); for (const c of Object.values(cur().cards)) (c.tags || []).forEach(t => s.add(t)); return [...s].sort(); }
+function toggleTagFilter(t){ tagFilter.has(t) ? tagFilter.delete(t) : tagFilter.add(t); applyFilter(); }
+function clearTagFilter(){ tagFilter.clear(); applyFilter(); }
+function applyFilter(){
+  const bar = $('#filterbar'), b = cur(), on = tagFilter.size > 0, match = c => (c.tags || []).some(t => tagFilter.has(t));
+  let shown = 0, total = 0;
+  world.querySelectorAll('.card').forEach(el => {
+    const c = b.cards[el.dataset.id]; if (!c) return;
+    let m = !on || c.type === 'frame' || match(c);
+    if (on && !m && c.type === 'column') m = c.children.some(k => b.cards[k] && match(b.cards[k]));
+    el.classList.toggle('dim', !m);
+    if (c.type !== 'frame' && c.type !== 'column'){ total++; if (on ? match(c) : true) shown++; }
+  });
+  world.querySelectorAll('.tag-pill').forEach(p => p.classList.toggle('on', tagFilter.has(p.dataset.tag)));
+  bar.classList.toggle('show', on);
+  if (on) bar.innerHTML = `<span>Showing</span>${[...tagFilter].map(t => `<button class="tag-pill on" data-tag="${esc(t)}" style="--tint:var(--k-${tagColor(t)})" title="Remove filter">#${esc(t)}${ico('x', 10)}</button>`).join('')}<span class="fb-n">${shown} of ${total}</span><button class="btn sm fb-clear">Clear</button>`;
+}
+$('#filterbar').addEventListener('click', e => { const p = e.target.closest('[data-tag]'); if (p) return toggleTagFilter(p.dataset.tag); if (e.target.closest('.fb-clear')) clearTagFilter(); });
+world.addEventListener('click', e => { const p = e.target.closest('.tag-pill'); if (p && p.dataset.tag){ e.stopPropagation(); toggleTagFilter(p.dataset.tag); } });
+function openTagFilterMenu(x, y){
+  openMenu([{heading:'Filter by tag'}, ...boardTags().map(t => ({label:'#' + t, icon:tagFilter.has(t) ? 'check' : 'tag', fn:() => toggleTagFilter(t)})),
+    ...(tagFilter.size ? [{sep:true}, {label:'Clear filter', icon:'x', fn:clearTagFilter}] : [])], x, y);
+}
+function editTags(ids){
+  const b = cur(); ids = ids.filter(id => b.cards[id]); if (!ids.length) return;
+  let tags = [...new Set(ids.flatMap(id => b.cards[id].tags || []))];
+  modal({title:ids.length > 1 ? `Tag ${ids.length} cards` : 'Tags',
+    html:`<p>Tags group related cards across all your boards. Click a tag on a card to filter by it.</p><div class="tagbox"><span class="tb-chips"></span><input placeholder="Add a tag…" maxlength="30" spellcheck="false" autocomplete="off" aria-label="New tag"></div><div class="lbl" style="margin-top:16px">Suggestions</div><div class="tag-sugg"></div>`,
+    actions:[{label:'Cancel', value:null}, {label:'Save', kind:'primary', primary:true, fn:ov => { const v = normTag(ov.querySelector('.tagbox input').value); if (v && !tags.includes(v) && tags.length < 8) tags.push(v); return {tags}; }}],
+    onOpen: ov => {
+      const chips = ov.querySelector('.tb-chips'), inp = ov.querySelector('.tagbox input'), sug = ov.querySelector('.tag-sugg');
+      const draw = () => {
+        chips.innerHTML = tags.map(t => `<span class="tag-pill" style="--tint:var(--k-${tagColor(t)})">#${esc(t)}<button data-rm="${esc(t)}" aria-label="Remove ${esc(t)}">${ico('x', 10)}</button></span>`).join('');
+        const s = allTags().filter(t => !tags.includes(t)).slice(0, 16);
+        sug.innerHTML = s.length ? s.map(t => tagPill(t, false)).join('') : '<span class="mnote" style="padding:0">Tags you create will be suggested here.</span>';
+      };
+      const add = v => { v = normTag(v); if (v && !tags.includes(v)){ if (tags.length >= 8) toast('Up to 8 tags per card'); else tags.push(v); } inp.value = ''; draw(); };
+      inp.addEventListener('keydown', e => {
+        if ((e.key === ',' || e.key === ' ' || e.key === 'Tab') && inp.value.trim()){ e.preventDefault(); add(inp.value); }
+        else if (e.key === 'Backspace' && !inp.value && tags.length){ tags.pop(); draw(); }
+      });
+      chips.addEventListener('click', e => { const r = e.target.closest('[data-rm]'); if (r){ tags = tags.filter(t => t !== r.dataset.rm); draw(); inp.focus(); } });
+      sug.addEventListener('click', e => { const p = e.target.closest('[data-tag]'); if (p){ e.preventDefault(); add(p.dataset.tag); inp.focus(); } });
+      ov.querySelector('.tagbox').addEventListener('click', () => inp.focus());
+      draw(); setTimeout(() => inp.focus(), 60);
+    }}).then(r => {
+      if (!r) return; commit();
+      ids.forEach(id => { const c = b.cards[id]; if (!c) return; if (r.tags.length) c.tags = [...r.tags]; else delete c.tags; });
+      render(); saveSoon();
+    });
+}
+
+/* ---------- board covers & icons ---------- */
+const EMOJIS = ['✨','🎨','🎬','📸','🎞️','🎵','✏️','📐','🖋️','📚','💡','🧠','🎯','🚀','📅','🗂️','📌','🔖','🧭','✈️','🏝️','🏔️','🏠','🍜','☕','🌿','🌸','🌙','☀️','🔥','💎','❤️','⭐','🎉','🛍️','💼','📈','🧪','🎮','🐾'];
+async function processCover(file){
+  const bmp = await createImageBitmap(file), k = Math.min(1, 480 / Math.max(bmp.width, bmp.height)), cv = document.createElement('canvas');
+  cv.width = Math.max(1, Math.round(bmp.width * k)); cv.height = Math.max(1, Math.round(bmp.height * k)); cv.getContext('2d').drawImage(bmp, 0, 0, cv.width, cv.height);
+  let u = cv.toDataURL('image/webp', .85); if (!u.startsWith('data:image/webp')) u = cv.toDataURL('image/jpeg', .88); return u;
+}
+function boardCardOf(bid){ const tb = S.boards[bid], p = tb && S.boards[tb.parent]; return p ? Object.values(p.cards).find(c => c.type === 'board' && c.target === bid) : null; }
+function customizeBoard(bid){
+  const tb = S.boards[bid]; if (!tb) return; const card = boardCardOf(bid);
+  let icon = tb.icon || '', color = card?.color || null, coverUrl = null, coverId = tb.coverId || null, coverChanged = false;
+  modal({title:'Customize board', cls:'wide',
+    html:`<div class="bc-wrap"><div class="bc-prev"><div class="tile"></div></div><div style="flex:1;min-width:0"><label class="field" style="margin-top:0"><input id="bc-name" value="${esc(tb.title)}" maxlength="80" spellcheck="false" aria-label="Board name"></label>
+<div class="lbl" style="margin-top:16px">Icon</div><div class="emoji-grid"><button data-e="" title="No icon">${ico('x', 14)}</button>${EMOJIS.map(e => `<button data-e="${e}">${e}</button>`).join('')}</div>
+${card ? `<div class="lbl">Colour</div><div class="swatches" style="padding:2px 0 14px">${['', ...COLORS].map(k => `<button class="sw${k ? '' : ' none'}" ${k ? `data-color="${k}"` : ''} data-col="${k}" title="${k ? cap(k) : 'Default'}"></button>`).join('')}</div>` : ''}
+<div class="lbl">Cover</div><div class="row-btns"><button class="btn sm" data-cv="up">${ico('image', 14)}Upload a cover…</button><button class="btn sm" data-cv="rm">Remove cover</button></div></div></div>`,
+    actions:[{label:'Cancel', value:null}, {label:'Save', kind:'primary', primary:true, fn:ov => ({name:ov.querySelector('#bc-name').value.trim()})}],
+    onOpen: ov => {
+      const prev = ov.querySelector('.bc-prev'), tile = prev.querySelector('.tile');
+      const drawTile = async () => {
+        if (color) prev.dataset.color = color; else delete prev.dataset.color;
+        tile.className = 'tile';
+        const u = coverUrl || (coverId && !coverChanged ? await loadImg(coverId) : null);
+        if (u){ tile.classList.add('cover'); tile.innerHTML = `<img alt="" src="${u}">`; }
+        else tile.innerHTML = icon ? `<span class="bemoji">${esc(icon)}</span>` : ico('board', 32);
+        ov.querySelectorAll('[data-e]').forEach(b => b.classList.toggle('on', b.dataset.e === icon));
+        ov.querySelectorAll('[data-col]').forEach(b => b.classList.toggle('on', (b.dataset.col || null) === color));
+        ov.querySelector('[data-cv="rm"]').disabled = !u;
+      };
+      ov.querySelector('.m-body').addEventListener('click', async e => {
+        const em = e.target.closest('[data-e]'), co = e.target.closest('[data-col]'), cv = e.target.closest('[data-cv]');
+        if (em){ e.preventDefault(); icon = em.dataset.e; drawTile(); }
+        else if (co){ e.preventDefault(); color = co.dataset.col || null; drawTile(); }
+        else if (cv?.dataset.cv === 'rm'){ e.preventDefault(); coverUrl = null; coverChanged = true; drawTile(); }
+        else if (cv?.dataset.cv === 'up'){
+          e.preventDefault(); const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*';
+          inp.onchange = async () => { const f = inp.files[0]; if (!f) return; try { coverUrl = await processCover(f); coverChanged = true; drawTile(); } catch { toast('Couldn’t read that image'); } };
+          inp.click();
+        }
+      });
+      drawTile(); setTimeout(() => ov.querySelector('#bc-name').focus(), 60);
+    }}).then(async r => {
+      if (!r) return; commit();
+      if (r.name) tb.title = r.name.slice(0, 80);
+      if (icon) tb.icon = icon; else delete tb.icon;
+      if (card) card.color = color;
+      if (coverChanged){
+        if (coverUrl){ const cid = uid(); try { await imgPut(cid, coverUrl); imgCache.set(cid, coverUrl); tb.coverId = cid; } catch { toast('Not enough storage for that cover'); } }
+        else delete tb.coverId;
+      }
+      render(); saveSoon();
+    });
+}
+
+/* ---------- templates ---------- */
+const tN = (x, y, html, o = {}) => ({type:'note', x, y, w:o.w || 260, color:o.color || null, html});
+const tSt = (x, y, text, color = 'amber', w = 200) => ({type:'sticky', x, y, w, color, html:esc(text)});
+const tH = (x, y, text, size = 'l', w = 640) => ({type:'heading', x, y, w, size, html:esc(text)});
+const tTd = (x, y, title, items, w = 260, color = null) => ({type:'todo', x, y, w, color, title, items:items.map(t => ({text:t, done:false}))});
+const tCl = (x, y, title, kids, w = 270, color = null) => ({type:'column', x, y, w, color, title, kids:kids.map(k => ({type:'note', w, html:esc(k)}))});
+const tTb = (x, y, title, rows, w = 520) => ({type:'table', x, y, w, title, header:true, rows});
+const tFr = (x, y, w, h, title, color = null) => ({type:'frame', x, y, w, h, title, color});
+const tSw = (x, y, hex, name = '', w = 120) => ({type:'swatch', x, y, w, hex, name});
+const BUILTIN = [
+  {id:'moodboard', name:'Moodboard', icon:'🎨', desc:'Imagery, palette and type for a look.', nodes:[
+    tH(-560, -440, 'Moodboard', 'l', 700), tFr(-560, -330, 760, 520, 'Imagery', 'violet'), tSt(-520, -280, 'Drop reference images into this frame', 'violet', 220),
+    tFr(240, -330, 436, 250, 'Palette', 'rose'), tSw(264, -282, '#e8d9c0', 'Sand'), tSw(396, -282, '#c98c6b', 'Clay'), tSw(528, -282, '#2f3a3a', 'Ink'),
+    tFr(240, -40, 436, 230, 'Type & tone'), tN(264, 0, '<h3>Display serif</h3><div>Clean sans for body. Generous spacing, quiet contrast.</div>', {w:388}),
+    tCl(-560, 240, 'Keywords', ['Calm', 'Warm', 'Editorial'], 260, 'amber'), tN(-270, 240, '<h3>Brief</h3><div>What should this feel like? Who is it for?</div>', {w:320, color:'violet'})]},
+  {id:'story', name:'Story outline', icon:'🎬', desc:'Logline, three acts and characters.', nodes:[
+    tH(-700, -430, 'Story outline'), tN(-700, -330, '<h3>Logline</h3><div>When ___ happens, ___ must ___ or else ___.</div>', {w:420, color:'violet'}),
+    tCl(-700, -150, 'Act I · Setup', ['Opening image', 'Inciting incident', 'Debate'], 280, 'sky'),
+    tCl(-390, -150, 'Act II · Confrontation', ['Fun & games', 'Midpoint', 'Bad guys close in', 'All is lost'], 280, 'amber'),
+    tCl(-80, -150, 'Act III · Resolution', ['Finale', 'Final image'], 280, 'mint'),
+    tCl(230, -150, 'Characters', ['Protagonist — want vs. need', 'Antagonist', 'Mentor'], 280, 'rose')], links:[[2, 3], [3, 4]]},
+  {id:'trip', name:'Trip plan', icon:'✈️', desc:'Itinerary, bookings, packing and budget.', nodes:[
+    tH(-620, -430, 'Trip plan'), tTb(-620, -330, 'Itinerary', [['Day', 'Plan', 'Stay'], ['Day 1', '', ''], ['Day 2', '', ''], ['Day 3', '', ''], ['Day 4', '', '']], 560),
+    tTd(-30, -330, 'Before you go', ['Passport & visas', 'Flights booked', 'Stay booked', 'Travel insurance', 'Offline maps']),
+    tTd(260, -330, 'Packing list', ['Chargers & adapters', 'Toiletries', 'Walking shoes', 'Camera']),
+    tCl(-620, 40, 'Places to see', ['Add a place', 'Add a place'], 260, 'sky'),
+    tN(-330, 40, '<h3>Budget</h3><div>Flights · Stay · Food · Transport · Extras</div>', {w:280, color:'mint'}), tSt(-20, 40, 'Paste booking links and guides here', 'amber', 220)]},
+  {id:'kanban', name:'Kanban', icon:'🗂️', desc:'Move work from backlog to done.', nodes:[
+    tH(-760, -380, 'Project board'),
+    ...[['Backlog', 'slate', ['Idea', 'Research']], ['To do', 'sky', ['Write the brief']], ['In progress', 'amber', ['Rough cut']], ['Review', 'violet', []], ['Done', 'mint', []]].map(([t, c, k], i) => tCl(-760 + i * 300, -280, t, k, 280, c))]},
+  {id:'weekly', name:'Weekly planner', icon:'📅', desc:'Priorities and a plan for each day.', nodes:[
+    tH(-760, -450, 'This week'), tTd(-760, -340, 'Top priorities', ['', '', ''], 260, 'violet'), tSt(-760, -100, 'Focus for the week', 'violet', 260),
+    ...['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((d, i) => tTd(-460 + (i % 4) * 260, -340 + Math.floor(i / 4) * 250, d, [''], 240))]},
+  {id:'content', name:'Content calendar', icon:'🎞️', desc:'Plan, produce and publish videos and posts.', nodes:[
+    tH(-800, -450, 'Content calendar'), tTb(-800, -350, 'Schedule', [['Date', 'Platform', 'Title', 'Status'], ['', 'YouTube', '', ''], ['', 'Instagram', '', ''], ['', 'TikTok', '', ''], ['', '', '', '']], 760),
+    ...[['Ideas', 'violet', ['Hook idea', 'Series idea']], ['Scripting', 'sky', []], ['Editing', 'amber', ['Rough cut', 'Colour & sound']], ['Scheduled', 'slate', []], ['Published', 'mint', []]].map(([t, c, k], i) => tCl(-800 + i * 290, 0, t, k, 270, c))]}
+];
+function estH(n){
+  switch (n.type){
+    case 'heading': return {s:40, m:56, l:80}[n.size || 'm']; case 'sticky': return 200; case 'note': return 110;
+    case 'todo': return 64 + n.items.length * 30; case 'column': return 56 + Math.max(1, n.kids.length) * 86; case 'table': return 46 + n.rows.length * 33;
+    case 'frame': case 'sketch': return n.h; case 'swatch': return n.w * .75 + 60; default: return 120;
+  }
+}
+const specRects = t => t.nodes.map(n => ({x:n.x, y:n.y, w:n.w, h:estH(n), t:n.type, color:n.color, hex:n.hex}));
+function previewSVG(rects){
+  if (!rects.length) return '<svg viewBox="0 0 160 100"></svg>';
+  let x1 = Infinity, y1 = Infinity, x2 = -Infinity, y2 = -Infinity;
+  for (const r of rects){ x1 = Math.min(x1, r.x); y1 = Math.min(y1, r.y); x2 = Math.max(x2, r.x + r.w); y2 = Math.max(y2, r.y + r.h); }
+  const s = Math.min(144 / (x2 - x1 || 1), 84 / (y2 - y1 || 1)), ox = 8 + (144 - (x2 - x1) * s) / 2 - x1 * s, oy = 8 + (84 - (y2 - y1) * s) / 2 - y1 * s, f = v => v.toFixed(1);
+  const order = [...rects].sort((a, b) => (b.t === 'frame') - (a.t === 'frame'));
+  return `<svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid meet">${order.map(r => {
+    const x = ox + r.x * s, y = oy + r.y * s, w = Math.max(1.5, r.w * s), h = Math.max(1.5, r.h * s);
+    if (r.t === 'frame') return `<rect x="${f(x)}" y="${f(y)}" width="${f(w)}" height="${f(h)}" rx="2.5" style="fill:none;stroke:var(--line-3);stroke-width:.7;stroke-dasharray:2 1.5"/>`;
+    if (r.t === 'heading') return `<rect x="${f(x)}" y="${f(y + h * .3)}" width="${f(w * .55)}" height="${f(Math.max(2, h * .38))}" rx="1" style="fill:var(--text-2);opacity:.75"/>`;
+    const fill = r.t === 'swatch' && r.hex ? r.hex : r.color ? `var(--k-${r.color})` : 'var(--text)';
+    return `<rect x="${f(x)}" y="${f(y)}" width="${f(w)}" height="${f(h)}" rx="1.8" style="fill:${fill};opacity:${r.t === 'swatch' ? .95 : r.color ? .38 : .13}"/>`;
+  }).join('')}</svg>`;
+}
+function buildSpec(tpl, b){
+  const ids = []; let z = maxZ(b);
+  tpl.nodes.forEach(n => {
+    const {kids, ...rest} = n, c = {id:uid(), z:n.type === 'frame' ? 0 : ++z, color:null, ...rest};
+    if (c.type === 'todo') c.items = c.items.map(i => ({id:uid(), ...i}));
+    if (c.type === 'table') c.rows = c.rows.map(r => [...r]);
+    if (c.type === 'column'){ c.children = []; for (const k of kids){ const ch = {id:uid(), z:++z, x:0, y:0, color:null, ...k, parent:c.id}; b.cards[ch.id] = ch; c.children.push(ch.id); } }
+    b.cards[c.id] = c; ids.push(c.id);
+  });
+  (tpl.links || []).forEach(([a, bb]) => b.links.push({id:uid(), from:ids[a], to:ids[bb], curve:true}));
+}
+function applyTemplate(tpl, mode, p){
+  commit(); const here = mode === 'here', target = here ? cur() : newBoard(tpl.name, curId);
+  if (tpl.custom){
+    const map = {}, src = tpl.board;
+    for (const c of Object.values(src.cards)) if (!c.parent || !src.cards[c.parent]) cloneCard(c, src.cards, target, 0, 0, null, map, tpl.subs || {});
+    target.links.push(...(src.links || []).filter(l => map[l.from] && map[l.to]).map(l => ({...l, id:uid(), from:map[l.from], to:map[l.to]})));
+    if (src.bg) target.bg = src.bg;
+  } else buildSpec(tpl, target);
+  if (tpl.icon && !target.icon && target.id !== S.rootId) target.icon = tpl.icon;
+  if (here){ render(Object.keys(target.cards)); requestAnimationFrame(() => fit()); saveSoon(); toast(`${tpl.name} template added`, {label:'Undo', fn:undo}); return; }
+  p = p || centerWorld(); const b = cur();
+  const card = {id:uid(), type:'board', x:Math.round(p.x - 66), y:Math.round(p.y - 50), w:132, z:maxZ(b) + 1, color:null, target:target.id};
+  b.cards[card.id] = card; target.view.set = false; sel.clear(); sel.add(card.id); render([card.id]); saveSoon();
+  setTimeout(() => openBoard(target.id), 420);
+}
+function openTemplates(mode = 'new', p){
+  const here = mode === 'here' && !Object.keys(cur().cards).length;
+  const card = t => `<button class="tpl" data-t="${t.id}"><div class="tpl-prev">${previewSVG(t.rects || specRects(t))}</div><div class="tpl-meta"><span class="tpl-ic">${esc(t.icon || '▫️')}</span><span><b>${esc(t.name)}</b><span>${esc(t.desc || '')}</span></span></div>${t.custom ? `<span class="tpl-del" data-del="${t.id}" title="Delete template" role="button">${ico('x', 12)}</span>` : ''}</button>`;
+  modal({title:'Templates', eyebrow:'Start faster', cls:'tpl-modal',
+    html:`<p>${here ? 'Fill this empty board with a ready-made layout.' : 'Start a new board from a ready-made layout. Everything stays editable.'}</p><div class="tpl-grid">${BUILTIN.map(card).join('')}</div><div class="tpl-mine"></div>`,
+    actions:[{label:'Cancel', value:null}],
+    onOpen: ov => {
+      const mine = ov.querySelector('.tpl-mine');
+      const drawMine = () => { mine.innerHTML = `<div class="tpl-h">Your templates</div>` + (S.templates.length ? `<div class="tpl-grid">${S.templates.map(card).join('')}</div>` : `<p class="mnote" style="padding:0">Save any board as a template from the ⋯ menu and it will appear here.</p>`); };
+      drawMine();
+      ov.querySelector('.m-body').addEventListener('click', e => {
+        const d = e.target.closest('[data-del]');
+        if (d){ e.stopPropagation(); S.templates = S.templates.filter(t => t.id !== d.dataset.del); saveSoon(); drawMine(); toast('Template deleted'); return; }
+        const t = e.target.closest('[data-t]'); if (!t) return;
+        const tpl = BUILTIN.find(x => x.id === t.dataset.t) || S.templates.find(x => x.id === t.dataset.t); if (!tpl) return;
+        ov._close(null); applyTemplate(tpl, here ? 'here' : 'new', p);
+      });
+    }});
+}
+async function saveAsTemplate(bid = curId){
+  const b = S.boards[bid]; if (!b) return;
+  if (!Object.keys(b.cards).length){ toast('Add some cards before saving a template'); return; }
+  const name = await modal({title:'Save as template',
+    html:`<p>Reuse this board’s layout and content to start new boards. Images stay on this device.</p><label class="field"><input id="tp-name" value="${esc(b.id === S.rootId ? 'My template' : b.title)}" maxlength="60" spellcheck="false" aria-label="Template name"></label>`,
+    onOpen: ov => setTimeout(() => { const i = ov.querySelector('#tp-name'); i.focus(); i.select(); }, 60),
+    actions:[{label:'Cancel', value:null}, {label:'Save template', kind:'primary', primary:true, fn:ov => ov.querySelector('#tp-name').value.trim() || 'My template'}]});
+  if (!name) return;
+  const subs = {}, copy = x => JSON.parse(JSON.stringify(x, (k, v) => k === 'view' ? undefined : v));
+  const collect = id => { const x = S.boards[id]; if (!x || subs[id]) return; subs[id] = copy(x); for (const c of Object.values(x.cards)) if (c.type === 'board') collect(c.target); };
+  for (const c of Object.values(b.cards)) if (c.type === 'board') collect(c.target);
+  const rects = bid === curId
+    ? [...world.querySelectorAll(':scope > .card')].map(el => { const c = b.cards[el.dataset.id], r = getWorldRect(el.dataset.id); return r && c ? {...r, t:c.type, color:c.color, hex:c.hex} : null; }).filter(Boolean)
+    : Object.values(b.cards).filter(c => !c.parent).map(c => ({x:c.x, y:c.y, w:c.w || 200, h:c.h || 120, t:c.type, color:c.color, hex:c.hex}));
+  S.templates.unshift({id:uid(), custom:true, name, icon:b.icon || '', desc:`Saved ${new Date().toLocaleDateString(undefined, {month:'short', day:'numeric'})}`, at:Date.now(), board:copy({cards:b.cards, links:b.links, bg:b.bg}), subs, rects});
+  saveSoon(); toast(`Saved “${name}” to your templates`, {label:'View', fn:() => openTemplates('new')});
+}
+
 /* ================= Modals, toasts, lightbox ================= */
 const isTop = ov => [...document.querySelectorAll('.overlay')].pop() === ov;
 function modal({title, html, actions, onOpen, dismissable = true, eyebrow = '', cls = ''}){
@@ -2568,17 +3102,10 @@ function toast(msg, action, ms = 4200){
   setTimeout(kill, ms);
   while ($('#toasts').children.length > 3) $('#toasts').firstChild.remove();
 }
-async function lightbox(c){
-  const u = await loadImg(c.imageId); if (!u) return;
-  const ov = document.createElement('div'); ov.className = 'overlay lb';
-  ov.innerHTML = `<img alt=""><button class="ib lb-x" aria-label="Close">${ico('x',18)}</button>`; ov.querySelector('img').src = u;
-  document.body.appendChild(ov); requestAnimationFrame(() => ov.classList.add('show'));
-  const close = () => { ov.classList.remove('show'); setTimeout(() => ov.remove(), 220); document.removeEventListener('keydown', kd, true); };
-  const kd = e => { if (e.key === 'Escape' && isTop(ov)){ e.stopPropagation(); close(); } };
-  document.addEventListener('keydown', kd, true); ov.addEventListener('click', close);
-}
+function lightbox(c){ openGallery(c.id); }
 async function downloadImage(c){
-  const u = await loadImg(c.imageId); if (!u) return;
+  const u = await imgUrl(c); if (!u) return;
+  if (!u.startsWith('data:')){ window.open(u, '_blank', 'noopener'); return; }
   const ext = (u.match(/^data:image\/(\w+)/) || [, 'png'])[1].replace('jpeg', 'jpg');
   const a = document.createElement('a'); a.href = u; a.download = `tessera-image.${ext}`; document.body.appendChild(a); a.click(); a.remove();
 }
@@ -2597,7 +3124,7 @@ function cardInfo(c){
   if (c.type === 'file') return {title:c.name || 'File', text:c.name || ''};
   if (c.type === 'audio') return {title:c.title || 'Voice memo', text:c.title || ''};
   if (c.type === 'sketch') return {title:'Sketch', text:''};
-  if (c.type === 'image') return {title:'Image', text:''};
+  if (c.type === 'image') return {title:c.caption || 'Image', text:c.caption || ''};
   if (c.type === 'board') return {title:S.boards[c.target]?.title || 'Board', text:''};
   return {title:'Card', text:''};
 }
@@ -2619,7 +3146,15 @@ function snippet(text, terms, n = 80){
   return (s > 0 ? '…' : '') + text.slice(s, e) + (e < text.length ? '…' : '');
 }
 function paletteActions(){
-  const a = TOOLS.map(([t, l, k]) => ({label:`New ${l.toLowerCase()}`, icon:t, kbd:k, run:() => createCard(t)}));
+  const a = TOOLS.filter(t => t[0] !== 'template').map(([t, l, k]) => ({label:`New ${l.toLowerCase()}`, icon:t, kbd:k, run:() => createCard(t)}));
+  a.push({label:'New board from template…', icon:'template', kbd:'M', run:() => openTemplates('new')});
+  a.push({label:'Save this board as a template…', icon:'template', run:() => saveAsTemplate()});
+  if (curId !== S.rootId) a.push({label:'Customize this board…', icon:'smile', run:() => customizeBoard(curId)});
+  if (Object.values(cur().cards).some(c => c.type === 'image')) a.push({label:'Open image gallery', icon:'gallery', run:() => openGallery()});
+  a.push({label:'Add image from URL…', icon:'link', run:() => askImageUrl(centerWorld())});
+  if (sel.size) a.push({label:'Tag selected cards…', icon:'tag', run:() => editTags([...sel])});
+  boardTags().forEach(t => a.push({label:`${tagFilter.has(t) ? 'Stop filtering by' : 'Filter by'} #${t}`, icon:'tag', run:() => toggleTagFilter(t)}));
+  if (tagFilter.size) a.push({label:'Clear tag filter', icon:'x', run:clearTagFilter});
   a.push({label:isDark() ? 'Switch to light mode' : 'Switch to dark mode', icon:isDark() ? 'sun' : 'moon', run:() => toggleTheme()});
   a.push({label:'Fit to screen', icon:'fit', kbd:'Ctrl 0', run:() => fit()});
   if (curId !== S.rootId){
@@ -2658,9 +3193,9 @@ function openPalette(mode = 'search', opts = {}){
   if (move) for (const id of opts.ids || []){ const c = cur().cards[id]; if (c?.type === 'board') descendantsOf(c.target, exclude); }
   const boards = Object.values(S.boards).filter(b => !(move && exclude.has(b.id)));
   const cards = [];
-  if (!move) for (const b of Object.values(S.boards)) for (const c of Object.values(b.cards)){ if (c.type === 'image' || c.type === 'board') continue; const info = cardInfo(c); if (info.text) cards.push({b, c, ...info}); }
+  if (!move) for (const b of Object.values(S.boards)) for (const c of Object.values(b.cards)){ if (c.type === 'board') continue; const info = cardInfo(c), tg = (c.tags || []).map(t => '#' + t).join(' '), text = [info.text, tg].filter(Boolean).join(' · '); if (text) cards.push({b, c, ...info, text}); }
   const actions = move ? [] : paletteActions();
-  const boardRow = (b, terms) => ({icon:b.id === S.rootId ? 'home' : isPinned(b.id) ? 'starFill' : 'board', t:hl(b.title, terms), s:esc(boardPath(b) || 'Top level'), kbd:b.id === curId ? 'Current' : '',
+  const boardRow = (b, terms) => ({icon:b.id === S.rootId ? 'home' : isPinned(b.id) ? 'starFill' : 'board', emoji:b.id === S.rootId ? '' : b.icon, t:hl(b.title, terms), s:esc(boardPath(b) || 'Top level'), kbd:b.id === curId ? 'Current' : '',
     run:() => move ? moveCards(opts.ids, b.id) : openBoard(b.id)});
   let rows = [], active = 0;
   const draw = () => {
@@ -2689,7 +3224,7 @@ function openPalette(mode = 'search', opts = {}){
     for (const g of groups){
       if (!g.items.length) continue;
       h += `<div class="pal-label">${g.label}</div>`;
-      for (const it of g.items){ const i = rows.length; rows.push(it); h += `<div class="pal-row" data-i="${i}"><span class="pal-ic">${ico(it.icon, 16)}</span><span class="pal-txt"><div class="pal-t">${it.t}</div>${it.s ? `<div class="pal-s">${it.s}</div>` : ''}</span>${it.kbd ? `<span class="k">${it.kbd}</span>` : ''}</div>`; }
+      for (const it of g.items){ const i = rows.length; rows.push(it); h += `<div class="pal-row" data-i="${i}"><span class="pal-ic">${it.emoji ? `<span class="pal-emo">${esc(it.emoji)}</span>` : ico(it.icon, 16)}</span><span class="pal-txt"><div class="pal-t">${it.t}</div>${it.s ? `<div class="pal-s">${it.s}</div>` : ''}</span>${it.kbd ? `<span class="k">${it.kbd}</span>` : ''}</div>`; }
     }
     if (!rows.length) h = `<div class="pal-empty">${move ? 'There’s no other board to move to yet.<br>Add a board card first.' : `Nothing matches “${esc(inp.value.trim())}”`}</div>`;
     list.innerHTML = h; active = clamp(active, 0, Math.max(0, rows.length - 1)); mark(true);
@@ -2903,7 +3438,7 @@ function welcome(){
     });
 }
 function shortcuts(){
-  const rows = [['Search & commands','<kbd>Ctrl</kbd> <kbd>K</kbd> · <kbd>/</kbd>'],['New note / to-do / link','<kbd>N</kbd> <kbd>T</kbd> <kbd>L</kbd>'],['New image / board / column','<kbd>I</kbd> <kbd>B</kbd> <kbd>C</kbd>'],['New frame','<kbd>F</kbd>'],['Sticky / heading / sketch','<kbd>S</kbd> <kbd>H</kbd> <kbd>D</kbd>'],['Table / colour / video','<kbd>G</kbd> <kbd>K</kbd> <kbd>V</kbd>'],['File / audio','<kbd>U</kbd> <kbd>A</kbd>'],['While sketching','<kbd>P</kbd> pen · <kbd>H</kbd> highlight · <kbd>E</kbd> erase'],['Quick note','Double-click canvas'],['Move into a board','Drag onto its tile'],['Frame selection','<kbd>Ctrl</kbd> <kbd>G</kbd>'],['Lock / unlock','<kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>L</kbd>'],['Drag without snapping','Hold <kbd>Alt</kbd>'],['Label an arrow','Double-click it'],['Pan','Scroll · <kbd>Space</kbd> + drag'],['Zoom','<kbd>Ctrl</kbd> + scroll · pinch'],['Fit to screen','<kbd>Ctrl</kbd> <kbd>0</kbd>'],['Undo / redo','<kbd>Ctrl</kbd> <kbd>Z</kbd> · <kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>Z</kbd>'],['Duplicate','<kbd>Ctrl</kbd> <kbd>D</kbd>'],['Copy / paste cards','<kbd>Ctrl</kbd> <kbd>C</kbd> · <kbd>Ctrl</kbd> <kbd>V</kbd>'],['Edit note / open board','<kbd>Enter</kbd>'],['Move to Trash','<kbd>Del</kbd>'],['Back to parent board','<kbd>Esc</kbd>'],['Export backup','<kbd>Ctrl</kbd> <kbd>S</kbd>']];
+  const rows = [['Search & commands','<kbd>Ctrl</kbd> <kbd>K</kbd> · <kbd>/</kbd>'],['New note / to-do / link','<kbd>N</kbd> <kbd>T</kbd> <kbd>L</kbd>'],['New image / board / column','<kbd>I</kbd> <kbd>B</kbd> <kbd>C</kbd>'],['New frame','<kbd>F</kbd>'],['Board from a template','<kbd>M</kbd>'],['Image gallery','Double-click an image · <kbd>←</kbd> <kbd>→</kbd>'],['Sticky / heading / sketch','<kbd>S</kbd> <kbd>H</kbd> <kbd>D</kbd>'],['Table / colour / video','<kbd>G</kbd> <kbd>K</kbd> <kbd>V</kbd>'],['File / audio','<kbd>U</kbd> <kbd>A</kbd>'],['While sketching','<kbd>P</kbd> pen · <kbd>H</kbd> highlight · <kbd>E</kbd> erase'],['Quick note','Double-click canvas'],['Move into a board','Drag onto its tile'],['Frame selection','<kbd>Ctrl</kbd> <kbd>G</kbd>'],['Lock / unlock','<kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>L</kbd>'],['Drag without snapping','Hold <kbd>Alt</kbd>'],['Label an arrow','Double-click it'],['Pan','Scroll · <kbd>Space</kbd> + drag'],['Zoom','<kbd>Ctrl</kbd> + scroll · pinch'],['Fit to screen','<kbd>Ctrl</kbd> <kbd>0</kbd>'],['Undo / redo','<kbd>Ctrl</kbd> <kbd>Z</kbd> · <kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>Z</kbd>'],['Duplicate','<kbd>Ctrl</kbd> <kbd>D</kbd>'],['Copy / paste cards','<kbd>Ctrl</kbd> <kbd>C</kbd> · <kbd>Ctrl</kbd> <kbd>V</kbd>'],['Edit note / open board','<kbd>Enter</kbd>'],['Move to Trash','<kbd>Del</kbd>'],['Back to parent board','<kbd>Esc</kbd>'],['Export backup','<kbd>Ctrl</kbd> <kbd>S</kbd>']];
   modal({title:'Keyboard shortcuts', html:`<div class="kbd-grid">${rows.map(r => `<span>${r[0]}</span><span>${r[1]}</span>`).join('')}</div>`, actions:[{label:'Done', kind:'primary', primary:true}]});
 }
 async function exportBackup(){
@@ -2953,6 +3488,7 @@ function openMoreMenu(){
     {label:'Storage & backup', icon:'database', fn:() => storagePanel()}, {label:'Trash', icon:'trash', kbd:tn ? String(tn) : '', fn:openTrash}, {sep:true},
     {label:isDark() ? 'Light mode' : 'Dark mode', icon:isDark() ? 'sun' : 'moon', fn:() => toggleTheme()},
     {label:'View options…', icon:'sliders', fn:() => openViewMenu(r.right, r.bottom + 8, true)},
+    {label:'Templates…', icon:'template', kbd:'M', fn:() => openTemplates('new')}, {label:'Save board as template…', icon:'template', fn:() => saveAsTemplate()},
     {label:'Keyboard shortcuts', icon:'keyboard', fn:shortcuts}];
   if (deferredInstall) items.push({label:'Install app', icon:'install', fn:async () => { deferredInstall.prompt(); try { await deferredInstall.userChoice; } catch {} deferredInstall = null; }});
   items.push({sep:true}, {label:'Erase everything…', icon:'trash', danger:true, fn:eraseAll});
@@ -2972,6 +3508,7 @@ tap('#chip', () => storagePanel());
 tap('#searchBtn', () => openPalette());
 tap('#themeBtn', e => toggleTheme(e));
 tap('#pinBtn', () => togglePin(curId));
+tap('#emTpl', () => openTemplates('here'));
 $('#crumbs').addEventListener('click', e => {
   const c = e.target.closest('.crumb'); if (!c) return;
   if (c.dataset.b === curId){ const sp = c.querySelector('span'); if (!sp.isContentEditable) inlineEdit(sp, cur().title, v => { cur().title = v; }); }
@@ -2983,7 +3520,7 @@ window.addEventListener('pagehide', saveNow);
 
 /* ================= Boot ================= */
 function normalizeState(){
-  S.meta = S.meta || {}; S.meta.pinned = S.meta.pinned || []; S.meta.recent = S.meta.recent || [];
+  S.meta = S.meta || {}; S.meta.pinned = S.meta.pinned || []; S.meta.recent = S.meta.recent || []; S.templates = S.templates || [];
   S.trash = (S.trash || []).filter(e => Date.now() - e.at < TRASH_DAYS * DAY);
   for (const b of Object.values(S.boards)){ b.view = b.view || {x:0,y:0,s:1,set:false}; b.links = b.links || []; }
 }
