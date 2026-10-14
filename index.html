@@ -442,8 +442,8 @@ table.tb{width:100%;border-collapse:collapse;table-layout:fixed}
 
 /* phase 6 */
 .menu{max-height:calc(100vh - 24px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
-#tl{max-width:calc(100vw - 720px)}
-@media (max-width:1180px){#tl{max-width:calc(100vw - 600px)}}
+#tl{max-width:calc(100vw - 760px)}
+@media (max-width:1180px){#tl{max-width:calc(100vw - 640px)}}
 .mi .k.badge{min-width:20px;height:20px;padding:0 6px;border-radius:10px;display:inline-grid;place-items:center;font-size:11px;font-weight:600;color:var(--accent-strong);background:var(--accent-soft)}
 .mi .k.badge.over{color:var(--danger);background:var(--danger-soft)}
 
@@ -864,6 +864,136 @@ textarea.shd-in{height:84px;padding:10px 13px;resize:vertical;line-height:1.5}
 .hc-item .m{flex:1;min-width:0}.hc-item .t{font-size:13px;color:var(--text);font-weight:500}.hc-item .s{font-size:11.5px;color:var(--text-3);margin-top:1px}
 @media (max-width:760px){.hc-tiles{grid-template-columns:repeat(2,1fr)}}
 
+/* phase 9 — start screen & welcome */
+#splash{position:fixed;inset:0;z-index:290;overflow:auto;overscroll-behavior:contain;background:var(--bg);opacity:0;transition:opacity .45s var(--ease),transform .45s var(--ease);transform:scale(1.015)}
+#splash.show{opacity:1;transform:none}
+#splash.out{opacity:0;transform:scale(.985);pointer-events:none}
+.sp-glow{position:fixed;inset:0;pointer-events:none;background:radial-gradient(60% 50% at 85% -10%,color-mix(in srgb,var(--accent) 18%,transparent),transparent 70%),radial-gradient(50% 45% at -5% 105%,color-mix(in srgb,var(--accent) 12%,transparent),transparent 70%)}
+.sp-dots{position:fixed;inset:0;pointer-events:none;background-image:radial-gradient(circle at center,var(--dots) 1px,transparent 1.3px);background-size:24px 24px;mask-image:radial-gradient(80% 70% at 50% 40%,#000 30%,transparent 85%);-webkit-mask-image:radial-gradient(80% 70% at 50% 40%,#000 30%,transparent 85%);opacity:.7}
+.sp-wrap{position:relative;max-width:1180px;margin:0 auto;padding:calc(26px + env(safe-area-inset-top)) 40px calc(36px + env(safe-area-inset-bottom))}
+.sp-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:46px}
+.sp-brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:26px;letter-spacing:.005em;color:var(--text)}
+.sp-top-r{display:flex;align-items:center;gap:6px}
+.sp-link{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 13px;border-radius:11px;font-size:13px;font-weight:500;color:var(--text-2);transition:background .15s,color .15s}
+.sp-link:hover{background:var(--hover);color:var(--text)}
+.sp-hero{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;margin-bottom:26px;flex-wrap:wrap}
+.sp-greet{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-strong);margin-bottom:10px}
+.sp-h{font-family:var(--serif);font-weight:400;font-size:clamp(38px,5vw,60px);line-height:1;letter-spacing:-.015em;margin:0;color:var(--text)}
+.sp-actions{display:flex;gap:8px;flex-wrap:wrap}
+.sp-act{display:flex;align-items:center;gap:10px;height:46px;padding:0 16px 0 12px;border-radius:14px;font-size:13px;font-weight:600;color:var(--text);background:var(--glass);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);transition:transform .2s var(--ease),border-color .15s}
+.sp-act:hover{transform:translateY(-2px);border-color:var(--accent)}
+.sp-act .ai{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-strong)}
+.sp-act.primary{color:var(--on-accent);background:linear-gradient(180deg,var(--primary-a),var(--primary-b));border-color:transparent;box-shadow:0 14px 30px -14px var(--accent-glow),inset 0 1px 0 rgba(255,255,255,.3)}
+.sp-act.primary .ai{background:rgba(255,255,255,.2);color:var(--on-accent)}
+.sp-act kbd{font:600 10.5px var(--font);color:var(--text-3);padding:2px 6px;border-radius:6px;background:var(--hover);margin-left:2px}
+.sp-main{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(260px,1fr);gap:18px;margin-bottom:34px}
+.sp-continue{position:relative;display:flex;flex-direction:column;text-align:left;border-radius:24px;overflow:hidden;background:var(--surface);border:1px solid var(--line-2);box-shadow:var(--shadow);transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .2s}
+.sp-continue:hover{transform:translateY(-3px);box-shadow:var(--shadow-lift);border-color:var(--accent)}
+.sp-continue .sp-thumb{aspect-ratio:16/8.5;border-radius:0;border:0;border-bottom:1px solid var(--line)}
+.sp-cmeta{display:flex;align-items:center;gap:14px;padding:16px 20px 18px}
+.sp-cmeta .t{flex:1;min-width:0}
+.sp-eyebrow{display:block;font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-strong);margin-bottom:5px}
+.sp-cmeta b{display:block;font-family:var(--serif);font-weight:400;font-size:28px;line-height:1.05;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sp-cmeta small{display:block;font-size:12.5px;color:var(--text-3);margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sp-go{flex:none;display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 16px;border-radius:12px;font-size:13px;font-weight:600;color:var(--on-accent);background:linear-gradient(180deg,var(--primary-a),var(--primary-b));box-shadow:0 10px 24px -12px var(--accent-glow)}
+.sp-go kbd{font:600 10.5px var(--font);opacity:.75}
+.sp-side{display:flex;flex-direction:column;gap:10px}
+.sp-note{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:18px;background:var(--glass);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow);text-align:left;transition:border-color .15s,transform .2s var(--ease)}
+button.sp-note:hover{border-color:var(--accent);transform:translateY(-1px)}
+.sp-note .ni{width:38px;height:38px;flex:none;border-radius:12px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-strong)}
+.sp-note.warn .ni{background:var(--warn-soft);color:var(--warn)}
+.sp-note.bad .ni{background:var(--danger-soft);color:var(--danger)}
+.sp-note.ok .ni{background:var(--ok-soft);color:var(--ok)}
+.sp-note .nm{flex:1;min-width:0}.sp-note b{display:block;font-size:13.5px;font-weight:600;color:var(--text)}.sp-note span{display:block;font-size:12px;color:var(--text-3);margin-top:2px}
+.sp-tip{margin-top:auto;padding:16px 18px;border-radius:18px;border:1px dashed var(--line-3);font-size:12.5px;line-height:1.55;color:var(--text-2)}
+.sp-tip b{color:var(--text)}
+.sp-sec{display:flex;align-items:baseline;justify-content:space-between;margin:0 2px 12px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3)}
+.sp-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:30px}
+.sp-card{display:flex;flex-direction:column;gap:9px;text-align:left;padding:7px 7px 10px;border-radius:18px;border:1px solid transparent;transition:background .2s,border-color .2s,transform .3s var(--ease)}
+.sp-card:hover{background:var(--hover-soft);border-color:var(--line-2);transform:translateY(-2px)}
+.sp-thumb{position:relative;aspect-ratio:16/10;border-radius:13px;overflow:hidden;background:var(--surface-2);border:1px solid var(--line);display:grid;place-items:center}
+.sp-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s}
+.sp-thumb img.ok{opacity:1}
+.sp-thumb svg.pv{width:82%;height:82%}
+.sp-thumb .lk{color:var(--accent);display:grid;place-items:center;gap:6px;font-size:11.5px;font-weight:600}
+.sp-thumb .emo{position:absolute;left:9px;bottom:9px;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-size:16px;background:var(--glass);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:var(--shadow)}
+.sp-card .ct{padding:0 4px}
+.sp-card b{display:block;font-size:13.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sp-card small{display:block;font-size:11.5px;color:var(--text-3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sp-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:20px;border-top:1px solid var(--line);font-size:12.5px;color:var(--text-3)}
+.sp-check{display:inline-flex;align-items:center;gap:10px;cursor:pointer;user-select:none;color:var(--text-2)}
+.sp-check input{appearance:none;-webkit-appearance:none;width:18px;height:18px;margin:0;border-radius:6px;border:1.5px solid var(--chk-border);display:grid;place-items:center;transition:all .15s;cursor:pointer}
+.sp-check input:checked{background:var(--accent);border-color:var(--accent)}
+.sp-check input:checked::after{content:'';width:9px;height:5px;border:2px solid var(--on-accent);border-top:0;border-right:0;transform:rotate(-45deg) translate(1px,-1px)}
+.sp-foot kbd{font:600 10.5px var(--font);padding:2px 6px;border-radius:6px;background:var(--hover);color:var(--text-2)}
+#splash .sp-in{animation:spIn .7s var(--ease) both}
+@keyframes spIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+/* welcome */
+.wl{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:calc(40px + env(safe-area-inset-top)) 24px calc(40px + env(safe-area-inset-bottom));position:relative}
+.wl-logo{width:76px;height:76px;border-radius:24px;display:grid;place-items:center;background:var(--surface);box-shadow:var(--shadow-lift),inset 0 0 0 1px var(--line);margin-bottom:26px}
+.wl-h{font-family:var(--serif);font-weight:400;font-size:clamp(44px,7vw,78px);line-height:.98;letter-spacing:-.02em;margin:0 0 14px;color:var(--text)}
+.wl-sub{font-size:16px;color:var(--text-2);max-width:520px;line-height:1.55;margin:0 0 30px}
+.wl-facts{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:34px}
+.wl-fact{display:flex;align-items:center;gap:10px;padding:10px 14px 10px 10px;border-radius:14px;background:var(--glass);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow);text-align:left;max-width:290px}
+.wl-fact .fi{width:32px;height:32px;flex:none;border-radius:10px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-strong)}
+.wl-fact b{display:block;font-size:12.5px;color:var(--text)}.wl-fact span{display:block;font-size:11.5px;color:var(--text-3);line-height:1.4}
+.wl-choices{display:grid;grid-template-columns:repeat(2,minmax(0,330px));gap:16px;margin-bottom:22px}
+.wl-choice{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:left;padding:22px 22px 20px;border-radius:24px;background:var(--surface);border:1px solid var(--line-2);box-shadow:var(--shadow);transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .2s}
+.wl-choice:hover{transform:translateY(-4px);box-shadow:var(--shadow-lift);border-color:var(--accent)}
+.wl-choice .ci{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;margin-bottom:12px;color:var(--accent-strong);background:var(--accent-soft)}
+.wl-choice.primary .ci{color:var(--on-accent);background:linear-gradient(180deg,var(--primary-a),var(--primary-b));box-shadow:0 10px 24px -10px var(--accent-glow)}
+.wl-choice b{font-size:17px;font-weight:600;color:var(--text)}
+.wl-choice span{font-size:13px;color:var(--text-3);line-height:1.5}
+.wl-choice .arr{position:absolute;right:20px;top:24px;color:var(--text-3);transition:transform .25s var(--ease),color .2s}
+.wl-choice:hover .arr{transform:translateX(3px);color:var(--accent)}
+.wl-links{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:22px}
+.wl-fine{font-size:11.5px;color:var(--text-3);max-width:460px;line-height:1.5}
+@media (max-width:760px){
+  .sp-wrap{padding-left:16px;padding-right:16px}
+  .sp-top{margin-bottom:26px}.sp-link span{display:none}
+  .sp-main{grid-template-columns:1fr}
+  .sp-cards{grid-template-columns:repeat(2,1fr);gap:8px}
+  .sp-actions{width:100%}.sp-act{flex:1 1 calc(50% - 8px);justify-content:flex-start}.sp-act kbd{display:none}
+  .sp-cmeta b{font-size:22px}.sp-go{padding:0 12px}.sp-go kbd{display:none}
+  .wl-choices{grid-template-columns:1fr;width:100%}
+}
+
+/* help center */
+.modal.help-modal{width:min(900px,100%);padding-bottom:18px}
+.hp{display:grid;grid-template-columns:210px minmax(0,1fr);gap:22px}
+.hp-nav{display:flex;flex-direction:column;gap:2px}
+.hp-search{position:relative;margin-bottom:10px}
+.hp-search input{width:100%;height:38px;border-radius:11px;background:var(--input-bg);border:1px solid var(--line-2);padding:0 12px 0 34px;outline:none;font-size:13px;color:var(--text)}
+.hp-search input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.hp-search svg{position:absolute;left:11px;top:11px;color:var(--text-3)}
+.hp-tab{display:flex;align-items:center;gap:10px;height:36px;padding:0 10px;border-radius:10px;font-size:13px;font-weight:500;color:var(--text-2);text-align:left;transition:background .15s,color .15s}
+.hp-tab:hover{background:var(--hover);color:var(--text)}
+.hp-tab.on{background:var(--accent-soft);color:var(--text)}
+.hp-tab.on svg{color:var(--accent-strong)}
+.hp-body{max-height:min(62vh,560px);overflow:auto;padding-right:6px;color:var(--text-2);font-size:13.5px;line-height:1.6}
+.hp-sec h3{font-family:var(--serif);font-weight:400;font-size:28px;color:var(--text);margin:0 0 6px;letter-spacing:-.01em}
+.hp-sec>p.lead{margin:0 0 16px;color:var(--text-3)}
+.hp-item{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.hp-item .ii{width:32px;height:32px;flex:none;border-radius:10px;display:grid;place-items:center;background:var(--hover);color:var(--text-2)}
+.hp-item b{display:block;color:var(--text);font-weight:600;font-size:13.5px;margin-bottom:2px}
+.hp-item p{margin:0}
+.hp-body kbd,.hp-faq kbd{font:600 11px var(--font);padding:1px 6px;border-radius:5px;background:var(--hover);border:1px solid var(--line-2);color:var(--text-2)}
+.hp-faq{border-top:1px solid var(--line)}
+.hp-faq summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 2px;font-weight:600;color:var(--text);font-size:13.5px}
+.hp-faq summary::-webkit-details-marker{display:none}
+.hp-faq summary svg{flex:none;color:var(--text-3);transition:transform .25s var(--ease)}
+.hp-faq[open] summary svg{transform:rotate(180deg)}
+.hp-faq p{margin:0 0 14px 2px}
+.hp-empty{padding:30px 0;text-align:center;color:var(--text-3)}
+@media (max-width:760px){.hp{grid-template-columns:1fr;gap:10px}.hp-nav{flex-direction:row;overflow-x:auto;padding-bottom:4px;flex-wrap:nowrap}.hp-search{display:none}.hp-tab{flex:none;white-space:nowrap}.hp-body{max-height:58vh}}
+
+/* template categories */
+.tpl-cats{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 14px}
+.tpl-cats button{height:30px;padding:0 12px;border-radius:999px;font-size:12px;font-weight:600;color:var(--text-2);background:var(--hover-soft);border:1px solid var(--line);transition:all .15s}
+.tpl-cats button:hover{color:var(--text);border-color:var(--line-3)}
+.tpl-cats button.on{color:var(--on-accent);background:linear-gradient(180deg,var(--primary-a),var(--primary-b));border-color:transparent}
+.tpl[hidden]{display:none}
+
 /* menu rows */
 .mrow{display:flex;align-items:center;gap:2px;padding:3px 6px 3px 10px}
 .mrow.col{flex-direction:column;align-items:stretch;gap:6px;padding:6px 8px 6px 10px}
@@ -1106,6 +1236,7 @@ mark{background:var(--accent-soft);color:var(--text);border-radius:3px;padding:0
   <button class="ib hide-sm" id="fitBtn" title="Fit to screen (Ctrl 0)" data-ico="fit"></button>
   <button class="ib hide-sm" id="presBtn" title="Present (P)" data-ico="present"></button>
   <div class="vsep"></div>
+  <button class="ib hide-sm" id="helpBtn" title="How to use Tessera (?)" data-ico="help"></button>
   <button class="ib" id="themeBtn" title="Switch theme"></button>
   <button class="ib" id="moreBtn" title="Menu" data-ico="more"></button>
 </div>
@@ -1236,7 +1367,8 @@ const ICONS = {
   shot:'<rect x="2.5" y="6" width="13.5" height="12" rx="2.5"/><path d="m16 10.5 5.5-3v9l-5.5-3"/>',
   font:'<path d="m3 19 6-14h1.2l6 14M5.6 13.5h8.6"/><path d="M19.5 9v10"/>',
   compare:'<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M12 2.5v19"/><path d="m8 10-2 2 2 2M16 10l2 2-2 2"/>',
-  elbow:'<path d="M4 6h6a2 2 0 0 1 2 2v8a2 2 0 0 0 2 2h6"/><path d="m17 15 3 3-3 3"/>'
+  elbow:'<path d="M4 6h6a2 2 0 0 1 2 2v8a2 2 0 0 0 2 2h6"/><path d="m17 15 3 3-3 3"/>',
+  help:'<circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.9.8c0 1.7-2.5 2.1-2.5 3.8"/><path d="M12 17h.01"/>'
 };
 const ico = (n, s = 18) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n] || ''}</svg>`;
 const COLORS = ['violet','sky','mint','rose','amber','slate'];
@@ -1320,7 +1452,7 @@ async function gcImages(){ if (!db) return; try { const used = usedImageIds();
   for (const k of await idb('kv','readonly', s => s.getAllKeys())) if (String(k).startsWith('ver:')) for (const v of (await kvGet(k)) || []) for (const c of Object.values(v.cards || {})) for (const f of ['imageId','fileId','thumbId','audioId','imgA','imgB']) if (c[f]) used.add(c[f]); const keys = await idb('img','readonly', s => s.getAllKeys()); for (const k of keys) if (!used.has(k)) await idb('img','readwrite', s => s.delete(k)); } catch {} }
 
 let saveT = 0;
-function saveSoon(changed = true){ clearTimeout(saveT); saveT = setTimeout(saveNow, 300); if (changed){ scheduleAutoBackup(); try { markVerDirty(); noteLocalChange(); } catch {} } }
+function saveSoon(changed = true){ clearTimeout(saveT); saveT = setTimeout(saveNow, 300); if (changed){ scheduleAutoBackup(); try { markVerDirty(); noteLocalChange(); markThumb(); if (curId && S.boards[curId]) S.boards[curId].editedAt = Date.now(); } catch {} } }
 async function saveNow(){
   clearTimeout(saveT); if (!db) return;
   try { S.meta.lastBoard = curId; await kvSet('state', S); updateDueBadge(); verTick(); }
@@ -1361,7 +1493,7 @@ function seed(){
   const k2 = put({id:uid(), type:'note', x:0, y:0, w:270, z:5, color:'rose', parent:col.id, html:'<div>Right-click (or long-press) any card for colours, moving and more.</div>'});
   col.children.push(k1.id, k2.id);
   put({id:uid(), type:'board', x:-420, y:110, w:132, z:6, color:null, target:mood.id});
-  root.links.push({id:uid(), from:n1.id, to:t1.id});
+  root.links.push({id:uid(), from:n1.id, to:t1.id, curve:true});
 }
 
 /* ---------- history ---------- */
@@ -2026,6 +2158,7 @@ function openBoard(id){
   if (!S.boards[id] || id === curId) return;
   { const lk = lockedAncestor(id); if (lk){ unlockBoard(lk.id).then(ok => { if (ok) openBoard(id); }); return; } }
   if (verDirty.has(curId)) saveVersion(curId);
+  if (thumbDirty.has(curId)) captureThumb(curId);
   blurEditing(); hideMenus(); exitDrawMode(); stopAudio();
   const deeper = S.boards[id].parent === curId;
   relockOutside(id); curId = id; sel.clear(); selLink = null; touchRecent(id);
@@ -2033,6 +2166,7 @@ function openBoard(id){
   render(); if (needFit) fit(false);
   stage.classList.remove('in', 'out'); void stage.offsetWidth; stage.classList.add(deeper ? 'in' : 'out');
   saveSoon(false); verEnsure(id); sfx(deeper ? 'whoosh' : 'back');
+  setTimeout(() => { if (curId === id) loadThumb(id).then(u => { if (!u && curId === id) captureThumb(id); }); }, 1600);
 }
 stage.addEventListener('animationend', () => stage.classList.remove('in', 'out'));
 function goToCard(bid, cid){
@@ -2332,7 +2466,7 @@ function startConnect(e, fromId){
     tmp.remove(); gesture = null;
     if (hover){
       const to = hover; setHover(null); const b = cur();
-      if (!b.links.some(l => (l.from === fromId && l.to === to) || (l.from === to && l.to === fromId))){ commit(); b.links.push({...(S.meta.linkDefault || {}), id:uid(), from:fromId, to}); buzz(12); sfx('link'); saveSoon(); }
+      if (!b.links.some(l => (l.from === fromId && l.to === to) || (l.from === to && l.to === fromId))){ commit(); b.links.push({...(S.meta.linkDefault || {curve:true}), id:uid(), from:fromId, to}); buzz(12); sfx('link'); saveSoon(); }
     }
     drawLinks();
   });
@@ -2591,6 +2725,7 @@ document.addEventListener('keydown', e => {
   if (mod || e.altKey) return;
   if (k === 'p' && !e.shiftKey && !e.repeat){ e.preventDefault(); startPresentation(); return; }
   if (k === 'f' && e.shiftKey && !e.repeat){ e.preventDefault(); toggleFocus(); return; }
+  if (e.key === '?'){ e.preventDefault(); openHelp(); return; }
   if (k === '/'){ e.preventDefault(); openPalette(); return; }
   if (k === 'delete' || k === 'backspace'){ if (selLink){ e.preventDefault(); removeLink(selLink); } else if (sel.size){ e.preventDefault(); deleteCards([...sel]); } return; }
   if (k === 'escape'){ hideMenus(); if (sel.size || selLink) clearSelection(); else if (focusMode) toggleFocus(false); else if (cur().parent) openBoard(cur().parent); return; }
@@ -3475,78 +3610,128 @@ const tFont = (x, y, family, sample, weight = 400, size = 44, w = 340) => ({type
 const T_R = {'16:9':16 / 9, '9:16':9 / 16, '4:5':.8, '1:1':1, '4:3':4 / 3, '2.39:1':2.39, 'A4':1 / 1.4142};
 const tRF = (x, y, w, ratio, title, color = null) => ({type:'frame', x, y, w, h:Math.round(w / T_R[ratio]), ratio, guides:ratio !== 'A4', title, color});
 const tClK = (x, y, title, kids, w = 280, color = null) => ({type:'column', x, y, w, color, title, kids});
+const tTdD = (x, y, title, items, w = 260, color = null) => ({type:'todo', x, y, w, color, title, items:items.map(([text, dueIn]) => ({text, done:false, dueIn}))});
+const tSk = (x, y, w, h) => ({type:'sketch', x, y, w, h, strokes:[]});
 const kShot = (num, title, size, move, dur, status = 'plan') => ({type:'shot', w:280, num, title, size, move, dur, status, ar:'16 / 9'});
+const TPL_CATS = ['Creative', 'Video', 'Study & teach', 'Health', 'Work & dev', 'Events', 'Life'];
 const BUILTIN = [
-  {id:'moodboard', name:'Moodboard', icon:'🎨', desc:'Imagery, palette and type for a look.', nodes:[
+  {id:'moodboard', cat:'Creative', name:'Moodboard', icon:'🎨', desc:'Imagery, palette and type for a look.', nodes:[
     tH(-560, -440, 'Moodboard', 'l', 700), tFr(-560, -330, 760, 520, 'Imagery', 'violet'), tSt(-520, -280, 'Drop reference images into this frame', 'violet', 220),
     tFr(240, -330, 436, 250, 'Palette', 'rose'), tSw(264, -282, '#e8d9c0', 'Sand'), tSw(396, -282, '#c98c6b', 'Clay'), tSw(528, -282, '#2f3a3a', 'Ink'),
     tFr(240, -40, 436, 230, 'Type & tone'), tN(264, 0, '<h3>Display serif</h3><div>Clean sans for body. Generous spacing, quiet contrast.</div>', {w:388}),
     tCl(-560, 240, 'Keywords', ['Calm', 'Warm', 'Editorial'], 260, 'amber'), tN(-270, 240, '<h3>Brief</h3><div>What should this feel like? Who is it for?</div>', {w:320, color:'violet'})]},
-  {id:'story', name:'Story outline', icon:'🎬', desc:'Logline, three acts and characters.', nodes:[
-    tH(-700, -430, 'Story outline'), tN(-700, -330, '<h3>Logline</h3><div>When ___ happens, ___ must ___ or else ___.</div>', {w:420, color:'violet'}),
-    tCl(-700, -150, 'Act I · Setup', ['Opening image', 'Inciting incident', 'Debate'], 280, 'sky'),
-    tCl(-390, -150, 'Act II · Confrontation', ['Fun & games', 'Midpoint', 'Bad guys close in', 'All is lost'], 280, 'amber'),
-    tCl(-80, -150, 'Act III · Resolution', ['Finale', 'Final image'], 280, 'mint'),
-    tCl(230, -150, 'Characters', ['Protagonist — want vs. need', 'Antagonist', 'Mentor'], 280, 'rose')], links:[[2, 3], [3, 4]]},
-  {id:'trip', name:'Trip plan', icon:'✈️', desc:'Itinerary, bookings, packing and budget.', nodes:[
-    tH(-620, -430, 'Trip plan'), tTb(-620, -330, 'Itinerary', [['Day', 'Plan', 'Stay'], ['Day 1', '', ''], ['Day 2', '', ''], ['Day 3', '', ''], ['Day 4', '', '']], 560),
-    tTd(-30, -330, 'Before you go', ['Passport & visas', 'Flights booked', 'Stay booked', 'Travel insurance', 'Offline maps']),
-    tTd(260, -330, 'Packing list', ['Chargers & adapters', 'Toiletries', 'Walking shoes', 'Camera']),
-    tCl(-620, 40, 'Places to see', ['Add a place', 'Add a place'], 260, 'sky'),
-    tN(-330, 40, '<h3>Budget</h3><div>Flights · Stay · Food · Transport · Extras</div>', {w:280, color:'mint'}), tSt(-20, 40, 'Paste booking links and guides here', 'amber', 220)]},
-  {id:'kanban', name:'Kanban', icon:'🗂️', desc:'Move work from backlog to done.', kanban:true, nodes:[
-    tH(-760, -380, 'Project board'),
-    ...[['Backlog', 'slate', ['Idea', 'Research']], ['To do', 'sky', ['Write the brief']], ['In progress', 'amber', ['Rough cut']], ['Review', 'violet', []], ['Done', 'mint', []]].map(([t, c, k], i) => tCl(-760 + i * 300, -280, t, k, 280, c))]},
-  {id:'weekly', name:'Weekly planner', icon:'📅', desc:'Priorities and a plan for each day.', nodes:[
-    tH(-760, -450, 'This week'), tTd(-760, -340, 'Top priorities', ['', '', ''], 260, 'violet'), tSt(-760, -100, 'Focus for the week', 'violet', 260),
-    ...['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((d, i) => tTd(-460 + (i % 4) * 260, -340 + Math.floor(i / 4) * 250, d, [''], 240))]},
-  {id:'content', name:'Content calendar', icon:'🎞️', desc:'Plan, produce and publish videos and posts.', nodes:[
-    tH(-800, -450, 'Content calendar'), tTb(-800, -350, 'Schedule', [['Date', 'Platform', 'Title', 'Status'], ['', 'YouTube', '', ''], ['', 'Instagram', '', ''], ['', 'TikTok', '', ''], ['', '', '', '']], 760),
-    ...[['Ideas', 'violet', ['Hook idea', 'Series idea']], ['Scripting', 'sky', []], ['Editing', 'amber', ['Rough cut', 'Colour & sound']], ['Scheduled', 'slate', []], ['Published', 'mint', []]].map(([t, c, k], i) => tCl(-800 + i * 290, 0, t, k, 270, c))]},
-  {id:'storyboard', name:'Storyboard', icon:'🎬', desc:'Shot-by-shot frames for a scene, with sizes and timing.', nodes:[
-    tH(-640, -520, 'Storyboard'), tN(-640, -430, '<h3>Scene 1 — Opening</h3><div>Location · time of day · mood. Drop a frame grab onto any shot.</div>', {w:600, color:'violet'}),
-    ...[['Establishing shot of the location', 'EWS', 'Drone', 4], ['Character enters frame', 'WS', 'Static', 3], ['Close-up on the reaction', 'CU', 'Static', 2], ['Insert of the key prop', 'Insert', 'Handheld', 2], ['Over-the-shoulder conversation', 'OTS', 'Static', 5], ['Reverse angle', 'OTS', 'Static', 5], ['Slow push in', 'MCU', 'Dolly', 4], ['Wide closing shot', 'WS', 'Crane', 6]].map(([t, sz, mv, d], i) => tShot(-640 + (i % 4) * 304, -290 + Math.floor(i / 4) * 272, i + 1, t, sz, mv, d))]},
-  {id:'shotlist', name:'Shot list', icon:'🎥', desc:'Track every shot from planned to approved.', kanban:true, nodes:[
-    tH(-640, -480, 'Shot list'),
-    tClK(-640, -380, 'Planned', [kShot(3, 'Product hero on turntable', 'MS', 'Static', 6), kShot(4, 'Hands unboxing', 'CU', 'Handheld', 4), kShot(5, 'Lifestyle wide', 'WS', 'Gimbal', 5)], 300, 'sky'),
-    tClK(-316, -380, 'Shot', [kShot(2, 'Logo reveal', 'ECU', 'Dolly', 3, 'shot')], 300, 'amber'),
-    tClK(8, -380, 'Edited', [kShot(1, 'Opening drone', 'EWS', 'Drone', 5, 'edit')], 300, 'violet'),
-    tClK(332, -380, 'Approved', [], 300, 'mint')]},
-  {id:'youtube', name:'YouTube video', icon:'📺', desc:'Thumbnails, titles, script, b-roll and publishing.', nodes:[
-    tH(-760, -470, 'YouTube video'), tRF(-760, -370, 480, '16:9', 'Thumbnail A', 'rose'), tRF(-240, -370, 480, '16:9', 'Thumbnail B'),
-    tCl(-760, 20, 'Title ideas', ['Working title…', 'Curiosity angle', 'How-to angle'], 270, 'violet'),
-    tTd(-460, 20, 'Script outline', ['Hook (first 15 seconds)', 'Promise & intro', 'Main point 1', 'Main point 2', 'Call to action']),
-    tTd(-170, 20, 'B-roll', ['Product close-ups', 'Workspace wide', 'Screen recording'], 260, 'sky'),
-    tTd(120, 20, 'Publish checklist', ['Edit & colour', 'Captions', 'Thumbnail', 'Description & tags', 'End screen', 'Schedule'], 260, 'mint')]},
-  {id:'brand', name:'Brand identity', icon:'💎', desc:'Logo, palette, typography and voice in one place.', nodes:[
+  {id:'brand', cat:'Creative', name:'Brand identity', icon:'💎', desc:'Logo, palette, typography and voice in one place.', nodes:[
     tH(-760, -470, 'Brand identity'), tRF(-760, -370, 300, '1:1', 'Logo', 'violet'),
     ...[['#1F1D2B', 'Ink'], ['#F4EFE6', 'Paper'], ['#C8553D', 'Ember'], ['#2A9D8F', 'Lagoon'], ['#E9C46A', 'Sun']].map(([h, n], i) => tSw(-420 + i * 134, -370, h, n)),
     tFont(-420, -160, 'Fraunces', 'Make it memorable', 600, 44, 330), tFont(-70, -160, 'Inter', 'Clear, friendly body copy for everything else.', 400, 20, 330),
     tCl(300, -370, 'Voice', ['Warm, never cute', 'Confident, never loud', 'Clear over clever'], 260, 'amber'),
     tCl(-760, 90, 'Do', ['Generous white space', 'One accent colour per layout'], 270, 'mint'), tCl(-470, 90, 'Don’t', ['Stretch or recolour the logo', 'Mix more than two typefaces'], 270, 'rose')]},
-  {id:'typepair', name:'Type pairings', icon:'🔤', desc:'Compare display and body font pairs side by side.', nodes:[
+  {id:'typepair', cat:'Creative', name:'Type pairings', icon:'🔤', desc:'Compare display and body font pairs side by side.', nodes:[
     tH(-700, -500, 'Type pairings'),
     ...[['Fraunces', 'Inter', 'Editorial warmth'], ['Space Grotesk', 'IBM Plex Mono', 'Technical & precise'], ['Playfair Display', 'Karla', 'Classic elegance']].flatMap(([d, b, m], i) => [
       tFont(-700, -400 + i * 260, d, 'Headlines that sing', 600, 40, 380), tFont(-300, -400 + i * 260, b, 'Body text that stays comfortable at small sizes and long lengths.', 400, 18, 380),
       tN(100, -400 + i * 260, `<h3>${m}</h3><div>${d} + ${b}</div>`, {w:240, color:['violet', 'sky', 'rose'][i]})])]},
-  {id:'social', name:'Social media kit', icon:'📱', desc:'Story, feed, square and thumbnail frames with captions.', nodes:[
-    tH(-760, -470, 'Social media kit'), tRF(-760, -370, 270, '9:16', 'Story / Reel', 'rose'), tRF(-460, -370, 384, '4:5', 'Feed post', 'violet'), tRF(-50, -370, 420, '1:1', 'Square', 'sky'),
-    tRF(-760, 160, 560, '16:9', 'YouTube thumbnail', 'amber'), tN(-170, 120, '<h3>Caption</h3><div>Hook line, value, call to action.</div>', {w:300}),
-    tSt(160, 120, '#hashtags #go #here', 'amber', 220), tTd(-170, 300, 'Posting checklist', ['Cover frame', 'Captions burned in', 'Alt text', 'Schedule'], 300, 'mint')]},
-  {id:'photoshoot', name:'Photo shoot', icon:'📸', desc:'Call sheet, gear, locations and a shot list.', nodes:[
-    tH(-760, -470, 'Photo shoot'), tTb(-760, -370, 'Call sheet', [['Time', 'What', 'Who'], ['08:00', 'Crew call', ''], ['09:00', 'First look', ''], ['12:00', 'Lunch', ''], ['13:00', 'Second look', '']], 520),
-    tTd(-200, -370, 'Gear', ['Camera bodies', 'Lenses', 'Batteries & cards', 'Reflector', 'Tripod'], 260, 'sky'), tCl(100, -370, 'Locations', ['Main set', 'Backup if it rains'], 270, 'mint'),
-    ...[['Hero portrait', 'MCU'], ['Detail of hands', 'ECU'], ['Environmental wide', 'WS'], ['Candid laugh', 'MS']].map(([t, sz], i) => tShot(-760 + i * 304, 30, i + 1, t, sz, 'Static', 0))]},
-  {id:'brief', name:'Client brief', icon:'🤝', desc:'Objective, audience, deliverables and timeline.', nodes:[
-    tH(-760, -470, 'Client brief'), tN(-760, -370, '<h3>Objective</h3><div>What does success look like?</div>', {w:330, color:'violet'}),
-    tN(-400, -370, '<h3>Audience</h3><div>Who is this for, and what do they care about?</div>', {w:330}), tN(-40, -370, '<h3>Key message</h3><div>The one thing people should remember.</div>', {w:330, color:'mint'}),
-    tTb(-760, -190, 'Deliverables', [['Deliverable', 'Format', 'Due'], ['Hero video', '16:9 · 60s', ''], ['Cutdowns', '9:16 · 15s', ''], ['Stills', 'JPG', '']], 560),
-    tTd(-170, -190, 'Timeline', ['Kickoff', 'Treatment approved', 'Shoot', 'First cut', 'Final delivery'], 300, 'sky'), tFr(170, -190, 360, 300, 'References', 'rose'), tSt(-760, 60, 'Budget & constraints', 'amber', 260)]},
-  {id:'meeting', name:'Meeting notes', icon:'🗒️', desc:'Agenda, notes, decisions and action items.', nodes:[
-    tH(-560, -440, 'Meeting notes', 'l', 560), tN(-560, -340, '<h3>Attendees</h3><div>Names…</div>', {w:300}), tTd(-240, -340, 'Agenda', ['Updates', 'Decisions needed', 'Next steps'], 280),
-    tN(-560, -190, '<h3>Notes</h3><div>Write as you go…</div>', {w:300, color:'violet'}), tCl(70, -340, 'Decisions', ['Decision…'], 260, 'mint'), tTd(-240, -150, 'Action items', ['Owner — task', ''], 280, 'amber')]},
-  {id:'retro', name:'Project retro', icon:'🔁', desc:'What went well, what to improve and next actions.', kanban:true, nodes:[
-    tH(-640, -440, 'Project retro'), ...[['Went well', 'mint', ['Great teamwork']], ['To improve', 'rose', ['Feedback came late']], ['Ideas', 'sky', []], ['Actions', 'violet', []]].map(([t, c, k], i) => tCl(-640 + i * 300, -340, t, k, 280, c))]},
+  {id:'storyboard', cat:'Video', name:'Storyboard', icon:'🎬', desc:'Shot-by-shot frames for a scene, with sizes and timing.', nodes:[
+    tH(-640, -520, 'Storyboard'), tN(-640, -430, '<h3>Scene 1 — Opening</h3><div>Location · time of day · mood. Drop a frame grab onto any shot.</div>', {w:600, color:'violet'}),
+    ...[['Establishing shot of the location', 'EWS', 'Drone', 4], ['Character enters frame', 'WS', 'Static', 3], ['Close-up on the reaction', 'CU', 'Static', 2], ['Insert of the key prop', 'Insert', 'Handheld', 2], ['Over-the-shoulder conversation', 'OTS', 'Static', 5], ['Reverse angle', 'OTS', 'Static', 5], ['Slow push in', 'MCU', 'Dolly', 4], ['Wide closing shot', 'WS', 'Crane', 6]].map(([t, sz, mv, d], i) => tShot(-640 + (i % 4) * 304, -290 + Math.floor(i / 4) * 272, i + 1, t, sz, mv, d))]},
+  {id:'shotlist', cat:'Video', name:'Shot list', icon:'🎥', desc:'Track every shot from planned to approved.', kanban:true, nodes:[
+    tH(-640, -480, 'Shot list'),
+    tClK(-640, -380, 'Planned', [kShot(3, 'Product hero on turntable', 'MS', 'Static', 6), kShot(4, 'Hands unboxing', 'CU', 'Handheld', 4), kShot(5, 'Lifestyle wide', 'WS', 'Gimbal', 5)], 300, 'sky'),
+    tClK(-316, -380, 'Shot', [kShot(2, 'Logo reveal', 'ECU', 'Dolly', 3, 'shot')], 300, 'amber'),
+    tClK(8, -380, 'Edited', [kShot(1, 'Opening drone', 'EWS', 'Drone', 5, 'edit')], 300, 'violet'),
+    tClK(332, -380, 'Approved', [], 300, 'mint')]},
+  {id:'youtube', cat:'Video', name:'YouTube video', icon:'📺', desc:'Thumbnails, titles, script, b-roll and publishing.', nodes:[
+    tH(-760, -470, 'YouTube video'), tRF(-760, -370, 480, '16:9', 'Thumbnail A', 'rose'), tRF(-240, -370, 480, '16:9', 'Thumbnail B'),
+    tCl(-760, 20, 'Title ideas', ['Working title…', 'Curiosity angle', 'How-to angle'], 270, 'violet'),
+    tTd(-460, 20, 'Script outline', ['Hook (first 15 seconds)', 'Promise & intro', 'Main point 1', 'Main point 2', 'Call to action']),
+    tTd(-170, 20, 'B-roll', ['Product close-ups', 'Workspace wide', 'Screen recording'], 260, 'sky'),
+    tTd(120, 20, 'Publish checklist', ['Edit & colour', 'Captions', 'Thumbnail', 'Description & tags', 'End screen', 'Schedule'], 260, 'mint')]},
+  {id:'story', cat:'Video', name:'Story outline', icon:'🎬', desc:'Logline, three acts and characters.', nodes:[
+    tH(-700, -430, 'Story outline'), tN(-700, -330, '<h3>Logline</h3><div>When ___ happens, ___ must ___ or else ___.</div>', {w:420, color:'violet'}),
+    tCl(-700, -150, 'Act I · Setup', ['Opening image', 'Inciting incident', 'Debate'], 280, 'sky'),
+    tCl(-390, -150, 'Act II · Confrontation', ['Fun & games', 'Midpoint', 'Bad guys close in', 'All is lost'], 280, 'amber'),
+    tCl(-80, -150, 'Act III · Resolution', ['Finale', 'Final image'], 280, 'mint'),
+    tCl(230, -150, 'Characters', ['Protagonist — want vs. need', 'Antagonist', 'Mentor'], 280, 'rose')], links:[[2, 3], [3, 4]]},
+  {id:'kanban', cat:'Work & dev', name:'Kanban', icon:'🗂️', desc:'Move work from backlog to done.', kanban:true, nodes:[
+    tH(-760, -380, 'Project board'),
+    ...[['Backlog', 'slate', ['Idea', 'Research']], ['To do', 'sky', ['Write the brief']], ['In progress', 'amber', ['Rough cut']], ['Review', 'violet', []], ['Done', 'mint', []]].map(([t, c, k], i) => tCl(-760 + i * 300, -280, t, k, 280, c))]},
+  {id:'weekly', cat:'Life', name:'Weekly planner', icon:'📅', desc:'Priorities and a plan for each day.', nodes:[
+    tH(-760, -450, 'This week'), tTd(-760, -340, 'Top priorities', ['', '', ''], 260, 'violet'), tSt(-760, -100, 'Focus for the week', 'violet', 260),
+    ...['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((d, i) => tTd(-460 + (i % 4) * 260, -340 + Math.floor(i / 4) * 250, d, [''], 240))]},
+  {id:'trip', cat:'Life', name:'Trip plan', icon:'✈️', desc:'Itinerary, bookings, packing and budget.', nodes:[
+    tH(-620, -430, 'Trip plan'), tTb(-620, -330, 'Itinerary', [['Day', 'Plan', 'Stay'], ['Day 1', '', ''], ['Day 2', '', ''], ['Day 3', '', ''], ['Day 4', '', '']], 560),
+    tTd(-30, -330, 'Before you go', ['Passport & visas', 'Flights booked', 'Stay booked', 'Travel insurance', 'Offline maps']),
+    tTd(260, -330, 'Packing list', ['Chargers & adapters', 'Toiletries', 'Walking shoes', 'Camera']),
+    tCl(-620, 40, 'Places to see', ['Add a place', 'Add a place'], 260, 'sky'),
+    tN(-330, 40, '<h3>Budget</h3><div>Flights · Stay · Food · Transport · Extras</div>', {w:280, color:'mint'}), tSt(-20, 40, 'Paste booking links and guides here', 'amber', 220)]},
+  {id:'study', cat:'Study & teach', name:'Study planner', icon:'📚', desc:'Subjects, deadlines and an exam schedule.', nodes:[
+    tH(-760, -470, 'Study planner'),
+    tTdD(-760, -370, 'This week', [['Read chapter 4', 1], ['Problem set 2', 3], ['Group project meeting', 4], ['Revise lecture notes', 6]], 300, 'violet'),
+    ...['Maths', 'Biology', 'History', 'English'].map((s, i) => tCl(-420 + i * 290, -370, s, ['Topics to review', 'Questions for class'], 270, ['sky', 'mint', 'amber', 'rose'][i])),
+    tTb(-760, -110, 'Exam schedule', [['Subject', 'Date', 'Room'], ['Maths', '', ''], ['Biology', '', ''], ['History', '', '']], 420),
+    tSt(-300, -100, 'Pomodoro: 25 min focus · 5 min break', 'amber', 240)]},
+  {id:'essay', cat:'Study & teach', name:'Essay & research', icon:'📝', desc:'Thesis, sources, outline and milestones.', nodes:[
+    tH(-700, -470, 'Essay & research'), tN(-700, -370, '<h3>Thesis</h3><div>One sentence: what are you arguing?</div>', {w:420, color:'violet'}),
+    tCl(-700, -220, 'Sources', ['Author, Title (Year) — key quote', 'Author, Title (Year)'], 300, 'sky'),
+    tTd(-380, -220, 'Outline', ['Introduction & hook', 'Point 1 + evidence', 'Point 2 + evidence', 'Counter-argument', 'Conclusion'], 300),
+    tTdD(-50, -370, 'Milestones', [['Research done', 3], ['First draft', 7], ['Peer review', 10], ['Final submission', 14]], 280, 'mint'),
+    tSt(-50, -150, 'Cite as you go — it saves hours later', 'amber', 240)]},
+  {id:'lesson', cat:'Study & teach', name:'Lesson plan', icon:'🍎', desc:'Objectives, lesson flow, materials and differentiation.', nodes:[
+    tH(-700, -470, 'Lesson plan'), tN(-700, -370, '<h3>Learning objectives</h3><div>By the end of the lesson, students will be able to…</div>', {w:380, color:'violet'}),
+    tTb(-700, -220, 'Lesson flow', [['Time', 'Activity', 'Materials'], ['0–10 min', 'Warm-up / hook', ''], ['10–25 min', 'Direct instruction', ''], ['25–40 min', 'Group practice', ''], ['40–50 min', 'Exit ticket', '']], 560),
+    tTd(-110, -370, 'Materials', ['Slides', 'Worksheets', 'Projector'], 260, 'sky'),
+    tCl(-110, -170, 'Differentiation', ['Support: …', 'Stretch: …'], 260, 'mint'),
+    tSt(190, -370, 'Homework & follow-up', 'amber', 220)]},
+  {id:'course', cat:'Study & teach', name:'Course planner', icon:'🗓️', desc:'Units across the term, with assessments and admin.', nodes:[
+    tH(-760, -470, 'Course planner'),
+    ...['Unit 1', 'Unit 2', 'Unit 3', 'Unit 4'].map((u, i) => tCl(-760 + i * 290, -370, u, ['Key concepts', 'Activities', 'Assessment'], 270, ['violet', 'sky', 'mint', 'amber'][i])),
+    tTdD(-760, 0, 'Grading & admin', [['Publish syllabus', 2], ['Midterm grades due', 30], ['Parent / teacher notes', 45]], 300, 'rose'),
+    tN(-430, 0, '<h3>Reflections</h3><div>What worked this term? What will you change next time?</div>', {w:320})]},
+  {id:'soap', cat:'Health', name:'Case study · SOAP', icon:'🩺', desc:'Structured notes for learning cases — no real patient details.', nodes:[
+    tH(-700, -470, 'Case study'), tSt(-700, -380, 'For study and practice only. Use no real names or identifiers.', 'rose', 280),
+    tN(-390, -380, '<h3>S — Subjective</h3><div>Presenting complaint, history, symptoms.</div>', {w:300, color:'sky'}),
+    tN(-70, -380, '<h3>O — Objective</h3><div>Vitals, exam findings, labs, imaging.</div>', {w:300, color:'mint'}),
+    tN(-390, -230, '<h3>A — Assessment</h3><div>Working diagnosis and differentials.</div>', {w:300, color:'amber'}),
+    tN(-70, -230, '<h3>P — Plan</h3><div>Investigations, treatment, follow-up.</div>', {w:300, color:'violet'}),
+    tTd(-700, -150, 'Learning points', ['Key takeaway', 'Look up: …', 'Ask preceptor: …'], 280),
+    tCl(260, -380, 'Differentials', ['Most likely', 'Can’t miss', 'Other'], 260, 'rose')]},
+  {id:'sbar', cat:'Health', name:'Shift handover · SBAR', icon:'🏥', desc:'Situation, background, assessment, recommendation.', nodes:[
+    tH(-700, -470, 'Shift handover'), tSt(-700, -380, 'Use initials or bed numbers only — boards stay on this device.', 'rose', 260),
+    ...[['S — Situation', 'sky', 'What’s happening right now?'], ['B — Background', 'mint', 'Relevant history and context'], ['A — Assessment', 'amber', 'What do you think is going on?'], ['R — Recommendation', 'violet', 'What needs to happen next?']].map(([t, c, d], i) => tN(-410 + (i % 2) * 320, -380 + Math.floor(i / 2) * 150, `<h3>${t}</h3><div>${d}</div>`, {w:300, color:c})),
+    tTd(-700, -150, 'Tasks for next shift', ['Bed 3 — recheck obs at 14:00', 'Bed 5 — pending labs', ''], 290, 'violet'),
+    tTb(-380, -60, 'Handover log', [['Time', 'Bed', 'Note'], ['', '', ''], ['', '', '']], 610)]},
+  {id:'sprint', cat:'Work & dev', name:'Sprint board', icon:'🏃', desc:'Backlog to done, with a sprint goal.', kanban:true, nodes:[
+    tH(-640, -480, 'Sprint 1'),
+    ...[['Backlog', 'slate', ['Set up CI', 'Write API docs']], ['To do', 'sky', ['Login screen']], ['In progress', 'amber', ['Database schema']], ['Review', 'violet', []], ['Done', 'mint', []]].map(([t, c, k], i) => tCl(-640 + i * 300, -380, t, k, 280, c))]},
+  {id:'sysdesign', cat:'Work & dev', name:'System design', icon:'🧩', desc:'Services, data flow, open questions and decisions.', links:[[1, 2], [2, 3], [2, 4], [3, 5, 'smart'], [4, 5, 'smart']], nodes:[
+    tH(-700, -500, 'System design'),
+    tN(-700, -300, '<h3>Client</h3><div>Web & mobile apps</div>', {w:220, color:'sky'}), tN(-380, -300, '<h3>API gateway</h3><div>Auth, rate limiting</div>', {w:220, color:'violet'}),
+    tN(-60, -400, '<h3>Users service</h3><div>Accounts & profiles</div>', {w:220, color:'mint'}), tN(-60, -200, '<h3>Orders service</h3><div>Checkout & payments</div>', {w:220, color:'amber'}),
+    tN(260, -300, '<h3>Database</h3><div>Postgres · read replica</div>', {w:220, color:'slate'}),
+    tCl(-700, -60, 'Open questions', ['How do we cache sessions?', 'Queue for emails?'], 280, 'rose'), tTd(-380, -60, 'Decisions', ['REST for v1', 'Postgres over Mongo'], 280)]},
+  {id:'event', cat:'Events', name:'Event plan', icon:'🎉', desc:'Budget, countdown, vendors, guests and decor.', nodes:[
+    tH(-760, -470, 'Event plan'), tN(-760, -370, '<h3>The essentials</h3><div>Date · venue · guest count · theme</div>', {w:320, color:'violet'}),
+    tTb(-400, -370, 'Budget', [['Item', 'Estimate', 'Actual'], ['Venue', '', ''], ['Catering', '', ''], ['Decor', '', ''], ['Entertainment', '', '']], 460),
+    tTdD(100, -370, 'Countdown', [['Book venue', 3], ['Send invitations', 14], ['Confirm catering', 21], ['Final headcount', 28]], 280, 'mint'),
+    tCl(-760, -220, 'Vendors', ['Venue — contact', 'Caterer — contact', 'Photographer — contact'], 300, 'sky'),
+    tTd(-400, -120, 'Guest list', ['RSVP tracking…', ''], 280, 'amber'), tFr(-90, -120, 460, 280, 'Decor & mood', 'rose')]},
+  {id:'runshow', cat:'Events', name:'Run of show', icon:'⏱️', desc:'Minute-by-minute timeline and day-of checklist.', nodes:[
+    tH(-700, -470, 'Run of show'),
+    tTb(-700, -370, 'Timeline', [['Time', 'Segment', 'Owner', 'Notes'], ['18:00', 'Doors open', '', ''], ['18:30', 'Welcome speech', '', ''], ['19:00', 'Dinner', '', ''], ['20:00', 'Main act', '', ''], ['21:30', 'Close', '', '']], 680),
+    tTd(20, -370, 'Day-of checklist', ['Mics tested', 'Run sheet printed', 'Signage up', 'Emergency contacts'], 280, 'mint'),
+    tCl(-700, -90, 'Contacts', ['Stage manager', 'Venue', 'AV tech'], 280, 'sky'), tSt(-390, -90, 'Plan B if it rains', 'amber', 220)]},
+  {id:'illustration', cat:'Creative', name:'Illustration project', icon:'🖌️', desc:'Brief, references, palette, thumbnails and stages.', nodes:[
+    tH(-760, -500, 'Illustration project'), tN(-760, -370, '<h3>Brief</h3><div>Client, size, deadline, usage.</div>', {w:300, color:'violet'}),
+    tFr(-420, -370, 560, 240, 'References', 'sky'),
+    tSw(180, -370, '#2B2D42', 'Shadow', 110), tSw(300, -370, '#EDF2F4', 'Light', 110), tSw(180, -215, '#EF233C', 'Accent', 110), tSw(300, -215, '#8D99AE', 'Mid', 110),
+    tH(-760, -80, 'Thumbnails', 's', 300), ...[0, 1, 2].map(i => tSk(-760 + i * 300, -30, 280, 190)),
+    tTd(160, -30, 'Stages', ['Thumbnails', 'Rough sketch', 'Line art', 'Flats', 'Shading & colour', 'Final export'], 260, 'mint')]},
+  {id:'character', cat:'Creative', name:'Character sheet', icon:'🧑‍🎨', desc:'Turnaround, expressions, palette and notes.', nodes:[
+    tH(-760, -500, 'Character sheet'), tRF(-760, -370, 640, '16:9', 'Turnaround · front / side / back', 'violet'),
+    tN(-90, -370, '<h3>Name</h3><div>Age · role · personality in three words</div>', {w:300}),
+    ...[['#F2C6A0', 'Skin'], ['#3D2C2E', 'Hair'], ['#4361EE', 'Jacket'], ['#F72585', 'Accent']].map(([h, n], i) => tSw(-90 + (i % 2) * 150, -235 + Math.floor(i / 2) * 180, h, n, 140)),
+    tCl(250, -370, 'Notes', ['Silhouette reads at small sizes', 'Signature prop: …'], 260, 'amber'),
+    tH(-760, 40, 'Expressions', 's', 300), ...[0, 1, 2, 3].map(i => tSk(-760 + i * 170, 90, 160, 160))]}
 ];
 function estH(n){
   switch (n.type){
@@ -3574,12 +3759,12 @@ function buildSpec(tpl, b){
   const ids = []; let z = maxZ(b);
   tpl.nodes.forEach(n => {
     const {kids, ...rest} = n, c = {id:uid(), z:n.type === 'frame' ? 0 : ++z, color:null, ...rest};
-    if (c.type === 'todo') c.items = c.items.map(i => ({id:uid(), ...i}));
+    if (c.type === 'todo') c.items = c.items.map(i => { const o = {id:uid(), ...i}; if (typeof o.dueIn === 'number'){ const d = new Date(); d.setDate(d.getDate() + o.dueIn); o.due = ymd(d); } delete o.dueIn; return o; });
     if (c.type === 'table') c.rows = c.rows.map(r => [...r]);
     if (c.type === 'column'){ c.children = []; for (const k of kids){ const ch = {id:uid(), z:++z, x:0, y:0, color:null, ...k, parent:c.id}; b.cards[ch.id] = ch; c.children.push(ch.id); } }
     b.cards[c.id] = c; ids.push(c.id);
   });
-  (tpl.links || []).forEach(([a, bb]) => b.links.push({id:uid(), from:ids[a], to:ids[bb], curve:true}));
+  (tpl.links || []).forEach(([a, bb, r]) => b.links.push({id:uid(), from:ids[a], to:ids[bb], curve:true, ...(r ? {route:r} : {})}));
 }
 function applyTemplate(tpl, mode, p){
   commit(); const here = mode === 'here', target = here ? cur() : newBoard(tpl.name, curId);
@@ -3599,15 +3784,17 @@ function applyTemplate(tpl, mode, p){
 }
 function openTemplates(mode = 'new', p){
   const here = mode === 'here' && !Object.keys(cur().cards).length;
-  const card = t => `<button class="tpl" data-t="${t.id}"><div class="tpl-prev">${previewSVG(t.rects || specRects(t))}</div><div class="tpl-meta"><span class="tpl-ic">${esc(t.icon || '▫️')}</span><span><b>${esc(t.name)}</b><span>${esc(t.desc || '')}</span></span></div>${t.custom ? `<span class="tpl-del" data-del="${t.id}" title="Delete template" role="button">${ico('x', 12)}</span>` : ''}</button>`;
+  const card = t => `<button class="tpl" data-t="${t.id}" data-cat="${esc(t.cat || '')}"><div class="tpl-prev">${previewSVG(t.rects || specRects(t))}</div><div class="tpl-meta"><span class="tpl-ic">${esc(t.icon || '▫️')}</span><span><b>${esc(t.name)}</b><span>${esc(t.desc || '')}</span></span></div>${t.custom ? `<span class="tpl-del" data-del="${t.id}" title="Delete template" role="button">${ico('x', 12)}</span>` : ''}</button>`;
   modal({title:'Templates', eyebrow:'Start faster', cls:'tpl-modal',
-    html:`<p>${here ? 'Fill this empty board with a ready-made layout.' : 'Start a new board from a ready-made layout. Everything stays editable.'}</p><div class="tpl-grid">${BUILTIN.map(card).join('')}</div><div class="tpl-mine"></div>`,
+    html:`<p>${here ? 'Fill this empty board with a ready-made layout.' : 'Start a new board from a ready-made layout. Everything stays editable.'}</p><div class="tpl-cats">${['All', ...TPL_CATS].map(c => `<button data-cat="${c}" class="${c === 'All' ? 'on' : ''}">${c}</button>`).join('')}</div><div class="tpl-grid tpl-built">${BUILTIN.map(card).join('')}</div><div class="tpl-mine"></div>`,
     actions:[{label:'Cancel', value:null}],
     onOpen: ov => {
       const mine = ov.querySelector('.tpl-mine');
       const drawMine = () => { mine.innerHTML = `<div class="tpl-h">Your templates</div>` + (S.templates.length ? `<div class="tpl-grid">${S.templates.map(card).join('')}</div>` : `<p class="mnote" style="padding:0">Save any board as a template from the ⋯ menu and it will appear here.</p>`); };
       drawMine();
       ov.querySelector('.m-body').addEventListener('click', e => {
+        const cb = e.target.closest('.tpl-cats [data-cat]');
+        if (cb){ const c = cb.dataset.cat; ov.querySelectorAll('.tpl-cats button').forEach(x => x.classList.toggle('on', x === cb)); ov.querySelectorAll('.tpl-built .tpl').forEach(t => t.hidden = c !== 'All' && t.dataset.cat !== c); return; }
         const d = e.target.closest('[data-del]');
         if (d){ e.stopPropagation(); S.templates = S.templates.filter(t => t.id !== d.dataset.del); saveSoon(); drawMine(); toast('Template deleted'); return; }
         const t = e.target.closest('[data-t]'); if (!t) return;
@@ -3972,8 +4159,8 @@ function exportFontsCSS(){
 }
 const topOf = id => { const c = findCard(id); return c?.parent && findCard(c.parent) ? c.parent : id; };
 const selTopIds = () => [...new Set(expandFrames([...sel]).map(topOf))];
-async function rasterize({ids = null, rect = null, pad = 48, scale = 2, bg = 'board', theme = null, slide = false} = {}){
-  blurEditing(); if (drawingId) exitDrawMode();
+async function rasterize({ids = null, rect = null, pad = 48, scale = 2, bg = 'board', theme = null, slide = false, maxPx = 0, silent = false} = {}){
+  if (!silent){ blurEditing(); if (drawingId) exitDrawMode(); }
   const b = cur(), tops = [...world.querySelectorAll(':scope > .card')], keep = ids ? new Set(ids) : null;
   const els = keep ? tops.filter(el => keep.has(el.dataset.id)) : tops;
   let x1 = Infinity, y1 = Infinity, x2 = -Infinity, y2 = -Infinity;
@@ -3985,7 +4172,7 @@ async function rasterize({ids = null, rect = null, pad = 48, scale = 2, bg = 'bo
   if (!isFinite(x1)) return null;
   x1 = Math.floor(x1 - pad); y1 = Math.floor(y1 - pad); x2 = Math.ceil(x2 + pad); y2 = Math.ceil(y2 + pad);
   const w = x2 - x1, h = y2 - y1;
-  const sc = Math.max(.2, Math.min(scale, 12000 / Math.max(w, h), Math.sqrt(48e6 / (w * h))));
+  const sc = Math.max(.02, Math.min(scale, 12000 / Math.max(w, h), Math.sqrt(48e6 / (w * h)), maxPx ? maxPx / Math.max(w, h) : Infinity));
   const clone = world.cloneNode(true);
   const oF = world.querySelectorAll('textarea,input'), cF = clone.querySelectorAll('textarea,input');
   oF.forEach((o, i) => { const c = cF[i]; if (!c) return; if (c.tagName === 'TEXTAREA') c.textContent = o.value; else c.setAttribute('value', o.value); });
@@ -4310,9 +4497,9 @@ function openAppearance(){
     return tile('auto', 'Match device', '', '', 'auto') + tile('light', 'Light', '#f5f3ee', '#ffffff') + SHADES.map(([k, l, bg, c]) => tile(k, l, bg, c)).join('');
   };
   const accents = () => ACCENTS.map(([k, l, c]) => `<button class="lk-acc${look.accent === k ? ' on' : ''}" data-ac="${k}" style="--c:${c}"><span class="dot">${ico('check', 15)}</span>${l}</button>`).join('');
-  const snd = () => `<div class="seg" data-k="sound">${[['off', 'Off'], ['soft', 'Soft'], ['full', 'Full']].map(([v, l]) => `<button data-v="${v}" class="${(S.meta.sound || 'off') === v ? 'on' : ''}">${l}</button>`).join('')}</div>`;
+  const snd = () => `<div class="seg" data-k="sound">${[['off', 'Off'], ['soft', 'Soft'], ['full', 'Full']].map(([v, l]) => `<button data-v="${v}" class="${(S.meta.sound ?? 'soft') === v ? 'on' : ''}">${l}</button>`).join('')}</div>`;
   modal({title:'Appearance', eyebrow:'Make it yours', cls:'look-modal',
-    html:`<div class="lk-h">Theme</div><div class="lk-themes">${tiles()}</div><div class="lk-h">Accent</div><div class="lk-accents">${accents()}</div><div class="lk-h">Sounds</div><div class="lk-row">${snd()}<button class="btn sm" data-play>${ico('play', 13)}Preview</button></div><p class="xp-note" style="margin-top:10px">Quiet, subtle feedback when you add, check off, move and delete things. Saved on this device.</p>`,
+    html:`<div class="lk-h">Theme</div><div class="lk-themes">${tiles()}</div><div class="lk-h">Accent</div><div class="lk-accents">${accents()}</div><div class="lk-h">Sounds</div><div class="lk-row">${snd()}<button class="btn sm" data-play>${ico('play', 13)}Preview</button></div><p class="xp-note" style="margin-top:10px">Quiet, subtle feedback when you add, check off, move and delete things. Saved on this device.</p><div class="lk-h" style="margin-top:22px">Start screen</div><div class="lk-row"><div class="seg" data-k="splash"><button data-v="on" class="${S.meta.splashOff ? '' : 'on'}">Show after 30 min away</button><button data-v="off" class="${S.meta.splashOff ? 'on' : ''}">Don’t show</button></div><button class="btn sm" data-open-splash>Open now</button></div>`,
     actions:[{label:'Done', kind:'primary', primary:true}],
     onOpen:ov => {
       const body = ov.querySelector('.m-body');
@@ -4323,7 +4510,8 @@ function openAppearance(){
           setLook(k === 'auto' ? {mode:'auto'} : k === 'light' ? {mode:'light'} : {mode:'dark', shade:k});
           body.querySelector('.lk-themes').innerHTML = tiles(); sfx('tick');
         } else if (ac){ setLook({accent:ac.dataset.ac}); body.querySelector('.lk-accents').innerHTML = accents(); sfx('tick'); }
-        else if (sd){ S.meta.sound = sd.dataset.v; saveSoon(false); sd.parentElement.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === sd)); sfx('check'); }
+        else if (sd){ if (sd.parentElement.dataset.k === 'splash') S.meta.splashOff = sd.dataset.v === 'off'; else { S.meta.sound = sd.dataset.v; sfx('check'); } saveSoon(false); sd.parentElement.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === sd)); }
+        else if (e.target.closest('[data-open-splash]')){ ov._close(null); setTimeout(showSplash, 260); }
         else if (pl){ const seq = ['pop', 'check', 'drop', 'link', 'success']; seq.forEach((n, i) => setTimeout(() => sfx(n, true), i * 380)); }
       });
       setTimeout(() => ov.querySelector('.btn.primary')?.focus({preventScroll:true}), 60);
@@ -4334,7 +4522,7 @@ function openAppearance(){
 let actx = null, noiseBuf = null;
 const SOUND_LV = {off:0, soft:.22, full:.5};
 function sfx(name, preview){
-  const lv = SOUND_LV[S?.meta?.sound || 'off'] || (preview ? SOUND_LV.soft : 0); if (!lv) return;
+  const lv = SOUND_LV[S?.meta?.sound ?? 'soft'] || (preview ? SOUND_LV.soft : 0); if (!lv) return;
   try {
     actx = actx || new (window.AudioContext || window.webkitAudioContext)();
     if (actx.state === 'suspended') actx.resume();
@@ -4575,7 +4763,7 @@ const TOUR = [
   {t:'Private by design', d:'Everything stays on this device — no account, no cloud. Turn on auto-backup here so nothing is ever lost.', el:'#chip', hideOk:true},
   {t:'Present & share', d:'Frames become slides when you present. Ctrl E exports a PNG, PDF, Markdown or a board file you can send to anyone.', el:'#presBtn', hideOk:true},
   {t:'Make it yours', d:'Themes, accent colours, sounds, version history and the dock all live in this menu.', el:'#moreBtn'},
-  {t:'You’re all set', d:'Keyboard shortcuts and this tour are always in the menu. Enjoy the calm.', final:true}
+  {t:'You’re all set', d:'Press ? any time for the full guide and FAQ. Shortcuts and this tour live in the menu too. Enjoy the calm.', final:true}
 ];
 let tour = null;
 const visibleEl = sel_ => { const n = sel_ && $(sel_); if (!n) return null; const r = n.getBoundingClientRect(); return r.width && r.height && getComputedStyle(n).visibility !== 'hidden' ? r : null; };
@@ -5165,6 +5353,229 @@ async function healthCheck(){
 let curHidden = new Set();
 const rrShot = id => { const c = findCard(id); rerenderCard(c?.parent && cur().cards[c.parent] ? c.parent : id); };
 function colRun(c){ const b = cur(); let t = 0, n = 0; for (const k of c.children || []){ const x = b.cards[k]; if (x?.type === 'shot'){ n++; t += x.dur || 0; } } return n && t ? `<span class="col-run">${ico('clock', 11)}${fmtDur(t)}</span>` : ''; }
+/* ================= Phase 9: board thumbnails ================= */
+const thumbDirty = new Set(), thumbMem = new Map(); let thumbT = 0, thumbBusy = false;
+function markThumb(){ if (!S || !curId) return; thumbDirty.add(curId); clearTimeout(thumbT); thumbT = setTimeout(() => captureThumb(curId), 4500); }
+function captureThumb(bid = curId){
+  if (!db || bid !== curId || thumbBusy || pres || document.querySelector('#splash')) return Promise.resolve();
+  const b = S.boards[bid]; if (!b || b.lock) return Promise.resolve();
+  if (!Object.keys(b.cards).length){ thumbMem.delete(bid); thumbDirty.delete(bid); return kvDel('thumb:' + bid).catch(() => {}); }
+  thumbBusy = true; thumbDirty.delete(bid);
+  const opt = {scale:1, maxPx:720, pad:36, bg:'board', silent:true}, jl = rasterize({...opt, theme:'light'}), jd = rasterize({...opt, theme:'dark'});
+  return Promise.all([jl, jd]).then(async ([l, d]) => {
+    if (!l || !d) return; const rec = {light:l.canvas.toDataURL('image/webp', .82), dark:d.canvas.toDataURL('image/webp', .82), at:Date.now()};
+    thumbMem.set(bid, rec); await kvSet('thumb:' + bid, rec);
+  }).catch(() => {}).finally(() => { thumbBusy = false; });
+}
+async function loadThumb(bid){
+  let t = thumbMem.get(bid);
+  if (!t){ try { t = db ? await kvGet('thumb:' + bid) : null; } catch {} if (t?.light) thumbMem.set(bid, t); }
+  return t?.light ? (isDark() ? t.dark : t.light) : null;
+}
+
+/* ================= Phase 9: start screen ================= */
+const ACTIVE_KEY = 'tessera-active', AWAY = 30 * 60e3;
+const lastActiveAtLoad = (() => { try { return +localStorage.getItem(ACTIVE_KEY) || 0; } catch { return 0; } })();
+const touchActive = () => { try { localStorage.setItem(ACTIVE_KEY, String(Date.now())); } catch {} };
+setInterval(() => { if (document.visibilityState === 'visible') touchActive(); }, 60000);
+window.addEventListener('pagehide', touchActive);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') touchActive(); });
+const LOGO = (s = 26, id = 'lg' + uid()) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b9adff"/><stop offset="1" stop-color="#6450ea"/></linearGradient></defs><rect x="2" y="2" width="9" height="12" rx="2.6" fill="url(#${id})"/><rect x="13" y="2" width="9" height="7" rx="2.6" fill="url(#${id})" opacity=".55"/><rect x="2" y="16" width="9" height="6" rx="2.6" fill="url(#${id})" opacity=".35"/><rect x="13" y="11" width="9" height="11" rx="2.6" fill="url(#${id})" opacity=".8"/></svg>`;
+let splashEl = null, splashKey = null;
+const greeting = () => { const h = new Date().getHours(); return h < 5 ? 'Working late' : h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening'; };
+function thumbHTML(b){
+  if (!b) return '';
+  if (b.lock && !unlockedB.has(b.id)) return `<div class="sp-thumb"><span class="lk">${ico('lock', 22)}Locked</span></div>`;
+  const rects = verRects(b);
+  return `<div class="sp-thumb" data-th="${b.id}">${rects.length ? previewSVG(rects).replace('<svg ', '<svg class="pv" ') : `<span class="lk" style="color:var(--text-3)">${ico('board', 22)}Empty</span>`}<img alt="">${b.icon ? `<span class="emo">${esc(b.icon)}</span>` : ''}</div>`;
+}
+function boardMeta(b){
+  const n = Object.keys(b.cards).length, when = b.editedAt ? `edited ${relTime(b.editedAt)}` : '';
+  return [b.id === S.rootId ? 'Top level' : boardPath(b) || 'Home', `${n} card${n === 1 ? '' : 's'}`, when].filter(Boolean).join(' · ');
+}
+function showSplash(){
+  if (splashEl || !S) return;
+  hideMenus(); closeDuePicker?.();
+  const arch = archivedIds(), ok = id => S.boards[id] && !arch.has(id);
+  const lastId = ok(S.meta.lastBoard) ? S.meta.lastBoard : S.rootId, last = S.boards[lastId];
+  const pins = (S.meta.pinned || []).filter(id => ok(id) && id !== lastId).slice(0, 8).map(id => S.boards[id]);
+  const recs = (S.meta.recent || []).filter(id => ok(id) && id !== lastId && !pins.some(p => p.id === id)).slice(0, 8).map(id => S.boards[id]);
+  if (lastId !== S.rootId && !recs.length && !pins.some(p => p.id === S.rootId)) recs.push(S.boards[S.rootId]);
+  const card = b => `<button class="sp-card" data-b="${b.id}">${thumbHTML(b)}<div class="ct"><b>${esc(b.id === S.rootId ? 'Home' : b.title)}</b><small>${esc(boardMeta(b))}</small></div></button>`;
+  const due = updateDueBadge() || {over:0, today:0, soon:0}, lastB = lastBackupAt(), bdays = lastB ? Math.floor((Date.now() - lastB) / DAY) : null;
+  const notes = [];
+  if (due.over || due.today) notes.push(`<button class="sp-note ${due.over ? 'bad' : ''}" data-a="due"><span class="ni">${ico('calendar', 18)}</span><span class="nm"><b>${[due.over && `${due.over} overdue`, due.today && `${due.today} due today`].filter(Boolean).join(' · ')}</b><span>Open your Due soon list</span></span></button>`);
+  else if (due.soon) notes.push(`<button class="sp-note" data-a="due"><span class="ni">${ico('calendar', 18)}</span><span class="nm"><b>${due.soon} due tomorrow</b><span>Open your Due soon list</span></span></button>`);
+  if (backupDir && backupPerm === 'granted') notes.push(`<div class="sp-note ok"><span class="ni">${ico('folder', 18)}</span><span class="nm"><b>Auto-backup is on</b><span>Saving to “${esc(backupDir.name)}”</span></span></div>`);
+  else if (!lastB || bdays >= 7) notes.push(`<button class="sp-note warn" data-a="backup"><span class="ni">${ico('download', 18)}</span><span class="nm"><b>${lastB ? `Last backup ${bdays} days ago` : 'No backup yet'}</b><span>Export one now — it takes a second</span></span></button>`);
+  else notes.push(`<div class="sp-note ok"><span class="ni">${ico('check', 18)}</span><span class="nm"><b>Backed up ${relTime(lastB)}</b><span>Your boards are safe</span></span></div>`);
+  const tips = ['Press <b>Ctrl K</b> anywhere to search every board or run any command.', 'Drag a card onto a board tile to move it inside.', `${TOUCHY ? 'Long-press' : 'Right-click'} the dock to choose your own tools.`, 'Frames become slides — press <b>P</b> to present.', 'Double-click the canvas to write a quick note.', 'Hold <b>Alt</b> while dragging to skip snapping.', 'Press <b>?</b> for the full guide and FAQ.'];
+  const el = document.createElement('div'); el.id = 'splash'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', 'Start screen');
+  el.innerHTML = `<div class="sp-glow"></div><div class="sp-dots"></div><div class="sp-wrap">
+<header class="sp-top sp-in"><div class="sp-brand">${LOGO(30)}Tessera</div><div class="sp-top-r"><button class="sp-link" data-a="help">${ico('help', 16)}<span>How to use Tessera</span></button><button class="ib" data-a="theme" title="Switch theme">${ico(isDark() ? 'sun' : 'moon', 17)}</button></div></header>
+<section class="sp-hero sp-in" style="animation-delay:.05s"><div><div class="sp-greet">${greeting()}</div><h1 class="sp-h">Pick up where you left off</h1></div>
+<div class="sp-actions"><button class="sp-act primary" data-a="new"><span class="ai">${ico('plus', 16)}</span>New board</button><button class="sp-act" data-a="tpl"><span class="ai">${ico('template', 16)}</span>From a template</button><button class="sp-act" data-a="import"><span class="ai">${ico('upload', 16)}</span>Import</button><button class="sp-act" data-a="search"><span class="ai">${ico('search', 16)}</span>Search<kbd>Ctrl K</kbd></button></div></section>
+<div class="sp-main sp-in" style="animation-delay:.1s"><button class="sp-continue" data-b="${lastId}">${thumbHTML(last)}<div class="sp-cmeta"><div class="t"><span class="sp-eyebrow">Continue</span><b>${esc(lastId === S.rootId ? 'Home' : last.title)}</b><small>${esc(boardMeta(last))}</small></div><span class="sp-go">Open<kbd>Enter</kbd></span></div></button>
+<div class="sp-side">${notes.join('')}<div class="sp-tip"><b>Tip</b> · ${tips[Math.floor(Math.random() * tips.length)]}</div></div></div>
+${pins.length ? `<div class="sp-in" style="animation-delay:.15s"><div class="sp-sec">Pinned</div><div class="sp-cards">${pins.map(card).join('')}</div></div>` : ''}
+${recs.length ? `<div class="sp-in" style="animation-delay:.2s"><div class="sp-sec">Recent</div><div class="sp-cards">${recs.map(card).join('')}</div></div>` : ''}
+<footer class="sp-foot sp-in" style="animation-delay:.25s"><label class="sp-check"><input type="checkbox" id="sp-off"${S.meta.splashOff ? ' checked' : ''}>Don’t show this to me again</label><span>Press <kbd>Enter</kbd> to continue · <kbd>Esc</kbd> to close</span></footer></div>`;
+  document.body.appendChild(el); splashEl = el;
+  requestAnimationFrame(() => el.classList.add('show'));
+  el.querySelectorAll('[data-th]').forEach(async t => { const u = await loadThumb(t.dataset.th); if (!u) return; const img = t.querySelector('img'); img.onload = () => { img.classList.add('ok'); t.querySelector('svg.pv')?.remove(); }; img.src = u; });
+  el.addEventListener('click', e => {
+    const bt = e.target.closest('[data-b]'), a = e.target.closest('[data-a]')?.dataset.a;
+    if (bt){ const id = bt.dataset.b; hideSplash(() => { if (id !== curId) openBoard(id); }); return; }
+    if (!a) return;
+    if (a === 'theme'){ toggleTheme(); setTimeout(() => { const b = el.querySelector('[data-a=theme]'); if (b) b.innerHTML = ico(isDark() ? 'sun' : 'moon', 17); el.querySelectorAll('[data-th]').forEach(async t => { const u = await loadThumb(t.dataset.th), img = t.querySelector('img'); if (u && img) img.src = u; }); }, 80); return; }
+    if (a === 'help'){ openHelp(); return; }
+    hideSplash(() => {
+      if (a === 'due') openDueSoon();
+      else if (a === 'backup') exportBackup();
+      else if (a === 'search') openPalette();
+      else atHome(() => { if (a === 'new') newBoardFlow(); else if (a === 'tpl') openTemplates('new'); else if (a === 'import') importBoardFile(); });
+    });
+  });
+  el.querySelector('#sp-off').addEventListener('change', e => { S.meta.splashOff = e.target.checked; saveSoon(false); });
+  splashKey = e => {
+    if (!splashEl || document.querySelector('.overlay')) return;
+    const mod = e.ctrlKey || e.metaKey;
+    if (e.key === 'Enter' || e.key === 'Escape'){ e.preventDefault(); e.stopPropagation(); const id = lastId; hideSplash(() => { if (id !== curId) openBoard(id); }); }
+    else if (mod && e.key.toLowerCase() === 'k'){ e.preventDefault(); e.stopPropagation(); hideSplash(() => openPalette()); }
+    else if (e.key === '?'){ e.preventDefault(); e.stopPropagation(); openHelp(); }
+    else if (!/^F\d+$/.test(e.key) && !mod) e.stopPropagation();
+  };
+  document.addEventListener('keydown', splashKey, true);
+  setTimeout(() => el.querySelector('.sp-continue')?.focus({preventScroll:true}), 80);
+}
+function hideSplash(then){
+  if (!splashEl) { then?.(); return; }
+  const el = splashEl; splashEl = null; document.removeEventListener('keydown', splashKey, true); touchActive();
+  if (S.meta.splashOff && el.querySelector('#sp-off')?.checked) setTimeout(() => toast('Start screen turned off — switch it back on in Appearance'), 500);
+  el.classList.add('out'); setTimeout(() => el.remove(), 450);
+  if (then) setTimeout(then, 60);
+  setTimeout(() => { if (S.meta.welcomed) loadThumb(curId).then(u => { if (!u) captureThumb(curId); }); }, 2200);
+}
+function atHome(fn){ if (curId !== S.rootId){ openBoard(S.rootId); setTimeout(fn, 480); } else fn(); }
+function newBoardFlow(name = 'Untitled board'){
+  const p = centerWorld(), c = addCard('board', p, {}, {edit:false}), tb = S.boards[c.target]; tb.title = name; saveSoon();
+  setTimeout(() => { openBoard(c.target); setTimeout(() => { const sp = $('#crumbs .crumb.cur span'); if (sp) inlineEdit(sp, tb.title, v => { tb.title = v; }); }, 520); }, 380);
+  return c.target;
+}
+
+/* ================= Phase 9: welcome (first launch) ================= */
+function showWelcome(){
+  if (splashEl) return;
+  const el = document.createElement('div'); el.id = 'splash'; el.className = 'welcome'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', 'Welcome to Tessera');
+  el.innerHTML = `<div class="sp-glow"></div><div class="sp-dots"></div><div class="wl">
+<div class="wl-logo sp-in">${LOGO(40)}</div>
+<h1 class="wl-h sp-in" style="animation-delay:.05s">Welcome to Tessera</h1>
+<p class="wl-sub sp-in" style="animation-delay:.1s">A calm, infinite canvas for ideas, references and plans — notes, images, to-dos, storyboards and more, all in one place.</p>
+<div class="wl-facts sp-in" style="animation-delay:.15s">
+<div class="wl-fact"><span class="fi">${ico('device', 16)}</span><span><b>Private by design</b><span>No account, no cloud — boards stay in this browser on this device.</span></span></div>
+<div class="wl-fact"><span class="fi">${ico('trash', 16)}</span><span><b>Can be erased</b><span>Clearing site data or using a private window removes your boards.</span></span></div>
+<div class="wl-fact"><span class="fi">${ico('folder', 16)}</span><span><b>Back up often</b><span>Export a backup or turn on auto-backup from the storage chip.</span></span></div></div>
+<div class="wl-choices sp-in" style="animation-delay:.2s">
+<button class="wl-choice primary" data-w="scratch"><span class="ci">${ico('plus', 22)}</span><b>Start from scratch</b><span>A blank board, ready for anything. A short tour shows you around.</span><span class="arr">${ico('chev', 18)}</span></button>
+<button class="wl-choice" data-w="tpl"><span class="ci">${ico('template', 22)}</span><b>Start from a template</b><span>${BUILTIN.length} layouts for creatives, students, teachers, healthcare, developers and events.</span><span class="arr">${ico('chev', 18)}</span></button></div>
+<div class="wl-links sp-in" style="animation-delay:.25s"><button class="sp-link" data-w="explore">${ico('compass', 16)}<span>Explore the sample board</span></button><button class="sp-link" data-w="help">${ico('help', 16)}<span>How to use Tessera</span></button></div>
+<p class="wl-fine sp-in" style="animation-delay:.3s">By continuing, you understand that your boards are saved only in this browser on this device and aren’t synced anywhere.</p></div>`;
+  document.body.appendChild(el); splashEl = el; requestAnimationFrame(() => el.classList.add('show'));
+  const done = () => { S.meta.welcomed = true; saveSoon(false); try { navigator.storage?.persist?.(); } catch {} };
+  el.addEventListener('click', e => {
+    const w = e.target.closest('[data-w]')?.dataset.w; if (!w) return;
+    if (w === 'help'){ openHelp(); return; }
+    done();
+    hideSplash(() => {
+      if (w === 'scratch'){ const p = centerWorld(), c = addCard('board', p, {}, {edit:false}); S.boards[c.target].title = 'My first board'; saveSoon(); setTimeout(() => { openBoard(c.target); setTimeout(() => { if (!S.meta.toured) startTour(); }, 700); }, 300); }
+      else if (w === 'tpl'){ openTemplates('new'); S.meta.toured = S.meta.toured || false; setTimeout(() => { if (!S.meta.toured) toast('New here? A one-minute tour shows you around', {label:'Start tour', fn:startTour}, 12000); }, 2600); }
+      else { fit(); if (!S.meta.toured) setTimeout(startTour, 500); }
+    });
+  });
+  splashKey = e => { if (!splashEl || document.querySelector('.overlay')) return; if (e.key === 'Enter'){ e.preventDefault(); el.querySelector('[data-w=scratch]').click(); } e.stopPropagation(); };
+  document.addEventListener('keydown', splashKey, true);
+  setTimeout(() => el.querySelector('[data-w=scratch]')?.focus({preventScroll:true}), 120);
+}
+
+/* ================= Phase 9: help center ================= */
+const K = (...k) => k.map(x => `<kbd>${x}</kbd>`).join(' ');
+const HELP = [
+  {id:'start', t:'Getting started', ic:'compass', lead:'The basics, in about a minute.', items:[
+    ['plus', 'Add cards', `Click a tool in the dock, or drag it onto the board exactly where you want it. Double-click empty canvas for a quick note. Every card type also has a key — ${K('N')} note, ${K('T')} to-do, ${K('L')} link, ${K('I')} image, ${K('B')} board.`],
+    ['board', 'Boards inside boards', 'A board card is a doorway to another canvas. Double-click to go in, press Esc to come back out. The breadcrumbs at the top always show where you are.'],
+    ['search', 'Find anything', `${K('Ctrl', 'K')} searches every board and card, and runs any command — new frames, exports, themes, and more.`],
+    ['fit', 'Move around', `Scroll or drag empty space to pan, ${K('Ctrl')} + scroll or pinch to zoom, ${K('Ctrl', '0')} to fit everything on screen. The minimap in the corner jumps anywhere.`],
+    ['undo', 'Undo anything', `${K('Ctrl', 'Z')} undoes, ${K('Ctrl', 'Shift', 'Z')} redoes. Deleted cards go to Trash for 30 days.`]]},
+  {id:'cards', t:'Cards', ic:'note', lead:'Everything you can put on a board.', items:[
+    ['note', 'Notes, stickies & headings', 'Rich text with bold, italic, headings and lists — select text to see the format bar.'],
+    ['todo', 'To-do lists', 'Press Enter for a new item. Hover an item and click the calendar to give it a due date.'],
+    ['image', 'Images', 'Drop, paste or pick images. Right-click to crop, add a caption, extract colours or open the gallery.'],
+    ['link', 'Links & videos', 'Paste any link to make a link card. YouTube and Vimeo links become playable videos.'],
+    ['file', 'Files & audio', 'Drop any file — PDFs get page previews. Record voice memos with the Audio tool.'],
+    ['table', 'Tables, sketches & colours', 'Tables for structured info, sketch cards for quick drawings, and colour swatches with hex and RGB.']]},
+  {id:'organize', t:'Organizing', ic:'column', lead:'Keep big boards tidy.', items:[
+    ['column', 'Columns', 'Drag cards into a column to stack them. Collapse a column with its chevron. Turn on Kanban mode from View options to line columns up.'],
+    ['frame', 'Frames', 'Frames group an area of the board and move everything inside together. Pick an aspect ratio (16:9, 9:16, 4:5…) from a frame’s menu, and collapse frames you’re not using.'],
+    ['select', 'Groups', `Select a few cards and press ${K('Ctrl', 'G')} to group them so they move as one. ${K('Ctrl', 'Shift', 'G')} ungroups.`],
+    ['tag', 'Tags & filters', 'Tag cards, then filter a board by tag to focus on what matters.'],
+    ['curve', 'Arrows', 'Drag the dot on a card’s edge to another card. Right-click an arrow to make it straight, curved or smart (it steps around other cards), add a label, or change its style.'],
+    ['folder', 'Pin, archive & lock', 'Star boards to pin them. Archive finished projects to hide them without deleting. Lock private boards with a passcode.']]},
+  {id:'creative', t:'Video & design', ic:'shot', lead:'Tools for editors, designers and artists.', items:[
+    ['shot', 'Shot cards & storyboards', `Shot cards (${K('O')}) hold a frame image, shot size, movement, duration and status. Renumber, arrange as a storyboard, or export a CSV shot list from the menu.`],
+    ['font', 'Font cards', `Preview any Google Font or a font installed on your device (${K('Y')}), set weight and size, and copy the CSS.`],
+    ['compare', 'Before / after', `Compare cards (${K('J')}) put two images under a slider — perfect for grades, retouches and revisions.`],
+    ['frame', 'Safe areas', 'Aspect-ratio frames can show rule-of-thirds lines and action/title safe areas.'],
+    ['swatch', 'Colour', 'Extract a palette from any image, or add swatches by hex.']]},
+  {id:'plan', t:'Planning', ic:'calendar', lead:'Deadlines, workflows and focus.', items:[
+    ['calendar', 'Due dates', 'Give any to-do item a date. Overdue and upcoming items show in Due soon, from every board.'],
+    ['kanban', 'Kanban', 'Columns line up side by side. Move cards between them by dragging, or with Alt + arrow keys.'],
+    ['focus', 'Focus mode', `${K('Shift', 'F')} hides the interface and spotlights the selected card.`],
+    ['history', 'Version history', `${K('Ctrl', 'Shift', 'H')} shows earlier versions of a board. Restore one, or restore it as a copy.`]]},
+  {id:'share', t:'Present & share', ic:'present', lead:'Show your work and send it.', items:[
+    ['present', 'Present', `Press ${K('P')}. Each frame becomes a slide, in reading order. Arrow keys move between slides.`],
+    ['share', 'Export', `${K('Ctrl', 'E')} exports PNG images, PDFs (frames can be slides), Markdown, or a board file anyone with Tessera can import.`],
+    ['printer', 'Print', `${K('Ctrl', 'P')} prints the board or one frame per page.`]]},
+  {id:'data', t:'Backups & privacy', ic:'database', lead:'Your boards never leave your device unless you send them.', items:[
+    ['device', 'Where boards live', 'Everything is stored in this browser on this device. There’s no account and nothing is uploaded.'],
+    ['download', 'Backups', `Export a backup with ${K('Ctrl', 'S')}, or turn on auto-backup to a folder (Chrome and Edge on computers). Backup reminders are in Storage & backup.`],
+    ['folder', 'Sync between computers (optional)', 'Point auto-backup at a Google Drive, OneDrive or Dropbox folder and switch Sync on — on each computer.'],
+    ['database', 'Storage health', 'Run a health check to clean up unused images, compress large ones and protect your storage.']]},
+  {id:'faq', t:'FAQ', ic:'help', lead:'Quick answers.', faq:[
+    ['Is Tessera really free?', 'Yes. There are no accounts, subscriptions or ads.'],
+    ['Where are my boards saved?', 'In your browser’s storage on this device only. They don’t appear on other devices or browsers unless you import a backup there or turn on folder sync.'],
+    ['What happens if I clear my browser data?', 'Your boards are erased along with it. Keep a recent backup (Ctrl S) or turn on auto-backup to a folder.'],
+    ['How do I move my boards to a new computer or phone?', 'Export a backup on the old device, then use Import backup on the new one. To share just one board, use Export & share → Board file.'],
+    ['Can I use Tessera offline?', 'Yes. Once it has loaded, it works without a connection. Install it as an app (menu → Install app) for the best experience.'],
+    ['Is a locked board encrypted?', 'No. The lock keeps a board private inside Tessera, but backups and browser storage still contain its contents.'],
+    ['Why does a font card show the wrong font?', 'Google Fonts load from the internet the first time. Fonts installed on your device need their exact name and only show on that device.'],
+    ['Why didn’t the start screen appear?', 'It shows when you return after 30 minutes away, so quick refreshes don’t interrupt you. Turn it on or off in Appearance, or open it from the menu any time.'],
+    ['How do I turn sounds off?', 'Appearance → Sounds → Off.'],
+    ['Can I change the dock?', 'Yes — right-click (or long-press) the dock to reorder tools, move it to the bottom or hide labels.']]}
+];
+function openHelp(start = 'start'){
+  hideMenus();
+  const sec = s => s.faq
+    ? `<div class="hp-sec" data-s="${s.id}"><h3>${s.t}</h3><p class="lead">${s.lead}</p>${s.faq.map(([q, a]) => `<details class="hp-faq hp-item-f"><summary>${esc(q)}${ico('chevd', 16)}</summary><p>${esc(a)}</p></details>`).join('')}</div>`
+    : `<div class="hp-sec" data-s="${s.id}"><h3>${s.t}</h3><p class="lead">${s.lead}</p>${s.items.map(([i, t, d]) => `<div class="hp-item"><span class="ii">${ico(i, 16)}</span><div><b>${t}</b><p>${d}</p></div></div>`).join('')}</div>`;
+  modal({title:'How to use Tessera', eyebrow:'Guide & FAQ', cls:'help-modal',
+    html:`<div class="hp"><nav class="hp-nav"><label class="hp-search">${ico('search', 15)}<input placeholder="Search the guide" spellcheck="false"></label>${HELP.map(s => `<button class="hp-tab" data-t="${s.id}">${ico(s.ic, 16)}${s.t}</button>`).join('')}<button class="hp-tab" data-t="keys">${ico('keyboard', 16)}All shortcuts</button></nav><div class="hp-body"></div></div>`,
+    actions:[{label:'Take the tour', value:'tour'}, {label:'Done', kind:'primary', primary:true}],
+    onOpen:ov => {
+      const body = ov.querySelector('.hp-body'), inp = ov.querySelector('.hp-search input');
+      const show = id => { if (id === 'keys'){ ov._close(null); setTimeout(shortcuts, 240); return; } body.innerHTML = sec(HELP.find(s => s.id === id) || HELP[0]); body.scrollTop = 0; ov.querySelectorAll('.hp-tab').forEach(t => t.classList.toggle('on', t.dataset.t === id)); };
+      ov.querySelector('.hp-nav').addEventListener('click', e => { const t = e.target.closest('.hp-tab'); if (t){ inp.value = ''; show(t.dataset.t); } });
+      inp.addEventListener('input', () => {
+        const q = inp.value.trim().toLowerCase(); if (!q){ show('start'); return; }
+        body.innerHTML = HELP.map(sec).join(''); ov.querySelectorAll('.hp-tab').forEach(t => t.classList.remove('on'));
+        let any = 0;
+        body.querySelectorAll('.hp-item, .hp-faq').forEach(it => { const m = it.textContent.toLowerCase().includes(q); it.hidden = !m; if (m){ any++; if (it.tagName === 'DETAILS') it.open = true; } });
+        body.querySelectorAll('.hp-sec').forEach(s => { s.hidden = !s.querySelector('.hp-item:not([hidden]), .hp-faq:not([hidden])'); });
+        if (!any) body.innerHTML = `<div class="hp-empty">Nothing found for “${esc(inp.value.trim())}”. Try the FAQ, or press Ctrl K to search commands.</div>`;
+      });
+      show(start); setTimeout(() => ov.querySelector('.btn.primary')?.focus({preventScroll:true}), 60);
+    }}).then(v => { if (v === 'tour'){ hideSplash(); setTimeout(startTour, 300); } });
+}
+
 /* ================= Modals, toasts, lightbox ================= */
 const isTop = ov => [...document.querySelectorAll('.overlay')].pop() === ov;
 function modal({title, html, actions, onOpen, dismissable = true, eyebrow = '', cls = ''}){
@@ -5270,8 +5681,9 @@ function paletteActions(){
   ACCENTS.forEach(([k, l]) => a.push({label:`Accent colour: ${l}`, icon:'palette', run:() => setLook({accent:k})}));
   [['light', 'Light'], ['default', 'Dark'], ['graphite', 'Graphite'], ['midnight', 'Midnight'], ['oled', 'True black']].forEach(([k, l]) => a.push({label:`Theme: ${l}`, icon:k === 'light' ? 'sun' : 'moon', run:() => setLook(k === 'light' ? {mode:'light'} : {mode:'dark', shade:k})}));
   a.push({label:'Customize dock…', icon:'dock', run:customizeDock});
-  a.push({label:`Sounds: ${(S.meta.sound || 'off') === 'off' ? 'turn on' : 'turn off'}`, icon:'audio', run:() => { S.meta.sound = (S.meta.sound || 'off') === 'off' ? 'soft' : 'off'; saveSoon(false); sfx('check'); toast(S.meta.sound === 'off' ? 'Sounds off' : 'Sounds on'); }});
+  a.push({label:`Sounds: ${(S.meta.sound ?? 'soft') === 'off' ? 'turn on' : 'turn off'}`, icon:'audio', run:() => { S.meta.sound = (S.meta.sound ?? 'soft') === 'off' ? 'soft' : 'off'; saveSoon(false); sfx('check'); toast(S.meta.sound === 'off' ? 'Sounds off' : 'Sounds on'); }});
   a.push({label:'Take the tour', icon:'compass', run:startTour});
+  a.push({label:'How to use Tessera', icon:'help', kbd:'?', run:() => openHelp()}, {label:'FAQ', icon:'help', run:() => openHelp('faq')}, {label:'Open start screen', icon:'home', run:showSplash});
   a.push({label:'Group selection', icon:'select', kbd:'Ctrl G', run:groupSel}, {label:'Ungroup', icon:'select', kbd:'Ctrl ⇧ G', run:ungroupSel});
   RATIOS.filter(r => r[0] !== 'free').forEach(([k, l]) => a.push({label:`New frame · ${l}`, icon:'frame', run:() => addRatioFrame(k)}));
   a.push({label:'Renumber shots', icon:'list', run:renumberShots}, {label:'Arrange shots as a storyboard', icon:'tidy', run:arrangeStoryboard}, {label:'Export shot list (CSV)', icon:'download', run:exportShotCSV});
@@ -5567,7 +5979,7 @@ function welcome(){
     });
 }
 function shortcuts(){
-  const rows = [['Search & commands','<kbd>Ctrl</kbd> <kbd>K</kbd> · <kbd>/</kbd>'],['New note / to-do / link','<kbd>N</kbd> <kbd>T</kbd> <kbd>L</kbd>'],['New image / board / column','<kbd>I</kbd> <kbd>B</kbd> <kbd>C</kbd>'],['New frame','<kbd>F</kbd>'],['Board from a template','<kbd>M</kbd>'],['Image gallery','Double-click an image · <kbd>←</kbd> <kbd>→</kbd>'],['Sticky / heading / sketch','<kbd>S</kbd> <kbd>H</kbd> <kbd>D</kbd>'],['Table / colour / video','<kbd>G</kbd> <kbd>K</kbd> <kbd>V</kbd>'],['File / audio','<kbd>U</kbd> <kbd>A</kbd>'],['While sketching','<kbd>P</kbd> pen · <kbd>H</kbd> highlight · <kbd>E</kbd> erase'],['Quick note','Double-click canvas'],['Move into a board','Drag onto its tile'],['Group / ungroup','<kbd>Ctrl</kbd> <kbd>G</kbd> · <kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>G</kbd>'],['Frame selection','<kbd>Ctrl</kbd> <kbd>Alt</kbd> <kbd>G</kbd>'],['Shot / font / compare','<kbd>O</kbd> <kbd>Y</kbd> <kbd>J</kbd>'],['Lock / unlock','<kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>L</kbd>'],['Drag without snapping','Hold <kbd>Alt</kbd>'],['Label an arrow','Double-click it'],['Pan','Scroll · <kbd>Space</kbd> + drag'],['Zoom','<kbd>Ctrl</kbd> + scroll · pinch'],['Fit to screen','<kbd>Ctrl</kbd> <kbd>0</kbd>'],['Undo / redo','<kbd>Ctrl</kbd> <kbd>Z</kbd> · <kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>Z</kbd>'],['Duplicate','<kbd>Ctrl</kbd> <kbd>D</kbd>'],['Copy / paste cards','<kbd>Ctrl</kbd> <kbd>C</kbd> · <kbd>Ctrl</kbd> <kbd>V</kbd>'],['Edit note / open board','<kbd>Enter</kbd>'],['Move to Trash','<kbd>Del</kbd>'],['Back to parent board','<kbd>Esc</kbd>'],['Export backup','<kbd>Ctrl</kbd> <kbd>S</kbd>'],['Export & share','<kbd>Ctrl</kbd> <kbd>E</kbd>'],['Print','<kbd>Ctrl</kbd> <kbd>P</kbd>'],['Present','<kbd>P</kbd> · <kbd>←</kbd> <kbd>→</kbd> · <kbd>Esc</kbd>'],['Focus mode','<kbd>⇧</kbd> <kbd>F</kbd>'],['Move card between columns','<kbd>Alt</kbd> + <kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd>'],['Version history','<kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>H</kbd>'],['Appearance','Right-click the theme button'],['Customize dock','Right-click the dock']];
+  const rows = [['Search & commands','<kbd>Ctrl</kbd> <kbd>K</kbd> · <kbd>/</kbd>'],['New note / to-do / link','<kbd>N</kbd> <kbd>T</kbd> <kbd>L</kbd>'],['New image / board / column','<kbd>I</kbd> <kbd>B</kbd> <kbd>C</kbd>'],['New frame','<kbd>F</kbd>'],['Board from a template','<kbd>M</kbd>'],['Image gallery','Double-click an image · <kbd>←</kbd> <kbd>→</kbd>'],['Sticky / heading / sketch','<kbd>S</kbd> <kbd>H</kbd> <kbd>D</kbd>'],['Table / colour / video','<kbd>G</kbd> <kbd>K</kbd> <kbd>V</kbd>'],['File / audio','<kbd>U</kbd> <kbd>A</kbd>'],['While sketching','<kbd>P</kbd> pen · <kbd>H</kbd> highlight · <kbd>E</kbd> erase'],['Quick note','Double-click canvas'],['Move into a board','Drag onto its tile'],['Group / ungroup','<kbd>Ctrl</kbd> <kbd>G</kbd> · <kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>G</kbd>'],['Frame selection','<kbd>Ctrl</kbd> <kbd>Alt</kbd> <kbd>G</kbd>'],['Shot / font / compare','<kbd>O</kbd> <kbd>Y</kbd> <kbd>J</kbd>'],['Lock / unlock','<kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>L</kbd>'],['Drag without snapping','Hold <kbd>Alt</kbd>'],['Label an arrow','Double-click it'],['Pan','Scroll · <kbd>Space</kbd> + drag'],['Zoom','<kbd>Ctrl</kbd> + scroll · pinch'],['Fit to screen','<kbd>Ctrl</kbd> <kbd>0</kbd>'],['Undo / redo','<kbd>Ctrl</kbd> <kbd>Z</kbd> · <kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>Z</kbd>'],['Duplicate','<kbd>Ctrl</kbd> <kbd>D</kbd>'],['Copy / paste cards','<kbd>Ctrl</kbd> <kbd>C</kbd> · <kbd>Ctrl</kbd> <kbd>V</kbd>'],['Edit note / open board','<kbd>Enter</kbd>'],['Move to Trash','<kbd>Del</kbd>'],['Back to parent board','<kbd>Esc</kbd>'],['Export backup','<kbd>Ctrl</kbd> <kbd>S</kbd>'],['Export & share','<kbd>Ctrl</kbd> <kbd>E</kbd>'],['Print','<kbd>Ctrl</kbd> <kbd>P</kbd>'],['Present','<kbd>P</kbd> · <kbd>←</kbd> <kbd>→</kbd> · <kbd>Esc</kbd>'],['Focus mode','<kbd>⇧</kbd> <kbd>F</kbd>'],['Move card between columns','<kbd>Alt</kbd> + <kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd>'],['Version history','<kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>H</kbd>'],['Appearance','Right-click the theme button'],['Customize dock','Right-click the dock'],['How to use Tessera','<kbd>?</kbd>']];
   modal({title:'Keyboard shortcuts', html:`<div class="kbd-grid">${rows.map(r => `<span>${r[0]}</span><span>${r[1]}</span>`).join('')}</div>`, actions:[{label:'Done', kind:'primary', primary:true}]});
 }
 async function exportBackup(){
@@ -5624,7 +6036,7 @@ function openMoreMenu(){
     {label:'Appearance…', icon:'palette', fn:openAppearance}, {label:'Customize dock…', icon:'dock', fn:customizeDock},
     {label:'View options…', icon:'sliders', fn:() => openViewMenu(r.right, r.bottom + 8, true)},
     {label:'Templates…', icon:'template', kbd:'M', fn:() => openTemplates('new')}, {label:'Save board as template…', icon:'template', fn:() => saveAsTemplate()},
-    {label:'Keyboard shortcuts', icon:'keyboard', fn:shortcuts}, {label:'Take the tour', icon:'compass', fn:startTour}];
+    {label:'How to use Tessera', icon:'help', kbd:'?', fn:() => openHelp()}, {label:'Keyboard shortcuts', icon:'keyboard', fn:shortcuts}, {label:'Take the tour', icon:'compass', fn:startTour}, {label:'Start screen', icon:'home', fn:showSplash}];
   if (deferredInstall) items.push({label:'Install app', icon:'install', fn:async () => { deferredInstall.prompt(); try { await deferredInstall.userChoice; } catch {} deferredInstall = null; }});
   items.push({sep:true}, {label:'Erase everything…', icon:'trash', danger:true, fn:eraseAll});
   openMenu(items, r.right, r.bottom + 8, true);
@@ -5644,7 +6056,7 @@ tap('#searchBtn', () => openPalette());
 tap('#themeBtn', e => toggleTheme(e));
 tap('#pinBtn', () => togglePin(curId));
 $('#themeBtn').addEventListener('contextmenu', e => { e.preventDefault(); openAppearance(); });
-tap('#dueBtn', openDueSoon); tap('#presBtn', startPresentation);
+tap('#dueBtn', openDueSoon); tap('#helpBtn', () => openHelp()); tap('#presBtn', startPresentation);
 tap('#emTpl', () => openTemplates('here'));
 $('#crumbs').addEventListener('click', e => {
   const c = e.target.closest('.crumb'); if (!c) return;
@@ -5673,9 +6085,11 @@ async function init(){
   document.fonts?.ready?.then(() => { world.querySelectorAll('.ti-text').forEach(autosize); drawLinks(); if (needFit) fit(false); });
   if (!storageOK) toast('Storage is blocked here — changes won’t be saved', {label:'Details', fn:() => storagePanel()}, 9000);
   await initAutoBackup();
-  if (S.meta.welcomed) setTimeout(dueReminder, 2400);
-  if (!S.meta.welcomed) setTimeout(welcome, 500);
-  else backupNudge();
+  const showStart = S.meta.welcomed && !S.meta.splashOff && Date.now() - lastActiveAtLoad > AWAY;
+  if (!S.meta.welcomed) setTimeout(showWelcome, 200);
+  else if (showStart) showSplash();
+  else { setTimeout(dueReminder, 2400); backupNudge(); setTimeout(() => loadThumb(curId).then(u => { if (!u) captureThumb(curId); }), 3000); }
+  touchActive();
   setTimeout(() => syncCheck(true), 1500);
   gcImages();
   if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) && window.isSecureContext){
