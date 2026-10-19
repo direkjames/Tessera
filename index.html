@@ -2365,6 +2365,15 @@ function openBoardsMenu(){
 
 /* ================= Sanitizer & editing ================= */
 const ALLOWED = new Set(['B','STRONG','I','EM','U','S','STRIKE','BR','DIV','P','UL','OL','LI','H1','H2','H3','SPAN','A','CODE']);
+/* bold / italic / underline / strike written as inline styles become real tags so they survive sanitizing */
+function styleToTags(el){
+  const st = el.style, out = [], fw = st.fontWeight, td = (st.textDecorationLine || st.textDecoration || '');
+  if (fw && (fw === 'bold' || fw === 'bolder' || +fw >= 600) && !/^(B|STRONG|H[1-3])$/.test(el.tagName)) out.push('b');
+  if (st.fontStyle === 'italic' && !/^(I|EM)$/.test(el.tagName)) out.push('i');
+  if (/underline/.test(td) && el.tagName !== 'U') out.push('u');
+  if (/line-through/.test(td) && !/^(S|STRIKE)$/.test(el.tagName)) out.push('s');
+  return out.length ? out : null;
+}
 function sanitize(html){
   const doc = new DOMParser().parseFromString(`<div>${html}</div>`, 'text/html'), root = doc.body.firstChild;
   (function walk(n){
@@ -2376,11 +2385,13 @@ function sanitize(html){
           continue;
         }
         const keepStyle = ch.hasAttribute('style') && !/^(BR|UL|OL)$/.test(ch.tagName) ? cleanStyle(ch) : '';
+        const fx = ch.hasAttribute('style') && !/^(BR|UL|OL)$/.test(ch.tagName) ? styleToTags(ch) : null;
         for (const a of [...ch.attributes]) if (!(ch.tagName === 'A' && a.name === 'href' && /^https?:/i.test(a.value))) ch.removeAttribute(a.name);
         if (keepStyle){
           if (ch.tagName === 'SPAN') ch.setAttribute('style', keepStyle);
           else { const sp = doc.createElement('span'); sp.setAttribute('style', keepStyle); sp.append(...ch.childNodes); ch.appendChild(sp); }
         }
+        if (fx){ let inner = doc.createDocumentFragment(); inner.append(...ch.childNodes); for (const t of fx){ const w = doc.createElement(t); w.appendChild(inner); inner = doc.createDocumentFragment(); inner.appendChild(w); } ch.appendChild(inner); }
         walk(ch);
       } else if (ch.nodeType === 3){ if (ch.data.includes('​') && ch.data.replace(/​/g, '')) ch.data = ch.data.replace(/​/g, ''); }
       else ch.remove();
@@ -2399,6 +2410,7 @@ function enterEdit(id, ev){
   if (!body || !c || body.isContentEditable) return;
   const before = snapshot(), html0 = c.html || '';
   body.contentEditable = 'true'; el.classList.add('editing'); body.focus({preventScroll:true});
+  try { document.execCommand('styleWithCSS', false, false); } catch {}
   let placed = false;
   if (ev && document.caretRangeFromPoint){
     const r = document.caretRangeFromPoint(ev.clientX, ev.clientY);
@@ -2462,7 +2474,7 @@ fmt.addEventListener('click', e => {
   const b = e.target.closest('[data-cmd]'); if (!b) return; const c = b.dataset.cmd;
   if (c === 'heading'){ const v = (document.queryCommandValue('formatBlock') || '').toLowerCase(); document.execCommand('formatBlock', false, /h[1-3]/.test(v) ? 'div' : 'h3'); }
   else if (c === 'code') toggleInlineCode();
-  else document.execCommand(c, false);
+  else { try { document.execCommand('styleWithCSS', false, false); } catch {} document.execCommand(c, false); }
   refreshFmtState();
 });
 document.addEventListener('selectionchange', refreshFmtState);
@@ -3130,13 +3142,20 @@ function updateDropTarget(e, ids, single){
   }
   return null;
 }
+/* other selected, unlocked, free-standing images that resize together with image `id` */
+function imgGroup(id){
+  const c = findCard(id); if (!c || c.type !== 'image' || !sel.has(id) || sel.size < 2) return [];
+  return [...sel].filter(k => k !== id).map(findCard).filter(o => o && o.type === 'image' && !o.locked && !o.parent && elOf(o.id));
+}
 function startResize(e, id){
   e.preventDefault(); commit();
   const c = findCard(id), el = elOf(id), sx = e.clientX, sy = e.clientY, w0 = c.w || W[c.type], h0 = c.h || 320, s = cur().view.s, min = c.type === 'line' ? lineMinW(c) : MIN_W[c.type] || 140, fr = ['frame', 'sketch', 'shape', 'plan'].includes(c.type);
+  const grp = imgGroup(id).map(o => ({o, w0:o.w || W.image}));
   const stop = track(e, ev => {
     let w = w0 + (ev.clientX - sx) / s, h = h0 + (ev.clientY - sy) / s;
     if ((S.meta.snap || 'guides') === 'grid' && !ev.altKey){ w = Math.round((c.x + w) / GRID) * GRID - c.x; h = Math.round((c.y + h) / GRID) * GRID - c.y; }
     c.w = Math.round(clamp(w, min, fr ? 8000 : 1600)); el.style.width = c.w + 'px';
+    if (grp.length){ const f = c.w / w0; grp.forEach(g => { g.o.w = Math.round(clamp(g.w0 * f, MIN_W.image || 110, 1600)); elOf(g.o.id).style.width = g.o.w + 'px'; }); }
     if (fr){ c.h = Math.round(clamp(c.type === 'frame' && c.ratio ? c.w / ratioOf(c.ratio) : h, c.type === 'shape' ? 24 : 80, 8000)); el.style.height = c.h + 'px'; }
     if (c.type === 'sketch') el.querySelector('.sk')?.setAttribute('viewBox', `0 0 ${c.w} ${c.h}`);
     if (c.type === 'line') updateLineEl(id);
@@ -8256,7 +8275,8 @@ function styleSel(cmd, sentinel, prop, value){
     saveFmtRange(); body.dispatchEvent(new Event('input', {bubbles:true})); refreshFmtState(); return;
   }
   try { document.execCommand('styleWithCSS', false, true); } catch {}
-  document.execCommand(cmd, false, sentinel); fontsToSpans(body);
+  try { document.execCommand(cmd, false, sentinel); } finally { try { document.execCommand('styleWithCSS', false, false); } catch {} }
+  fontsToSpans(body);
   const match = prop === 'font-family' ? (el => (el.style.fontFamily || '').includes('TsxSentinel')) : (el => el.style.getPropertyValue(prop).replace(/\s/g, '') === 'rgb(1,2,3)');
   body.querySelectorAll('[style]').forEach(el => { if (match(el)){ if (value) el.style.setProperty(prop, value); else el.style.removeProperty(prop); if (!el.getAttribute('style')) el.removeAttribute('style'); } });
   saveFmtRange(); body.dispatchEvent(new Event('input', {bubbles:true})); refreshFmtState();
@@ -8409,15 +8429,21 @@ function startImgEdge(e, id, edge){
   e.preventDefault(); e.stopPropagation(); commit();
   const c = findCard(id), el = elOf(id); if (!c || !el) return;
   const s = cur().view.s, wrap = el.querySelector('.img-wrap'), w0 = c.w || 300, h0 = wrap.offsetHeight, sx = e.clientX, sy = e.clientY;
-  const stop = track(e, ev => {
-    let w = w0, h = h0;
-    if (edge.includes('e')) w = clamp(w0 + (ev.clientX - sx) / s, MIN_W.image || 110, 3000);
-    if (edge.includes('s')) h = clamp(h0 + (ev.clientY - sy) / s, 60, 4000);
+  const apply = (c, el, wrap, w, h) => {
     const A = w / h; c.w = Math.round(w);
     if (c.fit === 'contain') c.box = +A.toFixed(4); else { const cr = coverCrop(c, A); if (validCrop(cr)) c.crop = {x:+cr.x.toFixed(4), y:+cr.y.toFixed(4), w:+cr.w.toFixed(4), h:+cr.h.toFixed(4)}; else delete c.crop; }
     el.style.width = c.w + 'px';
     const n = document.createElement('div'); n.innerHTML = imageHTML(c); const nw = n.querySelector('.img-wrap'); wrap.setAttribute('style', nw.getAttribute('style')); wrap.className = nw.className;
-    const im = wrap.querySelector('img'), nim = nw.querySelector('img'); im.setAttribute('style', nim.getAttribute('style') || ''); drawLinksSoon();
+    const im = wrap.querySelector('img'), nim = nw.querySelector('img'); im.setAttribute('style', nim.getAttribute('style') || '');
+  };
+  const grp = imgGroup(id).map(o => { const oe = elOf(o.id), ow = oe.querySelector('.img-wrap'); return {o, oe, ow, w0:o.w || 300, h0:ow.offsetHeight}; });
+  const stop = track(e, ev => {
+    let w = w0, h = h0;
+    if (edge.includes('e')) w = clamp(w0 + (ev.clientX - sx) / s, MIN_W.image || 110, 3000);
+    if (edge.includes('s')) h = clamp(h0 + (ev.clientY - sy) / s, 60, 4000);
+    apply(c, el, wrap, w, h);
+    grp.forEach(g => apply(g.o, g.oe, g.ow, clamp(g.w0 * w / w0, MIN_W.image || 110, 3000), clamp(g.h0 * h / h0, 60, 4000)));
+    drawLinksSoon();
   }, () => { gesture = null; saveSoon(); });
   gesture = {type:'resize', cancel:() => { stop(); gesture = null; }};
 }
