@@ -1338,6 +1338,11 @@ body:has(.overlay.ped) #toasts{top:calc(70px + env(safe-area-inset-top));bottom:
 #fmt .fx-e{font-size:16px}
 #fmt .fx-c{font-size:13px;letter-spacing:.02em}
 .fp-case button{font-size:14px}
+.fp-al{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.fp-al button{display:flex;flex-direction:column;align-items:center;gap:5px;padding:9px 0 7px;border-radius:10px;color:var(--text-2);font-size:11px;font-weight:500;transition:background .12s,color .12s}
+.fp-al button:hover{background:var(--hover);color:var(--text)}
+.fp-al button.on{color:var(--accent);background:var(--accent-soft)}
+.fp-al kbd{font:500 9.5px var(--font);color:var(--text-3);letter-spacing:.02em}
 .fp-case button i{font:500 10.5px var(--font);font-style:normal;color:var(--text-3)}
 #fmt.hd [data-cmd=heading],#fmt.hd [data-cmd=insertUnorderedList],#fmt.hd [data-cmd=code],#fmt.hd .fsep.hd-hide{display:none}
 #fpop{position:fixed;z-index:360;width:276px;padding:12px;border-radius:16px;opacity:0;pointer-events:none;transform:translateY(-4px) scale(.98);transition:opacity .15s,transform .18s var(--ease)}
@@ -1721,6 +1726,7 @@ body.viewer #canvas.panning{cursor:grabbing}
   <button data-cmd="insertUnorderedList" title="Bulleted list" data-ico="list" data-s="16"></button>
   <button data-cmd="code" title="Inline code" data-ico="code" data-s="16"></button>
   <span class="fsep"></span>
+  <button data-pop="align" title="Text alignment" data-ico="taLeft" data-s="16"></button>
   <button class="fx" data-pop="font" title="Font" style="font-family:var(--serif);font-size:16px">Aa</button>
   <button class="fx fx-c" data-pop="case" title="Change case (UPPERCASE, Capitalize…)">Tt</button>
   <button class="fx-a" data-pop="color" title="Text color">A<i></i></button>
@@ -1784,6 +1790,8 @@ const ICONS = {
   frame:'<path d="M7 3v18M17 3v18M3 7h18M3 17h18"/>',
   lock:'<rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
   unlock:'<rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 7.6-1.8"/>',
+  taLeft:'<path d="M4 6h16M4 10h10M4 14h16M4 18h10"/>', taCenter:'<path d="M4 6h16M7 10h10M4 14h16M7 18h10"/>',
+  taRight:'<path d="M4 6h16M10 10h10M4 14h16M10 18h10"/>', taJustify:'<path d="M4 6h16M4 10h16M4 14h16M4 18h16"/>',
   alignL:'<path d="M4 3v18"/><rect x="8" y="6" width="12" height="4" rx="1.5"/><rect x="8" y="14" width="7" height="4" rx="1.5"/>',
   alignC:'<path d="M12 3v18"/><rect x="5" y="6" width="14" height="4" rx="1.5"/><rect x="8" y="14" width="8" height="4" rx="1.5"/>',
   alignR:'<path d="M20 3v18"/><rect x="4" y="6" width="12" height="4" rx="1.5"/><rect x="9" y="14" width="7" height="4" rx="1.5"/>',
@@ -2393,6 +2401,9 @@ function openBoardsMenu(){
 
 /* ================= Sanitizer & editing ================= */
 const ALLOWED = new Set(['B','STRONG','I','EM','U','S','STRIKE','BR','DIV','P','UL','OL','LI','H1','H2','H3','SPAN','A','CODE']);
+/* text alignment lives on block elements, as a style (Chrome, Safari) or an align attribute (Firefox) */
+const ALIGN_OF = {left:'left', start:'left', right:'right', end:'right', center:'center', '-webkit-center':'center', justify:'justify'};
+const blockAlign = el => /^(DIV|P|H1|H2|H3|LI|UL|OL)$/.test(el.tagName) ? ALIGN_OF[(el.style.textAlign || el.getAttribute('align') || '').trim().toLowerCase()] || '' : '';
 /* bold / italic / underline / strike written as inline styles become real tags so they survive sanitizing */
 function styleToTags(el){
   const st = el.style, out = [], fw = st.fontWeight, td = (st.textDecorationLine || st.textDecoration || '');
@@ -2413,8 +2424,9 @@ function sanitize(html){
           continue;
         }
         const keepStyle = ch.hasAttribute('style') && !/^(BR|UL|OL)$/.test(ch.tagName) ? cleanStyle(ch) : '';
-        const fx = ch.hasAttribute('style') && !/^(BR|UL|OL)$/.test(ch.tagName) ? styleToTags(ch) : null;
+        const fx = ch.hasAttribute('style') && !/^(BR|UL|OL)$/.test(ch.tagName) ? styleToTags(ch) : null, al = blockAlign(ch);
         for (const a of [...ch.attributes]) if (!(ch.tagName === 'A' && a.name === 'href' && /^https?:/i.test(a.value))) ch.removeAttribute(a.name);
+        if (al) ch.setAttribute('style', `text-align:${al}`);
         if (keepStyle){
           if (ch.tagName === 'SPAN') ch.setAttribute('style', keepStyle);
           else { const sp = doc.createElement('span'); sp.setAttribute('style', keepStyle); sp.append(...ch.childNodes); ch.appendChild(sp); }
@@ -2448,7 +2460,9 @@ function enterEdit(id, ev){
   fmtFor = id; fmt.classList.toggle('hd', c.type === 'heading'); fmt.classList.add('show'); positionFormatBar(); refreshFmtState();
   const onInput = () => { c.html = body.innerHTML; saveSoon(); drawLinksSoon(); positionFormatBar(); };
   const onPaste = e => { e.preventDefault(); e.stopPropagation(); document.execCommand('insertText', false, e.clipboardData.getData('text/plain')); };
-  const onKey = e => { if (e.key === 'Escape' || (c.type === 'heading' && e.key === 'Enter' && !e.shiftKey)){ e.preventDefault(); e.stopPropagation(); body.blur(); } };
+  const onKey = e => {
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && !e.altKey){ const a = ALIGN_KEYS[e.key.toLowerCase()]; if (a){ e.preventDefault(); e.stopPropagation(); saveFmtRange(); setAlign(a); return; } }
+    if (e.key === 'Escape' || (c.type === 'heading' && e.key === 'Enter' && !e.shiftKey)){ e.preventDefault(); e.stopPropagation(); body.blur(); } };
   const onBlur = ev => {
     if (ev?.relatedTarget && (fpop.contains(ev.relatedTarget) || ev.relatedTarget === emoBtn)) return;
     if (fpop.classList.contains('show') && fpop._kind !== 'emo2') closeFpop();
@@ -2494,6 +2508,25 @@ function refreshFmtState(){
     try { on = c === 'heading' ? /h[1-3]/i.test(document.queryCommandValue('formatBlock') || '') : c === 'code' ? !!selCodeEl() : document.queryCommandState(c); } catch {}
     b.classList.toggle('on', !!on);
   });
+  const ab = fmt.querySelector('[data-pop=align]'), a = curAlign();
+  if (ab.dataset.a !== a){ ab.dataset.a = a; ab.innerHTML = ico('ta' + cap(a), 16); ab.title = `Text alignment: ${cap(a)}`; }
+  ab.classList.toggle('on', a !== 'left');
+}
+/* ---- text alignment (left / center / right / justify) for the block under the caret or selection ---- */
+const ALIGNS = [['left', 'Left', 'L'], ['center', 'Center', 'E'], ['right', 'Right', 'R'], ['justify', 'Justify', 'J']];
+const ALIGN_KEYS = {l:'left', e:'center', r:'right', j:'justify'};
+function curAlign(){
+  const s = getSelection(); if (!s.rangeCount) return 'left';
+  let n = s.anchorNode; if (n && n.nodeType !== 1) n = n.parentElement;
+  if (!n?.closest?.('.note-body')) return 'left';
+  return ALIGN_OF[getComputedStyle(n).textAlign] || 'left';
+}
+function setAlign(a){
+  if (!ALIGN_OF[a] || !restoreFmtRange()) return; const body = fmtBody;
+  try { document.execCommand('styleWithCSS', false, true); } catch {}
+  try { document.execCommand({left:'justifyLeft', center:'justifyCenter', right:'justifyRight', justify:'justifyFull'}[a], false); } finally { try { document.execCommand('styleWithCSS', false, false); } catch {} }
+  body.querySelectorAll('[align]').forEach(el => { const v = blockAlign(el); el.removeAttribute('align'); if (v) el.style.textAlign = v; });
+  saveFmtRange(); body.dispatchEvent(new Event('input', {bubbles:true})); refreshFmtState();
 }
 fmt.addEventListener('pointerdown', e => e.preventDefault());
 fmt.addEventListener('mousedown', e => e.preventDefault());
@@ -6396,7 +6429,7 @@ const HELP = [
     ['shape', 'Shapes, lines & symbols', `Shapes (${K('R')}) for flowcharts and diagrams — double-click to type inside. Lines (${K('W')}) with arrowheads, and symbols & emoji (${K('Q')}). Drag the round handle above a selected shape to rotate it (hold Shift for free rotation).`],
     ['map', 'Maps', `Map cards (${K('E')}) use OpenStreetMap. Search for a place, drop numbered pins, and Tessera saves a snapshot so the map still shows offline and in exports. Searching sends your search text to OpenStreetMap’s Nominatim service.`],
     ['plan', 'Floor plans', `Floor plans (${K('Z')}) are drawn to scale in metres or feet. Start from a ready-made layout or draw walls (W) and box rooms (B). Drag on empty space to select several things, right-click for copy, paste, group, lock and more. Drag a wall’s end dots to resize it or its middle diamond to curve it. Pan with the middle mouse button (two fingers on touch).`],
-    ['hl', 'Text styling', 'Select text in a note, sticky or heading to change its font, color or highlight, or add emoji. Headings take any font size from the right-click menu.'],
+    ['hl', 'Text styling', 'Select text in a note, sticky or heading to change its font, color, highlight or alignment (left, center, right or justified), or add emoji. Headings take any font size from the right-click menu.'],
     ['image', 'Stretch images', 'Drag the side handles of a selected image to give it any shape — the photo fills the frame, and Crop… picks which part shows. Right-click → Whole image to fit it without cropping.'],
     ['code', 'Code blocks', `Code cards (${K('X')}) highlight JavaScript, Python, HTML, CSS, SQL and more, with line numbers, wrap and one-click copy. Paste code anywhere on the board and Tessera turns it into a code block automatically. Select text in a note and use the code button for inline code.`]]},
   {id:'plan', t:'Planning', ic:'calendar', lead:'Deadlines, workflows and focus.', items:[
@@ -8394,6 +8427,12 @@ function openFmtPop(kind, anchor){
     let t = 0; const pk = mountPicker(fpop.querySelector('.hp').parentElement, isHl ? '#ffe08a' : '#e2557a', hex => { clearTimeout(t); t = setTimeout(() => (isHl ? setHighlight : setTextColor)(hex), 260); });
     placePop(fpop, anchor); return;
   }
+  if (kind === 'align'){
+    const now = curAlign();
+    fpop.innerHTML = `<div class="fp-h">Align text</div><div class="fp-al">${ALIGNS.map(([k, l, key]) => `<button data-al="${k}" class="${k === now ? 'on' : ''}" title="${l} (Ctrl ⇧ ${key})">${ico('ta' + cap(k), 18)}${l}<kbd>⇧ ${key}</kbd></button>`).join('')}</div>`;
+    fpop.querySelector('.fp-al').addEventListener('click', e => { const b = e.target.closest('[data-al]'); if (!b) return; setAlign(b.dataset.al); closeFpop(); });
+    placePop(fpop, anchor); return;
+  }
   if (kind === 'case'){
     fpop.innerHTML = `<div class="fp-h">Change case</div><div class="fp-fonts fp-case">${CASES.map(([k, l, ex]) => `<button data-case="${k}">${l}<i>${ex}</i></button>`).join('')}</div>`;
     fpop.querySelector('.fp-case').addEventListener('click', e => { const b = e.target.closest('[data-case]'); if (!b) return; changeCase(b.dataset.case); closeFpop(); });
@@ -8934,7 +8973,7 @@ function welcome(){
     });
 }
 function shortcuts(){
-  const rows = [['Search & commands','<kbd>Ctrl</kbd> <kbd>K</kbd> · <kbd>/</kbd>'],['New note / to-do / link','<kbd>N</kbd> <kbd>T</kbd> <kbd>L</kbd>'],['New image / board / column','<kbd>I</kbd> <kbd>B</kbd> <kbd>C</kbd>'],['New frame','<kbd>F</kbd>'],['Board from a template','<kbd>M</kbd>'],['Image gallery','Double-click an image · <kbd>←</kbd> <kbd>→</kbd>'],['Sticky / heading / sketch','<kbd>S</kbd> <kbd>H</kbd> <kbd>D</kbd>'],['Table / color / video','<kbd>G</kbd> <kbd>K</kbd> <kbd>V</kbd>'],['File / audio','<kbd>U</kbd> <kbd>A</kbd>'],['While sketching','<kbd>P</kbd> pen · <kbd>H</kbd> highlight · <kbd>E</kbd> erase'],['Quick note','Double-click canvas'],['Move into a board','Drag onto its tile'],['Group / ungroup','<kbd>Ctrl</kbd> <kbd>G</kbd> · <kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>G</kbd>'],['Frame selection','<kbd>Ctrl</kbd> <kbd>Alt</kbd> <kbd>G</kbd>'],['Shot / font / compare','<kbd>O</kbd> <kbd>Y</kbd> <kbd>J</kbd>'],['Shape / line / symbol','<kbd>R</kbd> <kbd>W</kbd> <kbd>Q</kbd>'],['Code / map / floor plan','<kbd>X</kbd> <kbd>E</kbd> <kbd>Z</kbd>'],['Illustration / clock','<kbd>⇧</kbd> <kbd>D</kbd> · <kbd>⇧</kbd> <kbd>T</kbd>'],['Lock / unlock','<kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>L</kbd>'],['Drag without snapping','Hold <kbd>Alt</kbd>'],['Label an arrow','Double-click it'],['Pan','Scroll · <kbd>Space</kbd> + drag'],['Zoom','<kbd>Ctrl</kbd> + scroll · pinch'],['Fit to screen','<kbd>Ctrl</kbd> <kbd>0</kbd>'],['Undo / redo','<kbd>Ctrl</kbd> <kbd>Z</kbd> · <kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>Z</kbd>'],['Duplicate','<kbd>Ctrl</kbd> <kbd>D</kbd>'],['Copy / paste cards','<kbd>Ctrl</kbd> <kbd>C</kbd> · <kbd>Ctrl</kbd> <kbd>V</kbd>'],['Edit note / open board','<kbd>Enter</kbd>'],['Move to Trash','<kbd>Del</kbd>'],['Back to parent board','<kbd>Esc</kbd>'],['Export backup','<kbd>Ctrl</kbd> <kbd>S</kbd>'],['Export & share','<kbd>Ctrl</kbd> <kbd>E</kbd>'],['Print','<kbd>Ctrl</kbd> <kbd>P</kbd>'],['Present','<kbd>P</kbd> · <kbd>←</kbd> <kbd>→</kbd> · <kbd>Esc</kbd>'],['Focus mode','<kbd>⇧</kbd> <kbd>F</kbd>'],['Move card between columns','<kbd>Alt</kbd> + <kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd>'],['Version history','<kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>H</kbd>'],['Appearance','Right-click the theme button'],['Customize dock','Right-click the dock'],['How to use Tessera','<kbd>?</kbd>']];
+  const rows = [['Search & commands','<kbd>Ctrl</kbd> <kbd>K</kbd> · <kbd>/</kbd>'],['New note / to-do / link','<kbd>N</kbd> <kbd>T</kbd> <kbd>L</kbd>'],['New image / board / column','<kbd>I</kbd> <kbd>B</kbd> <kbd>C</kbd>'],['New frame','<kbd>F</kbd>'],['Board from a template','<kbd>M</kbd>'],['Image gallery','Double-click an image · <kbd>←</kbd> <kbd>→</kbd>'],['Sticky / heading / sketch','<kbd>S</kbd> <kbd>H</kbd> <kbd>D</kbd>'],['Table / color / video','<kbd>G</kbd> <kbd>K</kbd> <kbd>V</kbd>'],['File / audio','<kbd>U</kbd> <kbd>A</kbd>'],['While sketching','<kbd>P</kbd> pen · <kbd>H</kbd> highlight · <kbd>E</kbd> erase'],['Quick note','Double-click canvas'],['Move into a board','Drag onto its tile'],['Group / ungroup','<kbd>Ctrl</kbd> <kbd>G</kbd> · <kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>G</kbd>'],['Frame selection','<kbd>Ctrl</kbd> <kbd>Alt</kbd> <kbd>G</kbd>'],['Shot / font / compare','<kbd>O</kbd> <kbd>Y</kbd> <kbd>J</kbd>'],['Shape / line / symbol','<kbd>R</kbd> <kbd>W</kbd> <kbd>Q</kbd>'],['Code / map / floor plan','<kbd>X</kbd> <kbd>E</kbd> <kbd>Z</kbd>'],['Illustration / clock','<kbd>⇧</kbd> <kbd>D</kbd> · <kbd>⇧</kbd> <kbd>T</kbd>'],['Lock / unlock','<kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>L</kbd>'],['Align text left / center / right / justify (while writing)','<kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>L</kbd> <kbd>E</kbd> <kbd>R</kbd> <kbd>J</kbd>'],['Drag without snapping','Hold <kbd>Alt</kbd>'],['Label an arrow','Double-click it'],['Pan','Scroll · <kbd>Space</kbd> + drag'],['Zoom','<kbd>Ctrl</kbd> + scroll · pinch'],['Fit to screen','<kbd>Ctrl</kbd> <kbd>0</kbd>'],['Undo / redo','<kbd>Ctrl</kbd> <kbd>Z</kbd> · <kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>Z</kbd>'],['Duplicate','<kbd>Ctrl</kbd> <kbd>D</kbd>'],['Copy / paste cards','<kbd>Ctrl</kbd> <kbd>C</kbd> · <kbd>Ctrl</kbd> <kbd>V</kbd>'],['Edit note / open board','<kbd>Enter</kbd>'],['Move to Trash','<kbd>Del</kbd>'],['Back to parent board','<kbd>Esc</kbd>'],['Export backup','<kbd>Ctrl</kbd> <kbd>S</kbd>'],['Export & share','<kbd>Ctrl</kbd> <kbd>E</kbd>'],['Print','<kbd>Ctrl</kbd> <kbd>P</kbd>'],['Present','<kbd>P</kbd> · <kbd>←</kbd> <kbd>→</kbd> · <kbd>Esc</kbd>'],['Focus mode','<kbd>⇧</kbd> <kbd>F</kbd>'],['Move card between columns','<kbd>Alt</kbd> + <kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd>'],['Version history','<kbd>Ctrl</kbd> <kbd>⇧</kbd> <kbd>H</kbd>'],['Appearance','Right-click the theme button'],['Customize dock','Right-click the dock'],['How to use Tessera','<kbd>?</kbd>']];
   modal({title:'Keyboard shortcuts', html:`<div class="kbd-grid">${rows.map(r => `<span>${r[0]}</span><span>${r[1]}</span>`).join('')}</div>`, actions:[{label:'Done', kind:'primary', primary:true}]});
 }
 async function exportBackup(){
