@@ -541,7 +541,8 @@ body.presenting #presprog{opacity:1}
 
 /* export dialog */
 .modal.xp-modal{width:min(640px,100%)}
-.xp-tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:6px 0 18px}
+.xp-tabs{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:6px 0 18px}
+@media (max-width:560px){.xp-tabs{grid-template-columns:repeat(3,1fr)}}
 .xp-tab{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 6px 12px;border-radius:15px;border:1px solid var(--line-2);background:var(--hover-soft);color:var(--text-2);font-size:12px;font-weight:600;transition:all .18s var(--ease)}
 .xp-tab:hover{color:var(--text);border-color:var(--line-3);transform:translateY(-1px)}
 .xp-tab .xi{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--surface);box-shadow:var(--shadow);color:var(--text-2);transition:all .18s}
@@ -1639,6 +1640,32 @@ mark{background:var(--accent-soft);color:var(--text);border-radius:3px;padding:0
   .ch{width:22px;height:22px;margin-top:-11px;right:-12px}.ch::after{inset:5px}
   .rz{width:18px;height:18px;right:-8px;bottom:-8px}
 }
+/* view-only share links */
+.xp-linkbox{display:flex}
+.xp-url{width:100%;height:46px;border-radius:13px;background:var(--input-bg);border:1px solid var(--line-2);padding:0 14px;font:12.5px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--text-2);outline:none;text-overflow:ellipsis}
+.xp-url:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.xp-lwarn{color:var(--text-2)}
+.xp-lwarn:empty{display:none}
+html.share-host body>:not(iframe):not(.vw-err){display:none!important}
+body.viewer #dock,body.viewer #undoBtn,body.viewer #redoBtn,body.viewer #chip,body.viewer #dueBtn,body.viewer #searchBtn,body.viewer #moreBtn,body.viewer #pinBtn,body.viewer #helpBtn,body.viewer #empty,body.viewer #tr>.vsep,body.viewer #brand .chev{display:none!important}
+body.viewer #brand,body.viewer .crumb.cur{pointer-events:none}
+body.viewer .card .ch,body.viewer .card .rz,body.viewer .card .ie-h,body.viewer .lock-badge,body.viewer .tb-add,body.viewer .col-add,body.viewer .ti-add{display:none!important}
+body.viewer #canvas{cursor:grab}
+body.viewer #canvas.panning{cursor:grabbing}
+#viewbar{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:70;display:flex;align-items:center;gap:12px;padding:8px 8px 8px 16px;border-radius:18px;max-width:calc(100vw - 24px);animation:vbIn .5s var(--ease) both}
+#viewbar .vb-ic{color:var(--accent);display:grid;place-items:center}
+#viewbar .vb-t{display:flex;flex-direction:column;min-width:0;line-height:1.25}
+#viewbar .vb-t b{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:min(260px,40vw)}
+#viewbar .vb-t small{font-size:11.5px;color:var(--text-3);white-space:nowrap}
+#viewbar .btn{height:36px;white-space:nowrap}
+#viewbar .vb-get{font-size:12.5px;font-weight:600;color:var(--text-2);padding:0 8px;white-space:nowrap}
+#viewbar .vb-get:hover{color:var(--accent)}
+@keyframes vbIn{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}
+@media (max-width:760px){body.viewer #minimap{display:none}#viewbar .vb-get{display:none}#viewbar{padding-left:12px;gap:8px}#viewbar .vb-t b{max-width:calc(100vw - 230px)}}
+@media (max-width:420px){body.viewer #themeBtn{display:grid!important}}
+.vw-err{position:fixed;inset:0;display:grid;place-items:center;text-align:center;padding:24px;z-index:500;background:var(--bg)}
+.vw-err h2{font-family:var(--serif);font-weight:400;font-size:28px;margin:0 0 8px;color:var(--text)}
+.vw-err p{color:var(--text-3);margin:0 0 20px;max-width:360px;line-height:1.55}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -1708,6 +1735,7 @@ mark{background:var(--accent-soft);color:var(--text);border-radius:3px;padding:0
 
 /* ================= Utilities ================= */
 const $ = (s, r = document) => r.querySelector(s);
+const VIEWER = !!window.__SHARE;  // true inside the sandboxed view-only frame for share links
 const uid = () => Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-4);
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -1978,7 +2006,7 @@ async function gcImages(){ if (!db) return; try { const used = usedImageIds();
   for (const k of await idb('kv','readonly', s => s.getAllKeys())) if (String(k).startsWith('ver:')) for (const v of (await kvGet(k)) || []) for (const c of Object.values(v.cards || {})) for (const f of cardImgIds(c)) used.add(f); const keys = await idb('img','readonly', s => s.getAllKeys()); for (const k of keys) if (!used.has(k)) await idb('img','readwrite', s => s.delete(k)); } catch {} }
 
 let saveT = 0;
-function saveSoon(changed = true){ clearTimeout(saveT); saveT = setTimeout(saveNow, 300); if (changed){ scheduleAutoBackup(); try { markVerDirty(); noteLocalChange(); markThumb(); if (curId && S.boards[curId]) S.boards[curId].editedAt = Date.now(); } catch {} } }
+function saveSoon(changed = true){ if (VIEWER) return; clearTimeout(saveT); saveT = setTimeout(saveNow, 300); if (changed){ scheduleAutoBackup(); try { markVerDirty(); noteLocalChange(); markThumb(); if (curId && S.boards[curId]) S.boards[curId].editedAt = Date.now(); } catch {} } }
 async function saveNow(){
   clearTimeout(saveT); if (!db) return;
   try { S.meta.lastBoard = curId; await kvSet('state', S); updateDueBadge(); verTick(); }
@@ -2337,7 +2365,7 @@ function renderCrumbs(){
   const pb = $('#pinBtn'), on = isPinned(curId);
   pb.hidden = curId === S.rootId; pb.classList.toggle('on', on);
   pb.innerHTML = ico(on ? 'starFill' : 'star', 17); pb.title = on ? 'Unpin this board' : 'Pin this board';
-  document.title = curId === S.rootId ? 'Tessera' : `${cur().title} · Tessera`;
+  document.title = curId === S.rootId && !VIEWER ? 'Tessera' : `${cur().title} · Tessera`;
 }
 
 /* ================= Pinned & recent ================= */
@@ -2809,7 +2837,7 @@ function openBoard(id){
   render(); if (needFit) fit(false);
   stage.classList.remove('in', 'out'); void stage.offsetWidth; stage.classList.add(deeper ? 'in' : 'out');
   saveSoon(false); verEnsure(id); sfx(deeper ? 'whoosh' : 'back');
-  setTimeout(() => { if (curId === id) loadThumb(id).then(u => { if (!u && curId === id) captureThumb(id); }); }, 1600);
+  if (!VIEWER) setTimeout(() => { if (curId === id) loadThumb(id).then(u => { if (!u && curId === id) captureThumb(id); }); }, 1600);
 }
 stage.addEventListener('animationend', () => stage.classList.remove('in', 'out'));
 function goToCard(bid, cid){
@@ -5208,7 +5236,7 @@ function importBoardFile(p){
 }
 
 /* ---------- export dialog ---------- */
-const XP = [['png', 'Image', 'PNG', 'image'], ['pdf', 'PDF', 'Pages', 'pdf'], ['md', 'Markdown', 'Text', 'markdown'], ['file', 'Board file', 'Share', 'share'], ['print', 'Print', 'Paper', 'printer']];
+const XP = [['png', 'Image', 'PNG', 'image'], ['pdf', 'PDF', 'Pages', 'pdf'], ['md', 'Markdown', 'Text', 'markdown'], ['link', 'Share link', 'View-only', 'link'], ['file', 'Board file', 'Share', 'share'], ['print', 'Print', 'Paper', 'printer']];
 function openExport(fmt){
   blurEditing(); hideMenus(); closeDuePicker(); if (pres) return;
   const b = cur(), hasSel = sel.size > 0, frames = Object.values(b.cards).filter(c => c.type === 'frame').length;
@@ -5219,15 +5247,16 @@ function openExport(fmt){
     if (st.fmt === 'png') return seg('area', 'Area', [['board', 'Whole board'], ['sel', hasSel ? `Selection (${sel.size})` : 'Selection', !hasSel]]) + seg('scale', 'Quality', [['1', '1×'], ['2', '2× Sharp'], ['3', '3× Print']]) + seg('bg', 'Background', [['board', 'Board'], ['plain', 'Plain'], ['transparent', 'None']]) + themeSeg() + '<p class="xp-note">A crisp picture of your board, ready to post, send or drop into a deck.</p>';
     if (st.fmt === 'pdf') return seg('pages', 'Pages', [['board', 'Whole board'], ['frames', frames ? `Frames as slides (${frames})` : 'Frames as slides', !frames], ['sel', 'Selection', !hasSel]]) + seg('bg', 'Background', [['board', 'Board'], ['plain', 'Plain']]) + themeSeg() + '<p class="xp-note"><b>Frames as slides</b> puts each frame on its own page, in the same order as Present.</p>';
     if (st.fmt === 'md') return seg('nested', 'Include', [['no', 'This board'], ['yes', 'With nested boards']]) + seg('embed', 'Images', [['no', 'Placeholders'], ['yes', 'Embedded']]) + '<textarea class="xp-md" readonly spellcheck="false" aria-label="Markdown preview"></textarea>';
+    if (st.fmt === 'link') return `<div class="xp-linkbox"><input class="xp-url" readonly spellcheck="false" aria-label="View-only link" value="Building your link…"></div><div class="xp-stats"><div><b data-s="nb">–</b><span>boards</span></div><div><b data-s="nc">–</b><span>cards</span></div><div><b data-s="kb">–</b><span>link size</span></div></div><p class="xp-note">Anyone with the link sees <b>${esc(b.title)}</b> as a read-only copy and can look around, open nested boards and present it. It’s a snapshot of the board right now, and nothing is uploaded: the board travels inside the link itself.</p><p class="xp-note xp-lwarn"></p>`;
     if (st.fmt === 'file'){
       const {boards, imgIds} = boardBundle(curId), nb = Object.keys(boards).length, nc = Object.values(boards).reduce((n, x) => n + Object.keys(x.cards).length, 0);
       return `<div class="xp-stats"><div><b>${nb}</b><span>board${nb > 1 ? 's' : ''}</span></div><div><b>${nc}</b><span>card${nc !== 1 ? 's' : ''}</span></div><div><b>${imgIds.size}</b><span>images & files</span></div></div><p class="xp-note">Saves <b>${esc(b.title)}</b> and everything inside it as one <b>.tessera.json</b> file. Send it to anyone with Tessera — they choose <b>Import a board</b> or drop the file on their canvas. Their own boards stay untouched.</p>`;
     }
     return seg('pages', 'Pages', [['board', 'Whole board'], ['frames', frames ? `A frame per page (${frames})` : 'A frame per page', !frames], ['sel', 'Selection', !hasSel]]) + seg('orient', 'Orientation', [['auto', 'Auto'], ['portrait', 'Portrait'], ['landscape', 'Landscape']]) + seg('ptheme', 'Theme', [['light', 'Light · saves ink'], ['current', 'As shown']]) + '<p class="xp-note">Opens your browser’s print dialog — pick a printer or <b>Save as PDF</b>.</p>';
   };
-  const label = () => ({png:'Export PNG', pdf:'Export PDF', md:'Download .md', file:'Save board file', print:'Print…'})[st.fmt];
+  const label = () => ({png:'Export PNG', pdf:'Export PDF', md:'Download .md', link:'Copy link', file:'Save board file', print:'Print…'})[st.fmt];
   const themeOf = v => v === 'current' ? (isDark() ? 'dark' : 'light') : v;
-  let refreshMd = () => {};
+  let refreshMd = () => {}, linkRes = null;
   const run = async ov => {
     const prim = ov.querySelector('.m-actions .btn.primary'); if (prim.classList.contains('busy')) return;
     prim.classList.add('busy'); prim.innerHTML = `<i class="spin"></i>${st.fmt === 'print' ? 'Preparing…' : 'Exporting…'}`;
@@ -5236,6 +5265,7 @@ function openExport(fmt){
       if (st.fmt === 'png') ok = await exportPNG({area:st.area, scale:+st.scale, bg:st.bg, theme:themeOf(st.theme)});
       else if (st.fmt === 'pdf') ok = await exportPDF({pages:st.pages, bg:st.bg, theme:themeOf(st.theme)});
       else if (st.fmt === 'md'){ const md = await boardMd(curId, {nested:st.nested === 'yes', embed:st.embed === 'yes'}); downloadBlob(new Blob([md], {type:'text/markdown;charset=utf-8'}), `${fileSlug(b.title)}.md`); toast('Markdown exported'); ok = true; }
+      else if (st.fmt === 'link') ok = !!linkRes && await copyShareLink(linkRes.url, ov.querySelector('.xp-url'));
       else if (st.fmt === 'file') ok = await exportBoardFile(curId);
       else { ov._close(true); await new Promise(r => setTimeout(r, 260)); await printBoard({pages:st.pages, orient:st.orient, theme:themeOf(st.ptheme)}); return; }
     } catch (e){ console.error(e); toast('Export failed — try a lower quality or a smaller area'); }
@@ -5254,14 +5284,33 @@ function openExport(fmt){
         const md = await boardMd(curId, {nested:st.nested === 'yes', embed:st.embed === 'yes'});
         if (tok === mdTok && box.contains(ta)) ta.value = md.length > 40000 ? md.slice(0, 40000) + '\n\n…' : md;
       };
+      let linkTok = 0;
+      const refreshLink = async () => {
+        const tok = ++linkTok; linkRes = null; prim.disabled = true;
+        const live = () => tok === linkTok && box.querySelector('.xp-url'), url = box.querySelector('.xp-url'), warn = box.querySelector('.xp-lwarn');
+        const stat = (k, v) => { const n = box.querySelector(`[data-s="${k}"]`); if (n) n.textContent = v; };
+        try {
+          if (!shareSupported()){ url.value = 'Your browser can’t build share links'; warn.textContent = 'Update your browser, or use Board file to share this board.'; return; }
+          { const lk = lockedAncestor(curId); if (lk && !(await unlockBoard(lk.id))){ if (live()){ url.value = 'This board is locked'; warn.textContent = 'Unlock it to create a link.'; } return; } }
+          const r = await makeShareLink(curId); if (!live()) return;
+          stat('nb', r.nb); stat('nc', r.nc); stat('kb', r.url.length < 1000 ? r.url.length + ' B' : (r.url.length / 1000).toFixed(r.url.length < 10000 ? 1 : 0) + ' KB');
+          const notes = [];
+          if (r.skipped.media) notes.push(`${r.skipped.media} image, file or voice card${r.skipped.media > 1 ? 's' : ''} can’t travel in a link and show as placeholders. Use Board file to share those.`);
+          if (r.skipped.locked) notes.push(`${r.skipped.locked} locked board${r.skipped.locked > 1 ? 's are' : ' is'} left out.`);
+          if (r.url.length > SHARE_MAX){ url.value = 'Too big for a link'; notes.push('This board is too large to fit in a link. Use Board file instead.'); warn.textContent = notes.join(' '); return; }
+          if (r.url.length > SHARE_WARN) notes.push('This is a long link. Some chat apps may cut it off, so check it opens before you rely on it.');
+          linkRes = r; url.value = r.url; warn.textContent = notes.join(' '); prim.disabled = false;
+        } catch (err){ console.error(err); if (live()){ url.value = 'Couldn’t build the link'; warn.textContent = 'Something went wrong. Try Board file instead.'; } }
+      };
       const draw = () => {
+        prim.disabled = false;
         if ((st.pages === 'sel' && !hasSel) || (st.pages === 'frames' && !frames)) st.pages = 'board';
         if (st.fmt !== 'png' && st.bg === 'transparent') st.bg = 'board';
         box.innerHTML = opts(); prim.textContent = label();
         ov.querySelectorAll('.xp-tab').forEach(t => t.classList.toggle('on', t.dataset.f === st.fmt));
-        extra.style.display = st.fmt === 'md' || (st.fmt === 'file' && canShareFiles()) ? '' : 'none';
+        extra.style.display = st.fmt === 'md' || (st.fmt === 'file' && canShareFiles()) || (st.fmt === 'link' && navigator.share) ? '' : 'none';
         extra.textContent = st.fmt === 'md' ? 'Copy' : 'Share…';
-        if (st.fmt === 'md') refreshMd();
+        if (st.fmt === 'md') refreshMd(); else if (st.fmt === 'link') refreshLink();
       };
       ov.querySelector('.xp-tabs').addEventListener('click', e => { const t = e.target.closest('.xp-tab'); if (!t) return; st.fmt = t.dataset.f; S.meta.exportFmt = st.fmt; saveSoon(false); draw(); });
       box.addEventListener('click', e => {
@@ -5271,6 +5320,7 @@ function openExport(fmt){
       });
       extra.addEventListener('click', async () => {
         if (st.fmt === 'md') copyMd(await boardMd(curId, {nested:st.nested === 'yes', embed:st.embed === 'yes'}));
+        else if (st.fmt === 'link'){ if (linkRes) try { await navigator.share({title:b.title, url:linkRes.url}); ov._close(true); } catch {} }
         else if (st.fmt === 'file' && await exportBoardFile(curId, true)) ov._close(true);
       });
       draw(); setTimeout(() => prim.focus({preventScroll:true}), 60);
@@ -6368,6 +6418,7 @@ const HELP = [
     ['Where are my boards saved?', 'In your browser’s storage on this device only. They don’t appear on other devices or browsers unless you import a backup there or turn on folder sync.'],
     ['What happens if I clear my browser data?', 'Your boards are erased along with it. Keep a recent backup (Ctrl S) or turn on auto-backup to a folder.'],
     ['How do I move my boards to a new computer or phone?', 'Export a backup on the old device, then use Import backup on the new one. To share just one board, use Export & share → Board file.'],
+    ['Can I share a board without exporting it?', 'Yes. Export & share → Share link copies a view-only link. Whoever opens it sees a read-only copy of the board, including nested boards. Nothing is uploaded: the board is packed into the link, so images, files and voice memos are left out. Use Board file for those.'],
     ['Can I use Tessera offline?', 'Yes. Once it has loaded, it works without a connection. Install it as an app (menu → Install app) for the best experience.'],
     ['Is a locked board encrypted?', 'No. The lock keeps a board private inside Tessera, but backups and browser storage still contain its contents.'],
     ['Why does a font card show the wrong font?', 'Google Fonts load from the internet the first time. Fonts installed on your device need their exact name and only show on that device.'],
@@ -8576,7 +8627,7 @@ function paletteActions(){
   a.push({label:focusMode ? 'Leave focus mode' : 'Focus mode', icon:'focus', kbd:'⇧ F', run:() => toggleFocus()});
   a.push({label:cur().kanban ? 'Turn off Kanban mode' : 'Turn on Kanban mode', icon:'kanban', run:() => setKanban(!cur().kanban)});
   a.push({label:'Export & share…', icon:'share', kbd:'Ctrl E', run:() => openExport()});
-  [['png', 'Export as PNG image', 'image'], ['pdf', 'Export as PDF', 'pdf'], ['md', 'Export as Markdown', 'markdown'], ['file', 'Share as a board file', 'share'], ['print', 'Print this board', 'printer']].forEach(([f, label, icon]) => a.push({label, icon, run:() => openExport(f)}));
+  [['png', 'Export as PNG image', 'image'], ['pdf', 'Export as PDF', 'pdf'], ['md', 'Export as Markdown', 'markdown'], ['link', 'Copy a view-only link', 'link'], ['file', 'Share as a board file', 'share'], ['print', 'Print this board', 'printer']].forEach(([f, label, icon]) => a.push({label, icon, run:() => openExport(f)}));
   a.push({label:'Copy board as Markdown', icon:'markdown', run:async () => copyMd(await boardMd(curId))});
   a.push({label:'Import a board file…', icon:'upload', run:() => importBoardFile()});
   a.push({label:'Version history', icon:'history', kbd:'Ctrl ⇧ H', run:() => openVersions()});
@@ -8977,7 +9028,119 @@ function normalizeState(){
   S.trash = (S.trash || []).filter(e => Date.now() - e.at < TRASH_DAYS * DAY);
   for (const b of Object.values(S.boards)){ b.view = b.view || {x:0,y:0,s:1,set:false}; b.links = b.links || []; }
 }
+/* ---------- view-only share links ---------- */
+// The board is packed into the part of the URL after “#”, so it never reaches a server.
+// Opening a link runs the app inside a sandboxed frame with no access to the visitor's own boards.
+const SHARE_WARN = 90000, SHARE_MAX = 1500000;
+const b64u = {
+  enc(u8){ let s = ''; for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); },
+  dec(t){ t = t.replace(/-/g, '+').replace(/_/g, '/'); const s = atob(t + '='.repeat((4 - t.length % 4) % 4)), u = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i); return u; }
+};
+const shareSupported = () => typeof CompressionStream === 'function' && typeof DecompressionStream === 'function';
+const pipeBytes = async (bytes, T) => new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(new T('deflate-raw'))).arrayBuffer());
+const SHARE_MEDIA = {image:'Image', file:'File', audio:'Voice memo', art:'Illustration'};
+function shareBundle(bid){
+  const out = {}, skipped = {media:0, locked:0};
+  const placeholder = (c, what) => {
+    const keep = {id:c.id, type:'note', x:c.x, y:c.y, w:c.w || W[c.type] || W.note, z:c.z, color:null, html:`<div><i>${what} not included in shared links</i></div>`};
+    if (c.parent) keep.parent = c.parent; if (c.group) keep.group = c.group; if ('fr' in c) keep.fr = c.fr;
+    for (const k of Object.keys(c)) delete c[k]; Object.assign(c, keep);
+  };
+  const walk = id => {
+    const src = S.boards[id]; if (!src || out[id]) return;
+    const bd = JSON.parse(JSON.stringify(src)); out[id] = bd;
+    delete bd.lock; delete bd.coverId; delete bd.editedAt; delete bd.settle; bd.view = {x:0, y:0, s:1, set:false};
+    for (const c of Object.values(bd.cards)){
+      if (c.type === 'board'){
+        const t = S.boards[c.target]; if (!t) continue;
+        if (t.lock){ placeholder(c, 'Locked board'); skipped.locked++; continue; }
+        walk(c.target); continue;
+      }
+      if (!cardImgIds(c).length) continue;
+      if (c.type === 'image' && !c.imageId) continue;  // linked images keep their web address
+      if (SHARE_MEDIA[c.type]){ placeholder(c, SHARE_MEDIA[c.type]); skipped.media++; continue; }
+      for (const k of ['imageId', 'fileId', 'thumbId', 'audioId', 'imgA', 'imgB', 'snap']) delete c[k];
+      skipped.media++;
+    }
+  };
+  walk(bid);
+  return {boards:out, skipped};
+}
+async function makeShareLink(bid){
+  const src = S.boards[bid], {boards, skipped} = shareBundle(bid);
+  const data = {app:'tessera', kind:'share', v:1, root:bid, title:src.title, boards};
+  const packed = await pipeBytes(new TextEncoder().encode(JSON.stringify(data)), CompressionStream);
+  return {url:location.href.split(/[#?]/)[0] + '#view=' + b64u.enc(packed), skipped, nb:Object.keys(boards).length, nc:Object.values(boards).reduce((n, x) => n + Object.keys(x.cards).length, 0)};
+}
+async function copyShareLink(url, inp){
+  try { await navigator.clipboard.writeText(url); }
+  catch { try { inp.focus(); inp.select(); if (!document.execCommand('copy')) throw 0; } catch { toast('Couldn’t copy. Select the link and copy it by hand.'); return false; } }
+  toast('Link copied. Anyone who opens it can view this board.'); return true;
+}
+
+// Top window: show a shared board inside a sandboxed frame (opaque origin: no access to this device's boards).
+async function bootViewerFrame(){
+  const raw = location.hash.slice(6);
+  const fail = msg => { document.documentElement.classList.add('share-host'); document.body.insertAdjacentHTML('beforeend', `<div class="vw-err"><div><h2>Can’t open this link</h2><p>${esc(msg)}</p><a class="btn primary" href="${esc(location.href.split(/[#?]/)[0])}">Open Tessera</a></div></div>`); };
+  if (!/^[\w-]+$/.test(raw)) return fail('The link looks incomplete. Ask the sender to share it again.');
+  document.documentElement.classList.add('share-host');
+  let html; try { html = await (await fetch(location.href.split(/[#?]/)[0])).text(); } catch {}
+  if (!html || !/<head>/i.test(html)) return fail('Tessera couldn’t load to show this board. Check your connection and try again.');
+  const boot = `<script>window.__SHARE=${JSON.stringify({d:raw, theme:isDark() ? 'dark' : 'light'})};<\/script>`;
+  const f = document.createElement('iframe');
+  f.setAttribute('sandbox', 'allow-scripts allow-popups allow-popups-to-escape-sandbox allow-downloads');
+  f.setAttribute('allow', 'fullscreen'); f.allowFullscreen = true; f.title = 'Shared Tessera board';
+  f.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;border:0;background:var(--bg)';
+  f.srcdoc = html.replace(/<head>/i, m => m + boot);
+  f.addEventListener('load', () => f.focus());
+  document.body.appendChild(f);
+  window.addEventListener('hashchange', () => location.reload());
+}
+
+// Inside the frame: a read-only copy of the shared board.
+async function initViewer(){
+  const sh = window.__SHARE, fail = (t, m) => document.documentElement.classList.add('share-host') || document.body.insertAdjacentHTML('beforeend', `<div class="vw-err"><div><h2>${t}</h2><p>${m}</p><a class="btn primary" href="./" target="_blank" rel="noopener">Open Tessera</a></div></div>`);
+  let d = null;
+  try { if (shareSupported()) d = JSON.parse(new TextDecoder().decode(await pipeBytes(b64u.dec(sh.d), DecompressionStream))); } catch {}
+  setLook({mode:sh.theme === 'dark' ? 'dark' : 'light'});
+  const ok = d && d.kind === 'share' && d.boards && typeof d.boards === 'object' && d.boards[d.root];
+  if (!ok) return fail('Can’t open this link', 'It looks damaged or incomplete. Ask the sender to share it again.');
+  for (const [id, b] of Object.entries(d.boards)){ if (!b || typeof b.cards !== 'object' || !b.cards){ delete d.boards[id]; continue; } b.id = id; delete b.lock; }
+  if (!d.boards[d.root]) return fail('Can’t open this link', 'It looks damaged or incomplete. Ask the sender to share it again.');
+  db = null; storageOK = false;
+  S = {app:'tessera', version:2, rootId:d.root, boards:d.boards, trash:[], templates:[], meta:{welcomed:true, splashOff:true, pinned:[], recent:[]}};
+  S.boards[d.root].parent = null;
+  normalizeState(); curId = S.rootId;
+  document.body.classList.add('viewer');
+  // Everything below keeps the frame strictly read-only: gestures only pan and zoom.
+  const OK = 'a[href],.vd-play,.vd-close,.fr-fold,.col-fold,.sw-hex,.cd-copy,.tag-pill';
+  window.addEventListener('pointerdown', e => {
+    if (pres || !canvas.contains(e.target)) return;
+    e.stopPropagation();
+    if (e.pointerType === 'touch'){ touches.set(e.pointerId, {x:e.clientX, y:e.clientY}); if (touches.size >= 2){ startPinch(); return; } }
+    if (e.button === 2 || e.target.closest(OK)) return;
+    const el = e.target.closest('.card'), c = el && findCard(el.dataset.id);
+    startPan(e, {onTap:() => { if (c?.type === 'board') openBoard(c.target); }, onLong:() => {}});
+  }, true);
+  window.addEventListener('click', e => { if (!e.target.closest?.('#world') || e.target.closest(OK)) return; e.stopPropagation(); e.preventDefault(); }, true);
+  for (const t of ['paste', 'cut', 'drop', 'dragover', 'dragstart']) window.addEventListener(t, e => { e.stopPropagation(); e.preventDefault(); }, true);
+  for (const t of ['dblclick', 'contextmenu', 'beforeinput', 'input', 'change']) window.addEventListener(t, e => { if (e.target.closest?.('#world, #canvas')){ e.stopPropagation(); e.preventDefault(); } }, true);
+  world.addEventListener('focusin', e => { if (e.target.matches?.('input,textarea,[contenteditable]')) e.target.blur(); });
+  window.addEventListener('keydown', e => {
+    if (pres || document.querySelector('.overlay')) return;
+    const k = e.key.toLowerCase(), mod = e.ctrlKey || e.metaKey;
+    if (!(mod ? ['=', '+', '-', '0'].includes(k) : !e.altKey && (k === 'p' || k === 'escape'))) e.stopImmediatePropagation();
+  }, true);
+  const bar = document.createElement('div'); bar.id = 'viewbar'; bar.className = 'glass';
+  bar.innerHTML = `<span class="vb-ic">${ico('eye', 18)}</span><div class="vb-t"><b>${esc(d.title || S.boards[d.root].title)}</b><small>Shared view · read-only</small></div><button class="btn primary vb-save">Save a copy</button><a class="vb-get" href="./" target="_blank" rel="noopener">Get Tessera</a>`;
+  bar.querySelector('.vb-save').onclick = async () => { if (await exportBoardFile(S.rootId)) toast('In Tessera, choose Import a board and pick this file to keep it.', null, 7000); };
+  document.body.appendChild(bar);
+  render(); fit(false); stage.classList.add('in'); document.title = `${S.boards[d.root].title} · Tessera`;
+  document.fonts?.ready?.then(() => { world.querySelectorAll('.ti-text').forEach(autosize); drawLinks(); fit(false); });
+}
 async function init(){
+  if (VIEWER) return initViewer();
+  if (/^#view=/.test(location.hash)) return bootViewerFrame();
   db = await openDB(); storageOK = !!db;
   let st = null; try { st = db ? await kvGet('state') : null; } catch {}
   if (st && st.boards && st.boards[st.rootId]) S = st; else seed();
