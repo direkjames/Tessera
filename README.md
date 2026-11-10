@@ -1,40 +1,102 @@
+<div align="center">
+
 # Tessera
 
-A calm, infinite canvas for ideas, references and plans — a free, private alternative to visual board apps.
+**A calm, infinite canvas for ideas, references and plans. Free, private and works offline.**
 
-**Features:** notes (with bold, italic, headings, lists), to-do lists, links, images, sticky notes, headings, sketches, tables, color swatches, YouTube and Vimeo videos, files with PDF previews, voice memos, image cropping and captions, color extraction, web image clipping, a fullscreen gallery, tags with filtering, board icons and covers, templates (built-in and your own), nested boards, columns, arrows between cards, undo/redo, copy/paste, colors, light and dark mode, global search and command palette (Ctrl K), pinned and recent boards, move cards between boards (or drag onto a board), a 30-day Trash, auto-backup to a folder, a storage meter with image compression, frames, snapping and alignment guides, align/distribute/tidy, locking, curved and labeled arrows, a minimap, canvas backgrounds, backup export/import, due dates on to-dos with a Due soon overview, Kanban mode, presentation mode (frames become slides), focus mode, export to PNG, PDF and Markdown, shareable board files, view-only share links, print layouts, version history for every board, 22 light and dark themes (including soft patterned "Design" themes like Paper grain, Sakura, Starry night and Blueprint) with 12 accent colors plus a custom accent picker, a full color picker for swatches, an illustration studio with pressure-sensitive brushes, stabilizer, layers, blend modes, alpha lock, fill, lasso and transform (best with a Wacom, Huion, XP-Pen, Surface Pen or S Pen), optional subtle sounds, a guided tour, a customizable dock, shot list and storyboard cards (with CSV export), font cards, before/after comparison cards, aspect-ratio frames with safe-area guides, grouping, smart arrows that route around cards, collapsible columns and frames, privacy locks for boards, archived boards, a storage health check, backup reminders, optional sync through a Google Drive or OneDrive folder, a start screen with live board thumbnails, a built-in guide and FAQ (press ?), your own heading font (uploaded font files work offline and on phones), shapes, lines and symbols for diagrams and flowcharts, OpenStreetMap map cards with pins and offline snapshots, to-scale floor plans with ready-made layouts, box select, groups, copy and paste, curved walls, table shapes and seat counts, highlighted code blocks with automatic code paste, text fonts, colors, highlights, alignment (left, center, right and justified) and emoji in notes, any heading size, stretchable image frames, arrows from any side of a card, smooth zoom, live clock and date cards with time zones and custom fonts, 81 searchable templates (including bug reports, patch notes and release checklists) for creatives, video, students, teachers, healthcare, developers, events and everyday life, offline support, and install-as-app on Windows, Android, Mac and iPad.
+![Status: Shipped](https://img.shields.io/badge/status-shipped-brightgreen)
+![Platform: Web and installable](https://img.shields.io/badge/platform-web%20%2B%20installable-blue)
+![Works offline](https://img.shields.io/badge/works-offline-8f7dff)
+![No account needed](https://img.shields.io/badge/account-not%20needed-lightgrey)
+![Your boards stay on your device](https://img.shields.io/badge/data-stays%20on%20your%20device-6d5ce8)
 
-## Your data stays on your device
+<img src="docs/screenshots/hero-1920x1080.png" alt="Tessera boards shown as a mosaic: a moodboard with photos and colors, a trip plan, a floor plan and a launch board" width="880">
 
-There are no accounts and no sync. Boards are saved in the browser on the device you use. Clearing site data, uninstalling the app or using a private window erases them, so **export a backup** (Ctrl S) regularly, or turn on **auto-backup to a folder** from the storage chip (Chrome and Edge on a computer). Backups can be imported on any device.
+<img src="docs/screenshots/hero-1680x1050.png" alt="Tessera's dark theme with a trip board, a floor plan and a kanban board" width="880">
 
-To show a board to someone without sending a file, use **Export & share → Share link** (Ctrl E) and copy the link. Whoever opens it sees a read-only copy they can pan, zoom, open nested boards in and present. Nothing is uploaded: the board is compressed into the part of the link after the `#`, which browsers never send to a server. Because it all lives in the link, images, files and voice memos aren't included (they appear as placeholders), locked boards are left out, and very large boards may not fit, so use a board file for those. A link is a snapshot, so later edits don't change it. The link opens inside a sandboxed frame that can't touch the viewer's own boards, and **Save a copy** in the viewer downloads a board file they can import.
+## About
 
-To share one board with everything in it, use **Export & share → Board file** (Ctrl E). The other person opens Tessera and chooses **Import a board** (or drops the file on the canvas). It's added as a new board and nothing of theirs is replaced.
+Tessera is a place to gather notes, pictures, to-dos, maps and plans on one endless canvas and move them around until they make sense. Use it for moodboards, storyboards, trip plans, study notes, floor plans, project boards and anything else you would pin to a wall.
 
-### Optional: sync between computers
+There is no account and no server. Your boards are saved on your device, and Tessera keeps working without an internet connection.
 
-In **Storage & backup**, turn on auto-backup to a folder inside Google Drive, OneDrive or Dropbox, then switch **Sync** on. Do the same with the same folder on your other computer. Tessera never uploads anything itself; your cloud app moves the file, and Tessera offers to load newer boards when it sees them. Works in Chrome and Edge on computers.
+*The boards in these pictures are made-up samples.*
 
-Board locks are a privacy lock inside the app, not encryption: backups still contain the board's contents.
+**[Try it: direkjames.github.io/Tessera](https://direkjames.github.io/Tessera/)**
 
-## Services Tessera contacts
+</div>
 
-Tessera works fully offline. A few optional features reach the internet:
+## Features
 
-- **Map cards** load map tiles from OpenStreetMap (© OpenStreetMap contributors) and search places with OpenStreetMap's Nominatim service, which receives what you type in the map search. A snapshot of each map is saved on your device.
-- **Google Fonts** (font cards and heading fonts) load from Google the first time.
-- **Link cards** show site icons from Google's favicon service.
+**Cards for everything**
+- Notes with bold, italic, headings, lists, colors, highlights, fonts, emoji and alignment
+- To-do lists with due dates and a Due soon overview
+- Images with cropping and captions, a fullscreen gallery, color extraction and web image clipping
+- Sticky notes, headings, links, tables, color swatches and font cards
+- YouTube and Vimeo videos, files with PDF previews and voice memos
+- Highlighted code blocks, live clock and date cards, before and after comparisons
+- Map cards with pins and offline snapshots, and to-scale **floor plans** with ready-made layouts, curved walls and table seats
+- Shapes, lines and symbols for diagrams and flowcharts
+- Shot list and storyboard cards, with CSV export
 
-## Put it on GitHub Pages
+**Organizing**
+- Frames, columns (collapsible), nested boards, grouping and box select
+- Arrows between cards that route around other cards, with curves and labels
+- Snapping, alignment guides, align, distribute and tidy, plus locking
+- Tags with filtering, board icons and covers, pinned and recent boards, and archived boards
+- A minimap, canvas backgrounds and smooth zoom
+- **81 searchable templates** for creatives, video, students, teachers, healthcare, developers, events and everyday life, plus templates you save yourself
 
-1. Create a new public repository (for example `tessera`).
-2. Upload every file in this folder to the root of the repo.
-3. Go to **Settings → Pages**, set **Source** to *Deploy from a branch*, choose `main` and `/ (root)`, then save.
-4. After a minute it's live at `https://<your-username>.github.io/tessera/`.
+**Drawing**
+- An **illustration studio** with pressure-sensitive brushes, a stabilizer, layers, blend modes, alpha lock, fill, lasso and transform. It works best with a pen tablet or stylus.
 
-To install it as an app, open that link in Chrome or Edge and choose **Install** (or ⋯ → *Install app* inside Tessera). On Android, use Chrome's menu → *Add to Home screen*.
+**Working your way**
+- Kanban mode, focus mode and presentation mode, where frames become slides
+- Global search and a command palette (Ctrl K), and a built-in guide and FAQ (press ?)
+- 22 light and dark themes, including soft patterned ones like Paper grain, Sakura, Starry night and Blueprint, with 12 accent colors and a custom picker
+- Your own heading font, optional subtle sounds and a customizable dock
+- Undo and redo, copy and paste, and moving cards between boards
 
-## Updating
+**Saving, sharing and backup**
+- Autosave, version history for every board, and a 30-day trash
+- Export a backup, or turn on automatic backup to a folder (Chrome and Edge on a computer)
+- Optional sync between computers through a Google Drive, OneDrive or Dropbox folder
+- Export to PNG, PDF and Markdown, share a board as a file, or share a **view-only link** that needs no upload
+- Print layouts, and privacy locks for boards
 
-When you change files, bump `VERSION` in `sw.js` (e.g. `tessera-v2`) so installed copies pick up the new version.
+## Getting started
+
+1. Open [direkjames.github.io/Tessera](https://direkjames.github.io/Tessera/).
+2. Choose **Start from scratch** or **Start from a template**, or explore the sample board.
+3. Double-click the canvas to write a note, or drag cards in from the dock. Drop images straight onto the board.
+4. Press Ctrl K to search, and **Ctrl S** to export a backup.
+5. To use it like an app, press **Install** in Chrome or Edge, or choose *Add to Home screen* on Android.
+
+**Your boards live on your device.** Clearing site data, uninstalling the app or using a private window erases them, so export a backup now and then or turn on automatic backup.
+
+**Sharing a board:** open **Export & share** (Ctrl E). A *board file* includes everything, and the other person adds it with **Import a board**. A *share link* gives a read-only copy to pan, zoom and present. The board is packed into the part of the link after the `#`, which browsers never send to a server, so images, files and voice memos show as placeholders, and very large boards may not fit.
+
+Board locks are a privacy lock inside the app, not encryption. Backups still contain the board's contents.
+
+## Requirements
+
+- A modern web browser. Chrome and Edge are best, since the automatic backup folder and sync need them on a computer.
+- An internet connection the first time, so the app can load. After that it works offline.
+- A few optional features go online: map cards load maps and place search from OpenStreetMap, font cards and heading fonts load from Google Fonts, and link cards show site icons from Google. Everything else stays on your device.
+
+## Built with
+
+- HTML, CSS and JavaScript in a single page, with no build step
+- IndexedDB for saving and a service worker for offline use
+- Inter and Instrument Serif typefaces
+- [OpenStreetMap](https://www.openstreetmap.org/copyright) for map cards
+
+Want to host it yourself? See [Developing Tessera](docs/DEVELOPING.md).
+
+## Status
+
+Shipped.
+
+## Credits / License
+
+Made by [direkjames](https://github.com/direkjames). Map data © OpenStreetMap contributors. See [LICENSE](LICENSE).
